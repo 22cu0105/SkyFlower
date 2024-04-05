@@ -27,7 +27,9 @@ public:
 	USF_MoveInput();
 
 protected:
-	virtual void SetupPlayerInputComponent(UEnhancedInputComponent* const EnhancedInputComponent) override;
+	// override指定子はこの関数は親クラスの関数を上書きしますという宣言みたいなもの。
+	// よって↓の関数は親クラスに無いのでコンパイルエラーになっていました。
+	void SetupPlayerInputComponent(UEnhancedInputComponent* const EnhancedInputComponent);
 	virtual void BeginPlay() override;
 
 public:	
