@@ -1,31 +1,53 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "SF_CharacterBase.h"
+#include "SF_WeaponBase.h"
+#include "SF_Shield.h"
 
-// Sets default values
 ASF_CharacterBase::ASF_CharacterBase()
+	: WeaponActor(nullptr)
+	, ShieldActor(nullptr)
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 }
 
-// Called when the game starts or when spawned
 void ASF_CharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
 	
 }
 
-// Called every frame
 void ASF_CharacterBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
 }
 
-void ASF_CharacterBase::Equip(ASF_EquipmentBase* const InEquipment, const FName& InSoketName)
+/// ToDo
+/// @brief 武器を装備する
+/// @param InWeapon	   キャラクターに装備させるシールド
+/// @param InSoketName メッシュにアタッチさせるソケットの名前
+void ASF_CharacterBase::EquipWeapon(ASF_WeaponBase* const InWeapon, const FName& InSoketName)
 {
+	if (!IsValid(InWeapon)) return;
 
+	WeaponActor = InWeapon;
+
+	// 銃アクターをプレイヤーメッシュのソケットにアタッチする
+	FAttachmentTransformRules AttachTransform = { EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, EAttachmentRule::KeepWorld, true };
+	WeaponActor->AttachToComponent(GetMesh(), AttachTransform, InSoketName);
+}
+
+/// ToDo
+/// @brief シールドを装備する
+/// @param InEquipment キャラクターに装備させるシールド
+/// @param InSoketName メッシュにアタッチさせるソケットの名前
+void ASF_CharacterBase::EquipShield(ASF_Shield* const InShield, const FName& InSoketName)
+{
+	if (!IsValid(InShield)) return;
+
+	ShieldActor = InShield;
+
+	// 銃アクターをプレイヤーメッシュのソケットにアタッチする
+	FAttachmentTransformRules AttachTransform = { EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, EAttachmentRule::KeepWorld, true };
+	ShieldActor->AttachToComponent(GetMesh(), AttachTransform, InSoketName);
 }
