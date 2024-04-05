@@ -1,10 +1,16 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
+// ==================================================
+// Filename	:	SF_CharacterBace.h
+// Author	:	22cu0105 è¨ìcìá ó≈êl
+// Description:
+// Update	:	2024/04/05
+// ==================================================
 #pragma once
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "SF_CharacterBase.generated.h"
+
+class ASF_EquipmentBase;
 
 UCLASS()
 class SKYFLOWER_API ASF_CharacterBase : public ACharacter
@@ -12,18 +18,14 @@ class SKYFLOWER_API ASF_CharacterBase : public ACharacter
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this character's properties
 	ASF_CharacterBase();
 
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 public:	
-	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
+public:
+	void Equip(ASF_EquipmentBase* const InEquipment, const FName& InSoketName);
 };

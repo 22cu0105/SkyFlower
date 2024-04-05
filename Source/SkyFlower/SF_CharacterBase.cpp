@@ -25,10 +25,7 @@ void ASF_CharacterBase::Tick(float DeltaTime)
 
 }
 
-// Called to bind functionality to input
-void ASF_CharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+void ASF_CharacterBase::Equip(ASF_EquipmentBase* const InEquipment, const FName& InSoketName)
 {
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 }
-
