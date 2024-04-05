@@ -1,6 +1,7 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 using UnrealBuildTool;
+using UnrealBuildTool.Rules;
 
 public class SkyFlower : ModuleRules
 {
@@ -8,7 +9,12 @@ public class SkyFlower : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core",
+			"CoreUObject",
+			"Engine",
+			"InputCore",
+			/*’Ç‰Á*/
+			"EnhancedInput" });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 
