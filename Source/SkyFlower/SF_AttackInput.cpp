@@ -32,3 +32,8 @@ void USF_AttackInput::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 	// ...
 }
 
+void USF_AttackInput::Attack()
+{
+
+}
+

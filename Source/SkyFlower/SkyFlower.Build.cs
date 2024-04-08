@@ -12,9 +12,7 @@ public class SkyFlower : ModuleRules
 		PublicDependencyModuleNames.AddRange(new string[] { "Core",
 			"CoreUObject",
 			"Engine",
-			"InputCore",
-			/*’Ç‰Á*/
-			"EnhancedInput" });
+			"InputCore", });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 

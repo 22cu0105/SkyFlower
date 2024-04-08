@@ -1,4 +1,6 @@
 #include "SF_MainCamera.h"
+#include "SF_Player.h"
+#include "SF_GameMode.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -29,13 +31,19 @@ void ASF_MainCamera::BeginPlay()
 {
 	Super::BeginPlay();
 
-	CameraState = ESF_CameraState::Normal;
-	
+	// ‰Šú‰»
 	if (APlayerController* const PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0))
 		PlayerController->SetViewTargetWithBlend(this);
 
-	if (APawn* const Player = UGameplayStatics::GetPlayerPawn(GetWorld(), 0))
-		ViewPoint = Player->GetActorLocation();
+	CameraState = ESF_CameraState::Normal;
+
+	if (ASF_GameMode* const SF_GameMode = Cast<ASF_GameMode>(UGameplayStatics::GetGameMode(GetWorld())))
+	{
+		SF_GameMode->SetMainCamera(this);
+
+		if (ASF_Player* const SF_Player = SF_GameMode->GetPlayerCharacter())
+			ViewPoint = SF_Player->GetActorLocation();
+	}
 }
 
 void ASF_MainCamera::Tick(float DeltaTime)

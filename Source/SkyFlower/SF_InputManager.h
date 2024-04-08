@@ -1,7 +1,7 @@
 // ==================================================
 // Filename	:	SF_InputManager.h
 // Author	:	22cu0105 小田島 稜人
-// Description:
+// Description:入力処理を各Actor,Characterに送る
 // Update	:	2024/04/07
 // ==================================================
 #pragma once
@@ -27,20 +27,18 @@ public:
 
 	// 入力バインド処理
 	UFUNCTION()
-	void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent);
+	void SetupPlayerInputComponent(UInputComponent* const InPlayerInputComponent);
 
 	/********************PlayerInput********************/
 	// 視点Y軸回転処理
-	UFUNCTION()
 	void LookUp(const float InValue);
 	// 視点X軸回転処理
-	UFUNCTION()
 	void Turn(const float InValue);
 
 	// 前方向移動処理
-	UFUNCTION()
 	void MoveForward(const float InValue);
 	// 横方向移動処理
-	UFUNCTION()
 	void MoveRight(const float InValue);
+	// 上方向移動処理
+	void MoveUp(const float InValue);
 };

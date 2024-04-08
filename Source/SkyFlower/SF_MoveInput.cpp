@@ -8,50 +8,67 @@
 // ==================================================
 
 #include "SF_MoveInput.h"
-#include "Kismet/KismetSystemLibrary.h" // ’Ç‰Á
-#include "Kismet/GameplayStatics.h" // ’Ç‰Á
+#include "SF_Player.h"
+#include "SF_MainCamera.h"
+#include "SF_GameMode.h"
+#include "Kismet/GameplayStatics.h"
 #include "Components/InputComponent.h" // ’Ç‰Á
-#include "EnhancedInputComponent.h" // ’Ç‰Á
-#include "EnhancedInputSubsystems.h" // ’Ç‰Á
+#include "GameFramework/Pawn.h"
 
-// Sets default values for this component's properties
 USF_MoveInput::USF_MoveInput()
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
-
 }
 
 
-// Called when the game starts
 void USF_MoveInput::BeginPlay()
 {
 	Super::BeginPlay();
 }
 
-
-// Called every frame
 void USF_MoveInput::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 }
 
-void USF_MoveInput::SetupPlayerInputComponent(UEnhancedInputComponent* const EnhancedInputComponent)
+void USF_MoveInput::MoveForward(const float InValue)
 {
-	//Jumping
-	EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &USF_MoveInput::Jump);
+	if (ASF_GameMode* const SF_GameMode = Cast<ASF_GameMode>(UGameplayStatics::GetGameMode(GetWorld())))
+	{
+		ASF_MainCamera* const SF_MainCamera = SF_GameMode->GetMainCamera();
+		ASF_Player* const SF_Player = Cast<ASF_Player>(GetOwner());
+		
+		if (!IsValid(SF_MainCamera)) return;
+		if (!IsValid(SF_Player)) return;
 
-	//Moving
-	EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &USF_MoveInput::Move);
+		SF_Player->AddMovementInput(SF_MainCamera->GetActorForwardVector(), InValue);
+	}
 }
 
-void USF_MoveInput::Move(const FInputActionValue& Value)
+void USF_MoveInput::MoveRight(const float InValue)
 {
+	if (ASF_GameMode* const SF_GameMode = Cast<ASF_GameMode>(UGameplayStatics::GetGameMode(GetWorld())))
+	{
+		ASF_MainCamera* const SF_MainCamera = SF_GameMode->GetMainCamera();
+		ASF_Player* const SF_Player = Cast<ASF_Player>(GetOwner());
 
+		if (!IsValid(SF_MainCamera)) return;
+		if (!IsValid(SF_Player)) return;
+
+		SF_Player->AddMovementInput(SF_MainCamera->GetActorRightVector(), InValue);
+	}
 }
 
-void USF_MoveInput::Jump(const FInputActionValue& Value)
+void USF_MoveInput::MoveUp(const float InValue)
 {
+	if (ASF_GameMode* const SF_GameMode = Cast<ASF_GameMode>(UGameplayStatics::GetGameMode(GetWorld())))
+	{
+		ASF_MainCamera* const SF_MainCamera = SF_GameMode->GetMainCamera();
+		ASF_Player* const SF_Player = Cast<ASF_Player>(GetOwner());
 
+		if (!IsValid(SF_MainCamera)) return;
+		if (!IsValid(SF_Player)) return;
+
+		SF_Player->AddMovementInput(SF_MainCamera->GetActorUpVector(), InValue);
+	}
 }
