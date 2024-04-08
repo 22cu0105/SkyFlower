@@ -1,12 +1,15 @@
 // ==================================================
 // Filename	:	SF_GameMode.h
-// Author	:	22cu0115 坂下 拓人 22cu0105 小田島 稜人
+// Author	:	22cu0115 坂下 拓人
+//				22cu0105 小田島 稜人
+// 
 // Description:入力処理を各Actor,Characterに送る
 // Update	:	2024/04/08
 // ==================================================
 #include "SF_InputManager.h"
 #include "SF_GameMode.h"
 #include "SF_Player.h"
+#include "SF_MainCamera.h"
 #include "Kismet/GameplayStatics.h"
 
 USF_InputManager::USF_InputManager()
@@ -38,7 +41,7 @@ void USF_InputManager::SetupPlayerInputComponent(UInputComponent* const InPlayer
 
 	InPlayerInputComponent->BindAxis("MoveForward", this, &USF_InputManager::MoveForward);
 	InPlayerInputComponent->BindAxis("MoveRight",	this, &USF_InputManager::MoveRight);
-	InPlayerInputComponent->BindAxis("MoveUp",		this, &USF_InputManager::MoveRight);
+	InPlayerInputComponent->BindAxis("MoveUp",		this, &USF_InputManager::MoveUp);
 	InPlayerInputComponent->BindAxis("LookUp",		this, &USF_InputManager::LookUp);
 	InPlayerInputComponent->BindAxis("Turn",		this, &USF_InputManager::Turn);
 
@@ -51,12 +54,15 @@ void USF_InputManager::LookUp(const float InValue)
 
 void USF_InputManager::Turn(const float InValue)
 {
+	if (ASF_GameMode* const SF_GameMode = Cast<ASF_GameMode>(UGameplayStatics::GetGameMode(GetWorld())))
+		if (ASF_MainCamera* const SF_Camera = SF_GameMode->GetMainCamera())
+			SF_Camera->AddYawRotation(InValue);
 }
 
 void USF_InputManager::MoveForward(const float InValue)
 {
 	if (ASF_GameMode* const SF_GameMode = Cast<ASF_GameMode>(UGameplayStatics::GetGameMode(GetWorld())))
-		if (ASF_Player* SF_Player = SF_GameMode->GetPlayerCharacter())
+		if (ASF_Player* const SF_Player = SF_GameMode->GetPlayerCharacter())
 			SF_Player->MoveForward(InValue);
 }
 
@@ -70,6 +76,6 @@ void USF_InputManager::MoveRight(const float InValue)
 void USF_InputManager::MoveUp(const float InValue)
 {
 	if (ASF_GameMode* const SF_GameMode = Cast<ASF_GameMode>(UGameplayStatics::GetGameMode(GetWorld())))
-		if (ASF_Player* SF_Player = SF_GameMode->GetPlayerCharacter())
+		if (ASF_Player* const SF_Player = SF_GameMode->GetPlayerCharacter())
 			SF_Player->MoveUp(InValue);
 }
