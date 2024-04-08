@@ -11,9 +11,9 @@
 #include "SF_Player.h"
 #include "SF_MainCamera.h"
 #include "SF_GameMode.h"
-#include "Kismet/GameplayStatics.h"
 #include "Components/InputComponent.h" // ’Ç‰Á
 #include "GameFramework/Pawn.h"
+#include "Kismet/GameplayStatics.h"
 
 USF_MoveInput::USF_MoveInput()
 {

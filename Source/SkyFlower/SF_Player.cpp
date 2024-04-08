@@ -59,5 +59,7 @@ void ASF_Player::MoveUp(const float InValue)
 
 void ASF_Player::Attack()
 {
+	if (!IsValid(AttackInputComponent)) return;
 
+	AttackInputComponent->Attack();
 }

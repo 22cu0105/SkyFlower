@@ -45,6 +45,8 @@ void USF_InputManager::SetupPlayerInputComponent(UInputComponent* const InPlayer
 	InPlayerInputComponent->BindAxis("LookUp",		this, &USF_InputManager::LookUp);
 	InPlayerInputComponent->BindAxis("Turn",		this, &USF_InputManager::Turn);
 
+	InPlayerInputComponent->BindAction("Attack",IE_Pressed,this, &USF_InputManager::Attack);
+
 	UE_LOG(LogTemp, Warning, TEXT("InputManager : SetupPlayerInputComponent"));
 }
 
@@ -79,3 +81,11 @@ void USF_InputManager::MoveUp(const float InValue)
 		if (ASF_Player* const SF_Player = SF_GameMode->GetPlayerCharacter())
 			SF_Player->MoveUp(InValue);
 }
+
+void USF_InputManager::Attack()
+{
+	if (ASF_GameMode* const SF_GameMode = Cast<ASF_GameMode>(UGameplayStatics::GetGameMode(GetWorld())))
+		if (ASF_Player* const SF_Player = SF_GameMode->GetPlayerCharacter())
+			SF_Player->Attack();
+}
+

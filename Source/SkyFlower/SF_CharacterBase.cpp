@@ -5,21 +5,21 @@
 ASF_CharacterBase::ASF_CharacterBase()
 	: WeaponActor(nullptr)
 	, ShieldActor(nullptr)
+	, CharacterState(ESF_CharacterState::None)
 {
 	PrimaryActorTick.bCanEverTick = true;
-
 }
 
 void ASF_CharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	CharacterState = ESF_CharacterState::Normal;
 }
 
 void ASF_CharacterBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 /// ToDo

@@ -1,16 +1,14 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "SF_AttackInput.h"
+#include "SF_Player.h"
+#include "SF_GameMode.h"
+#include "Components/InputComponent.h"
+#include "GameFramework/Pawn.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values for this component's properties
 USF_AttackInput::USF_AttackInput()
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
-
-	// ...
 }
 
 
@@ -18,9 +16,6 @@ USF_AttackInput::USF_AttackInput()
 void USF_AttackInput::BeginPlay()
 {
 	Super::BeginPlay();
-
-	// ...
-	
 }
 
 
@@ -28,12 +23,17 @@ void USF_AttackInput::BeginPlay()
 void USF_AttackInput::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
 }
 
 void USF_AttackInput::Attack()
 {
+	if (ASF_GameMode* const SF_GameMode = Cast<ASF_GameMode>(UGameplayStatics::GetGameMode(GetWorld())))
+	{
+		ASF_Player* const SF_Player = Cast<ASF_Player>(GetOwner());
+		
+		if (!IsValid(SF_Player)) return;
 
+		SF_Player->SetCharacterState(ESF_CharacterState::BeginAttack);
+	}
 }
 

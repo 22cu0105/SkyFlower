@@ -41,4 +41,6 @@ public:
 	void MoveRight(const float InValue);
 	// ã•ûŒüˆÚ“®ˆ—
 	void MoveUp(const float InValue);
+
+	void Attack();
 };
