@@ -1,4 +1,9 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// ==================================================
+// Filename	:	SF_CharacterBace.h
+// Author	:	22cu0115 â‰º‘ñl
+// Description:UŒ‚‚ÌŠÖ”’è‹`
+// Update	:	2024/04/09
+// ==================================================
 
 #pragma once
 

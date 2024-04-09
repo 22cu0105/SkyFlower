@@ -11,8 +11,9 @@
 #include "SF_Player.h"
 #include "SF_MainCamera.h"
 #include "SF_GameMode.h"
-#include "Components/InputComponent.h" // ’Ç‰Á
+#include "Components/InputComponent.h"
 #include "GameFramework/Pawn.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "Kismet/GameplayStatics.h"
 
 USF_MoveInput::USF_MoveInput()
@@ -41,6 +42,13 @@ void USF_MoveInput::MoveForward(const float InValue)
 		if (!IsValid(SF_MainCamera)) return;
 		if (!IsValid(SF_Player)) return;
 
+		const FRotator Rotation = {
+			0.f,
+			UKismetMathLibrary::FindLookAtRotation(SF_Player->GetActorLocation(),FVector(0.f, InValue * 100.f, 0.f)).Yaw,
+			0.f };
+
+		UE_LOG(LogTemp, Warning, TEXT("%f"), SF_Player->GetActorLocation().X);
+		SF_Player->SetActorRotation(Rotation);
 		SF_Player->AddMovementInput(SF_MainCamera->GetActorForwardVector(), InValue);
 	}
 }
@@ -54,7 +62,14 @@ void USF_MoveInput::MoveRight(const float InValue)
 
 		if (!IsValid(SF_MainCamera)) return;
 		if (!IsValid(SF_Player)) return;
+		
+		const FRotator Rotation = {
+			0.f,
+			-UKismetMathLibrary::FindLookAtRotation(SF_Player->GetActorLocation(),FVector(0.f, InValue * 100.f, 0.f)).Yaw,
+			0.f };
 
+		//UE_LOG(LogTemp, Warning, TEXT("%f"), SF_Player->GetActorLocation().Y);
+		SF_Player->SetActorRotation(Rotation);
 		SF_Player->AddMovementInput(SF_MainCamera->GetActorRightVector(), InValue);
 	}
 }
