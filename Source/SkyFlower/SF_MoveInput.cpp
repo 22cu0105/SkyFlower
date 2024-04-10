@@ -42,13 +42,21 @@ void USF_MoveInput::MoveForward(const float InValue)
 		if (!IsValid(SF_MainCamera)) return;
 		if (!IsValid(SF_Player)) return;
 
-		const FRotator Rotation = {
-			0.f,
-			UKismetMathLibrary::FindLookAtRotation(SF_Player->GetActorLocation(),FVector(0.f, InValue * 100.f, 0.f)).Yaw,
-			0.f };
+		//const FRotator Rotation = {
+		//	0.f,
+		//	UKismetMathLibrary::FindLookAtRotation(SF_Player->GetActorLocation(),FVector(0.f, InValue * 100.f, 0.f)).Yaw,
+		//	0.f };
+		//UE_LOG(LogTemp, Warning, TEXT("Forward: %f"), SF_Player->GetActorUpVector());
 
-		UE_LOG(LogTemp, Warning, TEXT("%f"), SF_Player->GetActorLocation().X);
-		SF_Player->SetActorRotation(Rotation);
+		auto movement = SF_Player->GetLastMovementInputVector();
+		// “ü—Í‚ª‚ ‚éŽž‚¾‚¯‰ñ“]
+		if (movement.X != 0)
+		{
+			auto currentRot = SF_Player->GetActorRotation();
+			auto targetRot = movement.Rotation();
+			SF_Player->SetActorRotation(FMath::RInterpTo(currentRot, targetRot, 0.f, rotationSpeed));
+		}
+		// “ü—Í•ûŒü‚ÉˆÚ“®
 		SF_Player->AddMovementInput(SF_MainCamera->GetActorForwardVector(), InValue);
 	}
 }
@@ -63,13 +71,16 @@ void USF_MoveInput::MoveRight(const float InValue)
 		if (!IsValid(SF_MainCamera)) return;
 		if (!IsValid(SF_Player)) return;
 		
-		const FRotator Rotation = {
-			0.f,
-			-UKismetMathLibrary::FindLookAtRotation(SF_Player->GetActorLocation(),FVector(0.f, InValue * 100.f, 0.f)).Yaw,
-			0.f };
-
-		//UE_LOG(LogTemp, Warning, TEXT("%f"), SF_Player->GetActorLocation().Y);
-		SF_Player->SetActorRotation(Rotation);
+		auto movement = SF_Player->GetLastMovementInputVector();
+		// “ü—Í‚ª‚ ‚éŽž‚¾‚¯‰ñ“]
+		if (movement.Y != 0)
+		{
+			UE_LOG(LogTemp, Warning, TEXT(" : %s"), "’Ê‚Á‚Ä‚Ü‚·");
+			auto currentRot = SF_Player->GetActorRotation();
+			auto targetRot = movement.Rotation();
+			SF_Player->SetActorRotation(FMath::RInterpTo(currentRot, targetRot, 0.f, rotationSpeed));
+		}
+		// “ü—Í•ûŒü‚ÉˆÚ“®
 		SF_Player->AddMovementInput(SF_MainCamera->GetActorRightVector(), InValue);
 	}
 }
@@ -84,6 +95,7 @@ void USF_MoveInput::MoveUp(const float InValue)
 		if (!IsValid(SF_MainCamera)) return;
 		if (!IsValid(SF_Player)) return;
 
+		// “ü—Í•ûŒü‚ÉˆÚ“®
 		SF_Player->AddMovementInput(SF_MainCamera->GetActorUpVector(), InValue);
 	}
 }

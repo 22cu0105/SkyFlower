@@ -33,4 +33,9 @@ public:
 	void MoveForward(const float InValue);
 	void MoveRight(const float InValue);
 	void MoveUp(const float InValue);
+
+protected:
+	// U‚èŒü‚«‘¬“x
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float rotationSpeed = 8.0f;
 };
