@@ -30,6 +30,17 @@ void USF_MoveInput::BeginPlay()
 void USF_MoveInput::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+
+	ASF_Player* const SF_Player = Cast<ASF_Player>(GetOwner());
+	const FVector movement = SF_Player->GetLastMovementInputVector();
+	// “ü—Í‚ª‚ ‚éŽž‚¾‚¯‰ñ“]
+	if (movement.X != 0 || movement.Y != 0)
+	{
+		//UE_LOG(LogTemp, Warning, TEXT(" : %s"), "’Ê‚Á‚Ä‚Ü‚·");
+		const FRotator currentRot = {0.f, SF_Player->GetActorRotation().Yaw, 0.f};
+		const FRotator targetRot = {0.f, movement.Rotation().Yaw, 0.f};
+		SF_Player->SetActorRotation(FMath::RInterpTo(currentRot, targetRot, DeltaTime, rotationSpeed));
+	}
 }
 
 void USF_MoveInput::MoveForward(const float InValue)
@@ -48,14 +59,6 @@ void USF_MoveInput::MoveForward(const float InValue)
 		//	0.f };
 		//UE_LOG(LogTemp, Warning, TEXT("Forward: %f"), SF_Player->GetActorUpVector());
 
-		auto movement = SF_Player->GetLastMovementInputVector();
-		// “ü—Í‚ª‚ ‚éŽž‚¾‚¯‰ñ“]
-		if (movement.X != 0)
-		{
-			auto currentRot = SF_Player->GetActorRotation();
-			auto targetRot = movement.Rotation();
-			SF_Player->SetActorRotation(FMath::RInterpTo(currentRot, targetRot, 0.f, rotationSpeed));
-		}
 		// “ü—Í•ûŒü‚ÉˆÚ“®
 		SF_Player->AddMovementInput(SF_MainCamera->GetActorForwardVector(), InValue);
 	}
@@ -69,17 +72,8 @@ void USF_MoveInput::MoveRight(const float InValue)
 		ASF_Player* const SF_Player = Cast<ASF_Player>(GetOwner());
 
 		if (!IsValid(SF_MainCamera)) return;
-		if (!IsValid(SF_Player)) return;
+		if (!IsValid(SF_Player)) return;	
 		
-		auto movement = SF_Player->GetLastMovementInputVector();
-		// “ü—Í‚ª‚ ‚éŽž‚¾‚¯‰ñ“]
-		if (movement.Y != 0)
-		{
-			UE_LOG(LogTemp, Warning, TEXT(" : %s"), "’Ê‚Á‚Ä‚Ü‚·");
-			auto currentRot = SF_Player->GetActorRotation();
-			auto targetRot = movement.Rotation();
-			SF_Player->SetActorRotation(FMath::RInterpTo(currentRot, targetRot, 0.f, rotationSpeed));
-		}
 		// “ü—Í•ûŒü‚ÉˆÚ“®
 		SF_Player->AddMovementInput(SF_MainCamera->GetActorRightVector(), InValue);
 	}
