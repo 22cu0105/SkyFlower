@@ -10,26 +10,29 @@
 #include "Components/ActorComponent.h"
 #include "SF_InputManager.generated.h"
 
+class ASF_GameMode;
+class ASF_MainCamera;
+class ASF_Player;
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class SKYFLOWER_API USF_InputManager : public UActorComponent
 {
 	GENERATED_BODY()
 
-public:	
+public:
 	USF_InputManager();
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 protected:
 	virtual void BeginPlay() override;
 
-public:	
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	// 入力バインド処理
+	////////////////////////////////////////// 入力バインド処理
+public:
 	UFUNCTION()
 	void SetupPlayerInputComponent(UInputComponent* const InPlayerInputComponent);
-
-	/********************PlayerInput********************/
+private:
+	/********************MovementInput********************/
 	// 視点Y軸回転処理
 	void LookUp(const float InValue);
 	// 視点X軸回転処理
@@ -42,5 +45,16 @@ public:
 	// 上方向移動処理
 	void MoveUp(const float InValue);
 
-	void Attack();
+	/********************AttackInput********************/
+	void BeginNormalAttack();
+	void EndNormalAttack();
+	void HomingAttack();
+	void LaserAttack();
+
+	////////////////////////////////////////// Get関数
+	FORCEINLINE ASF_GameMode* GetGameMode() const;
+
+	FORCEINLINE ASF_MainCamera* GetMainCamera() const;
+
+	FORCEINLINE ASF_Player* GetPlayerCharacter() const; 
 };

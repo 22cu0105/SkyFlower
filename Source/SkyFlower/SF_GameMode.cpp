@@ -10,6 +10,7 @@
 
 #include "SF_GameMode.h"
 #include "SF_InputManager.h"
+#include "SF_Player.h"
 #include "Kismet/GameplayStatics.h"
 
 

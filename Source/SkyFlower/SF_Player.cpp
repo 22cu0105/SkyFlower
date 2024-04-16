@@ -57,9 +57,30 @@ void ASF_Player::MoveUp(const float InValue)
 	MoveInputComponent->MoveUp(InValue);
 }
 
-void ASF_Player::Attack()
+void ASF_Player::BeginNormalAttack()
 {
 	if (!IsValid(AttackInputComponent)) return;
 
-	AttackInputComponent->Attack();
+	AttackInputComponent->BeginNormalAttack();
+}
+
+void ASF_Player::EndNormalAttack()
+{
+	if (!IsValid(AttackInputComponent)) return;
+
+	AttackInputComponent->EndNormalAttack();
+}
+
+void ASF_Player::HomingAttack()
+{
+	if (!IsValid(AttackInputComponent)) return;
+
+	AttackInputComponent->HomingAttack();
+}
+
+void ASF_Player::LaserAttack()
+{
+	if (!IsValid(AttackInputComponent)) return;
+
+	AttackInputComponent->LaserAttack();
 }

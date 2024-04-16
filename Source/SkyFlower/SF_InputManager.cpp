@@ -15,77 +15,110 @@
 USF_InputManager::USF_InputManager()
 {
 	PrimaryComponentTick.bCanEverTick = true;
-
-	// ...
 }
 
 
 void USF_InputManager::BeginPlay()
 {
 	Super::BeginPlay();
-
-	// ...
 }
 
 
 void USF_InputManager::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
 }
 
 void USF_InputManager::SetupPlayerInputComponent(UInputComponent* const InPlayerInputComponent)
 {
 	if (!IsValid(InPlayerInputComponent)) return;
 
+	//movement process
 	InPlayerInputComponent->BindAxis("MoveForward", this, &USF_InputManager::MoveForward);
-	InPlayerInputComponent->BindAxis("MoveRight",	this, &USF_InputManager::MoveRight);
-	InPlayerInputComponent->BindAxis("MoveUp",		this, &USF_InputManager::MoveUp);
-	InPlayerInputComponent->BindAxis("LookUp",		this, &USF_InputManager::LookUp);
-	InPlayerInputComponent->BindAxis("Turn",		this, &USF_InputManager::Turn);
+	InPlayerInputComponent->BindAxis("MoveRight", this, &USF_InputManager::MoveRight);
+	InPlayerInputComponent->BindAxis("MoveUp", this, &USF_InputManager::MoveUp);
+	InPlayerInputComponent->BindAxis("LookUp", this, &USF_InputManager::LookUp);
+	InPlayerInputComponent->BindAxis("Turn", this, &USF_InputManager::Turn);
 
-	InPlayerInputComponent->BindAction("Attack",IE_Pressed,this, &USF_InputManager::Attack);
+	//attack process
+	InPlayerInputComponent->BindAction("PressNormalAttack", IE_Pressed, this, &USF_InputManager::BeginNormalAttack);
+	InPlayerInputComponent->BindAction("ReleasedNormalAttack", IE_Released, this, &USF_InputManager::EndNormalAttack);
+	InPlayerInputComponent->BindAction("HomingAttack", IE_Pressed, this, &USF_InputManager::HomingAttack);
+	InPlayerInputComponent->BindAction("LaserAttack", IE_Pressed, this, &USF_InputManager::LaserAttack);
 
 	UE_LOG(LogTemp, Warning, TEXT("InputManager : SetupPlayerInputComponent"));
 }
 
 void USF_InputManager::LookUp(const float InValue)
 {
+
 }
 
 void USF_InputManager::Turn(const float InValue)
 {
-	if (ASF_GameMode* const SF_GameMode = Cast<ASF_GameMode>(UGameplayStatics::GetGameMode(GetWorld())))
-		if (ASF_MainCamera* const SF_Camera = SF_GameMode->GetMainCamera())
-			SF_Camera->AddYawRotation(InValue);
+	if (!GetMainCamera()) return;
+	GetMainCamera()->AddYawRotation(InValue);
 }
 
 void USF_InputManager::MoveForward(const float InValue)
 {
-	if (ASF_GameMode* const SF_GameMode = Cast<ASF_GameMode>(UGameplayStatics::GetGameMode(GetWorld())))
-		if (ASF_Player* const SF_Player = SF_GameMode->GetPlayerCharacter())
-			SF_Player->MoveForward(InValue);
+	if (!GetPlayerCharacter()) return;
+	GetPlayerCharacter()->MoveForward(InValue);
 }
 
 void USF_InputManager::MoveRight(const float InValue)
 {
-	if (ASF_GameMode* const SF_GameMode = Cast<ASF_GameMode>(UGameplayStatics::GetGameMode(GetWorld())))
-		if (ASF_Player* SF_Player = SF_GameMode->GetPlayerCharacter())
-			SF_Player->MoveRight(InValue);
+	if (!GetPlayerCharacter()) return;
+	GetPlayerCharacter()->MoveRight(InValue);
 }
 
 void USF_InputManager::MoveUp(const float InValue)
 {
-	if (ASF_GameMode* const SF_GameMode = Cast<ASF_GameMode>(UGameplayStatics::GetGameMode(GetWorld())))
-		if (ASF_Player* const SF_Player = SF_GameMode->GetPlayerCharacter())
-			SF_Player->MoveUp(InValue);
+	if (!GetPlayerCharacter()) return;
+	GetPlayerCharacter()->MoveUp(InValue);
 }
 
-void USF_InputManager::Attack()
+void USF_InputManager::BeginNormalAttack()
 {
-	if (ASF_GameMode* const SF_GameMode = Cast<ASF_GameMode>(UGameplayStatics::GetGameMode(GetWorld())))
-		if (ASF_Player* const SF_Player = SF_GameMode->GetPlayerCharacter())
-			SF_Player->Attack();
+	if (!GetPlayerCharacter()) return;
+	GetPlayerCharacter()->BeginNormalAttack();
 }
+
+void USF_InputManager::EndNormalAttack()
+{
+	if (!GetPlayerCharacter()) return;
+	GetPlayerCharacter()->EndNormalAttack();
+}
+
+void USF_InputManager::HomingAttack()
+{
+	if (!GetPlayerCharacter()) return;
+	GetPlayerCharacter()->HomingAttack();
+}
+
+void USF_InputManager::LaserAttack()
+{
+	if (!GetPlayerCharacter()) return;
+	GetPlayerCharacter()->LaserAttack();
+}
+
+
+/////////////////////////////FORCEINLINE
+ASF_GameMode* USF_InputManager::GetGameMode() const
+{
+	return Cast<ASF_GameMode>(UGameplayStatics::GetGameMode(GetWorld()));
+}
+
+ASF_MainCamera* USF_InputManager::GetMainCamera() const
+{
+	if (!GetGameMode()) return nullptr;
+	return GetGameMode()->GetMainCamera();
+}
+
+ASF_Player* USF_InputManager::GetPlayerCharacter() const
+{
+	if (!GetGameMode()) return nullptr;
+	return GetGameMode()->GetPlayerCharacter();
+}
+
 

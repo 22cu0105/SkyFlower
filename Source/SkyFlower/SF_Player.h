@@ -21,8 +21,6 @@ class SKYFLOWER_API ASF_Player : public ASF_CharacterBase
 
 public:
 	ASF_Player();
-protected:
-	virtual void BeginPlay() override;
 
 public:
 	virtual void Tick(float DeltaTime) override;
@@ -35,7 +33,13 @@ public:
 	void MoveRight(const float InValue);
 	void MoveUp(const float InValue);
 
-	void Attack();
+	void BeginNormalAttack();
+	void EndNormalAttack();
+	void HomingAttack();
+	void LaserAttack();
+
+protected:
+	virtual void BeginPlay() override;
 
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component", meta = (AllowPrivateAccess = "true"))
