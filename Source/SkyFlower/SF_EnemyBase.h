@@ -1,10 +1,11 @@
-// ==================================================
+ï»¿// ==================================================
 // Filename	:	SF_EnemyBase.h
-// Author	:	22cu0115 â‰º‘ñl
-// Description: ƒGƒlƒ~[‚ÌŠî’êƒNƒ‰ƒX
-// Notes:		—á
+// Author	:	22cu0115 å‚ä¸‹æ‹“äºº
+// Description: ã‚¨ãƒãƒŸãƒ¼ã®åŸºåº•ã‚¯ãƒ©ã‚¹
+// Notes:		ä¾‹
 //				
 // Update:		2024/04/12 22cu0115 
+//				2024/04/18 22cu0105 
 // ==================================================
 #pragma once
 
@@ -30,12 +31,22 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 public:
-	// ƒRƒŠƒWƒ‡ƒ“
+	// ã‚³ãƒªã‚¸ãƒ§ãƒ³
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Collision")
 	UBoxComponent* CollisionBox;
 
 public:
-	// ƒI[ƒo[ƒ‰ƒbƒvƒCƒxƒ“ƒg
+	// ã‚ªãƒ¼ãƒãƒ¼ãƒ©ãƒƒãƒ—ã‚¤ãƒ™ãƒ³ãƒˆ
 	UFUNCTION()
 	void OnOverlapBegin(class AActor* OverlappedActor, class AActor* OtherActor);
+
+private:
+	virtual void UpdateOnNormal(const float InDeltaTime) override;
+	virtual void OnBeginAttack() override;
+	virtual void UpdateOnShortRangeAttack(const float InDeltaTime) override;
+	virtual void UpdateOnLongRangeAttack(const float InDeltaTime) override;
+	virtual void OnEndAttack() override;
+	virtual void OnBeginDead() override;
+	virtual void UpdateOnDead(const float InDeltaTime) override;
+	virtual void OnEndDead() override;
 };

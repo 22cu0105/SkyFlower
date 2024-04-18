@@ -6,6 +6,8 @@ ASF_CharacterBase::ASF_CharacterBase()
 	: WeaponActor(nullptr)
 	, ShieldActor(nullptr)
 	, CharacterState(ESF_CharacterState::None)
+	, CharacterParam(FSF_CharacterInfo())
+	, CurrentHP(0.f)
 {
 	PrimaryActorTick.bCanEverTick = true;
 }
@@ -14,7 +16,9 @@ void ASF_CharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	// èâä˙âª
 	CharacterState = ESF_CharacterState::Normal;
+	CurrentHP = CharacterParam.MaxHP;
 }
 
 void ASF_CharacterBase::Tick(float DeltaTime)
