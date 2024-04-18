@@ -41,8 +41,8 @@ void USF_InputManager::SetupPlayerInputComponent(UInputComponent* const InPlayer
 	InPlayerInputComponent->BindAxis("Turn", this, &USF_InputManager::Turn);
 
 	//attack process
-	InPlayerInputComponent->BindAction("PressNormalAttack", IE_Pressed, this, &USF_InputManager::BeginNormalAttack);
-	InPlayerInputComponent->BindAction("ReleasedNormalAttack", IE_Released, this, &USF_InputManager::EndNormalAttack);
+	InPlayerInputComponent->BindAction("BeginNormalAttack", IE_Pressed, this, &USF_InputManager::BeginNormalAttack);
+	InPlayerInputComponent->BindAction("EndNormalAttack", IE_Released, this, &USF_InputManager::EndNormalAttack);
 	InPlayerInputComponent->BindAction("HomingAttack", IE_Pressed, this, &USF_InputManager::HomingAttack);
 	InPlayerInputComponent->BindAction("LaserAttack", IE_Pressed, this, &USF_InputManager::LaserAttack);
 

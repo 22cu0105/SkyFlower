@@ -3,8 +3,8 @@
 #include "SF_GameMode.h"
 #include "Components/InputComponent.h"
 #include "GameFramework/Pawn.h"
-#include "Kismet/GameplayStatics.h"
 #include "DebugHelpers.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values for this component's properties
 USF_AttackInput::USF_AttackInput()
@@ -24,22 +24,22 @@ void USF_AttackInput::BeginPlay()
 void USF_AttackInput::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	
+	// “G‚ð’Ç‚¢‚©‚¯‚é
+	MoveToEnemy(DeltaTime);
 }
 
 void USF_AttackInput::BeginNormalAttack()
 {
-	Debug::PrintFixedLine("NormalAttack()");
+	if (!GetPlayerCharacter()) return;
+	
+	Debug::PrintFixedLine("BeginNormalAttack()");
 
-	if (ASF_GameMode* const SF_GameMode = Cast<ASF_GameMode>(UGameplayStatics::GetGameMode(GetWorld())))
-	{
-		ASF_Player* const SF_Player = Cast<ASF_Player>(GetOwner());
+	GetPlayerCharacter()->SetCharacterState(ESF_CharacterState::BeginAttack);
 
-		if (!IsValid(SF_Player)) return;
+	isAtDestination = true;
 
-		SF_Player->SetCharacterState(ESF_CharacterState::BeginAttack);
-	}
-
-	//ŽžŠÔ‘ª‚é
+	// ŽžŠÔ‘ª‚é GetWorld()->GetDeltaSeconds();
 	// if(pressedTime <= 3)
 	// {
 	//		getGameMode()->getRockOnEnemy()
@@ -54,47 +54,83 @@ void USF_AttackInput::BeginNormalAttack()
 	// }
 	// else
 	// {
-	//		LaserAttack()
+	//		LaserAttack();
 	// }
 }
 
 void USF_AttackInput::EndNormalAttack()
 {
-
+	if (!GetPlayerCharacter()) return;
+	
+	Debug::PrintFixedLine("EndNormalAttack()");
 }
 
 void USF_AttackInput::HomingAttack()
 {
+	if (!GetPlayerCharacter()) return;
+
 	Debug::PrintFixedLine("HomingAttack()");
 }
 
 void USF_AttackInput::LaserAttack()
 {
+	if (!GetPlayerCharacter()) return;
+
 	Debug::PrintFixedLine("LaserAttack()");
 }
 
 void USF_AttackInput::ShortRangeAttack()
 {
-	if (ASF_GameMode* const SF_GameMode = Cast<ASF_GameMode>(UGameplayStatics::GetGameMode(GetWorld())))
-	{
-		ASF_Player* const SF_Player = Cast<ASF_Player>(GetOwner());
+	if (!GetPlayerCharacter()) return;
+	
+	GetPlayerCharacter()->SetCharacterState(ESF_CharacterState::ShortRangeAttack);
 
-		if (!IsValid(SF_Player)) return;
-
-		SF_Player->SetCharacterState(ESF_CharacterState::ShortRangeAttack);
-	}
+	// AppllyDamage(Enemy);
 }
 
 void USF_AttackInput::LongRangeAttack()
 {
-	if (ASF_GameMode* const SF_GameMode = Cast<ASF_GameMode>(UGameplayStatics::GetGameMode(GetWorld())))
+	if (!GetPlayerCharacter()) return;
+	// if (!IsValid(SF_Player)) return;
+
+	GetPlayerCharacter()->SetCharacterState(ESF_CharacterState::LongRangeAttack);
+
+	// AppllyDamage(Enemy);
+}
+
+void USF_AttackInput::MoveToEnemy(float DeltaTime)
+{
+	if (isAtDestination)
 	{
-		ASF_Player* const SF_Player = Cast<ASF_Player>(GetOwner());
+		moveTime += DeltaTime;
+		// “G‚ÌˆÊ’u‚ðŽæ“¾‚·‚é
+		//FVector EnemyLocation = NearestEnemy->GetActorLocation();
+		FVector EnemyLocation(0, 100, 100);
 
-		if (!IsValid(SF_Player)) return;
+		// ƒvƒŒƒCƒ„[‚ª“G‚É‹ß‚Ã‚­•ûŒü‚ðŒvŽZ‚·‚é
+		FVector DirectionToEnemy = (EnemyLocation - GetPlayerCharacter()->GetActorLocation()).GetSafeNormal();
 
-		SF_Player->SetCharacterState(ESF_CharacterState::LongRangeAttack);
+		// ƒvƒŒƒCƒ„[‚ð“G‚ÉŒü‚©‚Á‚ÄˆÚ“®‚³‚¹‚é
+		FVector NewLocation = FMath::VInterpConstantTo(GetPlayerCharacter()->GetActorLocation() + DirectionToEnemy,
+			EnemyLocation, DeltaTime, moveSpeed);
+		GetPlayerCharacter()->SetActorLocation(NewLocation);
 
-
+		if (GetPlayerCharacter()->GetActorLocation() == EnemyLocation || moveTime >= timeLimit)
+		{
+			isAtDestination = false;
+			moveTime = 0.f;
+		}
 	}
+}
+
+/////////////////////////////FORCEINLINE
+ASF_GameMode* USF_AttackInput::GetGameMode() const
+{
+	return Cast<ASF_GameMode>(UGameplayStatics::GetGameMode(GetWorld()));
+}
+
+ASF_Player* USF_AttackInput::GetPlayerCharacter() const
+{
+	if (!GetGameMode()) return nullptr;
+	return GetGameMode()->GetPlayerCharacter();
 }
