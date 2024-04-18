@@ -28,6 +28,12 @@ void USF_EnemyManager::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 			EnemyList.Remove(DestroyEnemy);
 	}
 }
+
+/// @brief SpawnType‚Å¶¬•û–@‚ğ•ª‚¯‚é
+/// @param InSpawnType 
+/// @param InLocation 
+/// @param InEnemy 
+/// @param InNum 
 void USF_EnemyManager::SpawnAIEnemyFromGenerationType(const ESF_SpawnType InSpawnType, const FVector& InLocation, TSubclassOf<ASF_EnemyBase> const InEnemy, const int InNum)
 {
 	switch (InSpawnType)
@@ -40,23 +46,29 @@ void USF_EnemyManager::SpawnAIEnemyFromGenerationType(const ESF_SpawnType InSpaw
 	}
 }
 
+/// @brief €–S‚µ‚Ä‚¢‚é“GƒLƒƒƒ‰ƒNƒ^[‚ğæ“¾
+/// @return €–S‚µ‚Ä‚¢‚é“G‚Ì”z—ñ
 TArray<ASF_EnemyBase*> USF_EnemyManager::TryGetDeadEnemies() const
 {
 	// €–S‚µ‚Ä‚¢‚é“G‚ÌƒAƒhƒŒƒXŠi”[—p
 	TArray<ASF_EnemyBase*> DeadEnemyList;
 
-	//for (ASF_EnemyBase* CheackEnemy : EnemyList)
-	//{
-	//	if (!IsValid(CheackEnemy)) continue;
+	for (ASF_EnemyBase* CheackEnemy : EnemyList)
+	{
+		if (!IsValid(CheackEnemy)) continue;
 
-	//	// €–S‚µ‚Ä‚¢‚é‚©”»’è‚µA”z—ñ‚É’Ç‰Á
-	//	if (CheackEnemy->GetCharacterState() == EBO_CharacterState::Dead)
-	//		DeadEnemyList.Add(CheackEnemy);
-	//}
+		// €–S‚µ‚Ä‚¢‚é‚©”»’è‚µA”z—ñ‚É’Ç‰Á
+		if (CheackEnemy->IsDead())
+			DeadEnemyList.Add(CheackEnemy);
+	}
 
 	return DeadEnemyList;
 }
 
+/// @brief ’Êí“G‚Ì¶¬ˆ—
+/// @param InEnemy 
+/// @param InLocation 
+/// @param InNum 
 void USF_EnemyManager::NormalAIEnemySpawn(TSubclassOf<ASF_EnemyBase> const InEnemy, const FVector& InLocation, const int InNum)
 {
 	if (!IsValid(EnemyGenerator)) return;
@@ -71,6 +83,10 @@ void USF_EnemyManager::NormalAIEnemySpawn(TSubclassOf<ASF_EnemyBase> const InEne
 	}
 }
 
+/// @brief ŒQO“G‚Ì¶¬ˆ—
+/// @param InEnemy 
+/// @param InLocation 
+/// @param InNum 
 void USF_EnemyManager::FlockAIEnemySpawn(TSubclassOf<ASF_EnemyBase> const InEnemy, const FVector& InLocation, const int InNum)
 {
 	if (!IsValid(EnemyGenerator)) return;
