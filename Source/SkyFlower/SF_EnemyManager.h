@@ -38,6 +38,14 @@ protected:
 public:	
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	// “G‚Ì¶¬•û–@‚©‚ç“GAI‚ğ¶¬‚·‚éŠÖ”‚ğê‡•ª‚¯‚·‚é
+	UFUNCTION(BlueprintCallable, Category = "EnemyManager")
+	void SpawnAIEnemyFromGenerationType(const ESF_SpawnType InSpawnType, const FVector& InLocation, TSubclassOf<ASF_EnemyBase> const InEnemy, const int InNum = 1);
+
+	// ˆø”‚ÌÀ•W‚Éˆê”Ô‹ß‚¢“G‚ÌÀ•W‚ğæ“¾
+	UFUNCTION(BlueprintCallable, Category = "EnemyManager")
+	FVector GetNearestEnemyPos(const FVector& InLocation);
+
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "EnemyManager", meta = (AllowPrivateAccess = "true"))
 	USF_EnemyGenerator* EnemyGenerator;
@@ -50,10 +58,6 @@ public:
 	// Œ»İ¶‚«‚Ä‚¢‚é“G‚Ì”‚ğæ“¾
 	UFUNCTION(BlueprintCallable, Category = "EnemyManager")
 	int GetCurrentEnemyNum() const { return EnemyList.Num(); }
-
-	// “G‚Ì¶¬•û–@‚©‚ç“GAI‚ğ¶¬‚·‚éŠÖ”‚ğê‡•ª‚¯‚·‚é
-	UFUNCTION(BlueprintCallable, Category = "EnemyManager")
-	void SpawnAIEnemyFromGenerationType(const ESF_SpawnType InSpawnType, const FVector& InLocation, TSubclassOf<ASF_EnemyBase> const InEnemy, const int InNum = 1);
 
 private:
 	// ŠÇ—‚µ‚Ä‚¢‚é“G‚ª€–S‚µ‚Ä‚¢‚é‚©”»’è‚µA€‚ñ‚Å‚¢‚½‚çŠÇ——Ìˆæ‚ğ‰ğ•ú‚·‚é

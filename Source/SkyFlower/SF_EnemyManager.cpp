@@ -46,6 +46,25 @@ void USF_EnemyManager::SpawnAIEnemyFromGenerationType(const ESF_SpawnType InSpaw
 	}
 }
 
+FVector USF_EnemyManager::GetNearestEnemyPos(const FVector& InLocation)
+{
+	FVector NearestEnemyPos = InLocation;
+
+	for (ASF_EnemyBase* CheackEnemy : EnemyList)
+	{
+		if (!IsValid(CheackEnemy)) continue;
+
+		const FVector EnemyPos = CheackEnemy->GetActorLocation();
+		const float CurrentLength = (InLocation - EnemyPos).Size();
+		const float PrevLength = NearestEnemyPos.Size();
+
+		if (CurrentLength < PrevLength)
+			NearestEnemyPos = EnemyPos;
+	}
+
+	return NearestEnemyPos;
+}
+
 /// @brief Ž€–S‚µ‚Ä‚¢‚é“GƒLƒƒƒ‰ƒNƒ^[‚ðŽæ“¾
 /// @return Ž€–S‚µ‚Ä‚¢‚é“G‚Ì”z—ñ
 TArray<ASF_EnemyBase*> USF_EnemyManager::TryGetDeadEnemies() const
