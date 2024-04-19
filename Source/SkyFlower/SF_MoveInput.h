@@ -13,6 +13,9 @@
 #include "Components/ActorComponent.h"
 #include "SF_MoveInput.generated.h"
 
+class ASF_GameMode;
+class ASF_MainCamera;
+class ASF_Player;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class SKYFLOWER_API USF_MoveInput : public UActorComponent
@@ -33,9 +36,24 @@ public:
 	void MoveForward(const float InValue);
 	void MoveRight(const float InValue);
 	void MoveUp(const float InValue);
+	void MoveDash();
 
 protected:
 	// 振り向き速度
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float rotationSpeed = 8.0f;
+	// ダッシュ速度
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float dashSpeed = 1500.0f;
+
+private:
+	void CharacterRotate() const;
+	void AddForce(const FVector InDirection);
+
+	////////////////////////////////////////// Get関数
+	FORCEINLINE ASF_GameMode* GetGameMode() const;
+
+	FORCEINLINE ASF_MainCamera* GetMainCamera() const;
+
+	FORCEINLINE ASF_Player* GetPlayerCharacter() const;
 };

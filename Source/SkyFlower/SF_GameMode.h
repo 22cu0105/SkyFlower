@@ -31,15 +31,15 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 public:
-	void SetupPlayerInputComponent(UInputComponent* const InPlayerInputComponent);
+	//void SetupPlayerInputComponent(UInputComponent* const InPlayerInputComponent);
 
 	// ヒットストップ開始
 	UFUNCTION(BlueprintCallable, Category = "GameMode")
 	void StartHitStop(const float InHitStopSpeed, const float InHitStopTime);
 
 private:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
-	USF_InputManager* InputManager;
+	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
+	//USF_InputManager* InputManager;
 
 	UPROPERTY(VisibleAnywhere, Category = "Input")
 	ASF_Player* PlayerCharacter;

@@ -42,6 +42,8 @@ private:
 	void MoveForward(const float InValue);
 	// 横方向移動処理
 	void MoveRight(const float InValue);
+	// 前方向にダッシュする
+	void MoveDash();
 	// 上方向移動処理
 	void MoveUp(const float InValue);
 

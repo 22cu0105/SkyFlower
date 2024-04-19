@@ -32,6 +32,7 @@ public:
 	void MoveForward(const float InValue);
 	void MoveRight(const float InValue);
 	void MoveUp(const float InValue);
+	void MoveDash();
 
 	void BeginNormalAttack();
 	void EndNormalAttack();

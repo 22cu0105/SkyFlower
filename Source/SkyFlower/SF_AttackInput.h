@@ -27,15 +27,8 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	// ìGÇí«Ç¢Ç©ÇØÇÈë¨ìx
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		float moveSpeed = 2500.f;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		float timeLimit = 3.f;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		float moveTime = 0.f;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		bool isAtDestination = false;
+
+		////////////////////////////////////////// custom function
 public:
 	void BeginNormalAttack();
 	void EndNormalAttack();
@@ -51,10 +44,27 @@ private:
 	void LongRangeAttack();
 
 	UFUNCTION()
-		void MoveToEnemy(float DeltaTime);
+	void MoveToEnemy(float DeltaTime);
+
+	////////////////////////////////////////// custom variable
+public:	
+	// ìGÇí«Ç¢Ç©ÇØÇÈë¨ìx
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float moveSpeed = 2500.f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float timeLimit = 3.f;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	float moveTime = 0.f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool isAtDestination = false;
+
+	UPROPERTY(EditAnywhere, Category = "TEST")
+	TSubclassOf<AActor> ProjectileClass;
 
 	////////////////////////////////////////// Getä÷êî
 	FORCEINLINE ASF_GameMode* GetGameMode() const;
 
 	FORCEINLINE ASF_Player* GetPlayerCharacter() const;
+
+
 };

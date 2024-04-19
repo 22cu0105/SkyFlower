@@ -13,8 +13,12 @@
 #include "SF_GameMode.h"
 #include "Components/InputComponent.h"
 #include "GameFramework/Pawn.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "DebugHelpers.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Kismet/GameplayStatics.h"
+
+using namespace Debug;
 
 USF_MoveInput::USF_MoveInput()
 {
@@ -30,66 +34,97 @@ void USF_MoveInput::BeginPlay()
 void USF_MoveInput::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	ASF_Player* const SF_Player = Cast<ASF_Player>(GetOwner());
-	const FVector movement = SF_Player->GetLastMovementInputVector();
-	// “ü—Í‚ª‚ ‚éŽž‚¾‚¯‰ñ“]
-	if (movement.X != 0 || movement.Y != 0)
-	{
-		//UE_LOG(LogTemp, Warning, TEXT(" : %s"), "’Ê‚Á‚Ä‚Ü‚·");
-		const FRotator currentRot = {0.f, SF_Player->GetActorRotation().Yaw, 0.f};
-		const FRotator targetRot = {0.f, movement.Rotation().Yaw, 0.f};
-		SF_Player->SetActorRotation(FMath::RInterpTo(currentRot, targetRot, DeltaTime, rotationSpeed));
-	}
 }
 
 void USF_MoveInput::MoveForward(const float InValue)
 {
-	if (ASF_GameMode* const SF_GameMode = Cast<ASF_GameMode>(UGameplayStatics::GetGameMode(GetWorld())))
-	{
-		ASF_MainCamera* const SF_MainCamera = SF_GameMode->GetMainCamera();
-		ASF_Player* const SF_Player = Cast<ASF_Player>(GetOwner());
-		
-		if (!IsValid(SF_MainCamera)) return;
-		if (!IsValid(SF_Player)) return;
+	if (!IsValid(GetMainCamera())) return;
+	if (!IsValid(GetPlayerCharacter())) return;
 
-		//const FRotator Rotation = {
-		//	0.f,
-		//	UKismetMathLibrary::FindLookAtRotation(SF_Player->GetActorLocation(),FVector(0.f, InValue * 100.f, 0.f)).Yaw,
-		//	0.f };
-		//UE_LOG(LogTemp, Warning, TEXT("Forward: %f"), SF_Player->GetActorUpVector());
+	//const FRotator Rotation = {
+	//	0.f,
+	//	UKismetMathLibrary::FindLookAtRotation(SF_Player->GetActorLocation(),FVector(0.f, InValue * 100.f, 0.f)).Yaw,
+	//	0.f };
+	//UE_LOG(LogTemp, Warning, TEXT("Forward: %f"), SF_Player->GetActorUpVector());
 
-		// “ü—Í•ûŒü‚ÉˆÚ“®
-		SF_Player->AddMovementInput(SF_MainCamera->GetActorForwardVector(), InValue);
-	}
+	// “ü—Í•ûŒü‚ÉˆÚ“®
+	GetPlayerCharacter()->AddMovementInput(GetMainCamera()->GetActorForwardVector(), InValue);
+
+	// ‰ñ“]
+	CharacterRotate();
 }
 
 void USF_MoveInput::MoveRight(const float InValue)
 {
-	if (ASF_GameMode* const SF_GameMode = Cast<ASF_GameMode>(UGameplayStatics::GetGameMode(GetWorld())))
-	{
-		ASF_MainCamera* const SF_MainCamera = SF_GameMode->GetMainCamera();
-		ASF_Player* const SF_Player = Cast<ASF_Player>(GetOwner());
+	if (!IsValid(GetMainCamera())) return;
+	if (!IsValid(GetPlayerCharacter())) return;
 
-		if (!IsValid(SF_MainCamera)) return;
-		if (!IsValid(SF_Player)) return;	
-		
-		// “ü—Í•ûŒü‚ÉˆÚ“®
-		SF_Player->AddMovementInput(SF_MainCamera->GetActorRightVector(), InValue);
-	}
+	// “ü—Í•ûŒü‚ÉˆÚ“®
+	GetPlayerCharacter()->AddMovementInput(GetMainCamera()->GetActorRightVector(), InValue);
+
+	// ‰ñ“]
+	CharacterRotate();
+}
+
+void USF_MoveInput::MoveDash()
+{
+	if (!IsValid(GetMainCamera())) return;
+	if (!IsValid(GetPlayerCharacter())) return;
+
+	//UE_LOG(LogTemp, Warning, TEXT(": %f"), GetPlayerCharacter()->GetCharacterMovement()->Velocity;);
+	Debug::PrintFixedLine(GetPlayerCharacter()->GetCharacterMovement()->Velocity.ToString());
+	
+	AddForce(GetPlayerCharacter()->GetActorForwardVector());
 }
 
 void USF_MoveInput::MoveUp(const float InValue)
 {
-	if (ASF_GameMode* const SF_GameMode = Cast<ASF_GameMode>(UGameplayStatics::GetGameMode(GetWorld())))
+	if (!IsValid(GetMainCamera())) return;
+	if (!IsValid(GetPlayerCharacter())) return;
+
+	// “ü—Í•ûŒü‚ÉˆÚ“®
+	GetPlayerCharacter()->AddMovementInput(GetMainCamera()->GetActorUpVector(), InValue);
+}
+
+void USF_MoveInput::AddForce(const FVector InDirection)
+{
+	// ƒvƒŒƒCƒ„[‚Ì‘¬“x‚ð‚O‚É‚·‚é
+	//GetPlayerCharacter()->GetCharacterMovement()->Velocity = FVector::Zero();
+	// ƒ_ƒbƒVƒ…
+	//UE_LOG(LogTemp, Warning, TEXT("AddForce()"))
+	GetPlayerCharacter()->GetCharacterMovement()->AddImpulse(InDirection * dashSpeed, true);
+}
+
+void USF_MoveInput::CharacterRotate() const
+{
+	if (!IsValid(GetPlayerCharacter())) return;
+
+	const FVector movement = GetPlayerCharacter()->GetLastMovementInputVector();
+
+	// “ü—Í‚ª‚ ‚éŽž‚¾‚¯‰ñ“]
+	if (movement.X != 0 || movement.Y != 0)
 	{
-		ASF_MainCamera* const SF_MainCamera = SF_GameMode->GetMainCamera();
-		ASF_Player* const SF_Player = Cast<ASF_Player>(GetOwner());
-
-		if (!IsValid(SF_MainCamera)) return;
-		if (!IsValid(SF_Player)) return;
-
-		// “ü—Í•ûŒü‚ÉˆÚ“®
-		SF_Player->AddMovementInput(SF_MainCamera->GetActorUpVector(), InValue);
+		//UE_LOG(LogTemp, Warning, TEXT(" : %s"), "rotation");
+		const FRotator currentRot = { 0.f, GetPlayerCharacter()->GetActorRotation().Yaw, 0.f };
+		const FRotator targetRot = { 0.f, movement.Rotation().Yaw, 0.f };
+		GetPlayerCharacter()->SetActorRotation(FMath::RInterpTo(currentRot, targetRot, GetWorld()->GetDeltaSeconds(), rotationSpeed));
 	}
+}
+
+/////////////////////////////FORCEINLINE
+ASF_GameMode* USF_MoveInput::GetGameMode() const
+{
+	return Cast<ASF_GameMode>(UGameplayStatics::GetGameMode(GetWorld()));
+}
+
+ASF_MainCamera* USF_MoveInput::GetMainCamera() const
+{
+	if (!GetGameMode()) return nullptr;
+	return GetGameMode()->GetMainCamera();
+}
+
+ASF_Player* USF_MoveInput::GetPlayerCharacter() const
+{
+	if (!GetGameMode()) return nullptr;
+	return GetGameMode()->GetPlayerCharacter();
 }

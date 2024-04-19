@@ -39,6 +39,7 @@ void USF_InputManager::SetupPlayerInputComponent(UInputComponent* const InPlayer
 	InPlayerInputComponent->BindAxis("MoveUp", this, &USF_InputManager::MoveUp);
 	InPlayerInputComponent->BindAxis("LookUp", this, &USF_InputManager::LookUp);
 	InPlayerInputComponent->BindAxis("Turn", this, &USF_InputManager::Turn);
+	InPlayerInputComponent->BindAction("MoveDash", IE_Pressed, this, &USF_InputManager::MoveDash);
 
 	//attack process
 	InPlayerInputComponent->BindAction("BeginNormalAttack", IE_Pressed, this, &USF_InputManager::BeginNormalAttack);
@@ -51,7 +52,8 @@ void USF_InputManager::SetupPlayerInputComponent(UInputComponent* const InPlayer
 
 void USF_InputManager::LookUp(const float InValue)
 {
-
+	if (!GetMainCamera()) return;
+	//GetMainCamera()->AddPitchRotation(InValue);
 }
 
 void USF_InputManager::Turn(const float InValue)
@@ -70,6 +72,12 @@ void USF_InputManager::MoveRight(const float InValue)
 {
 	if (!GetPlayerCharacter()) return;
 	GetPlayerCharacter()->MoveRight(InValue);
+}
+
+void USF_InputManager::MoveDash()
+{
+	if (!GetPlayerCharacter()) return;
+	GetPlayerCharacter()->MoveDash();
 }
 
 void USF_InputManager::MoveUp(const float InValue)

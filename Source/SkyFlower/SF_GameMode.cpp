@@ -12,6 +12,7 @@
 #include "SF_InputManager.h"
 #include "SF_Player.h"
 #include "Kismet/GameplayStatics.h"
+#include "SF_PlayerController.h"
 
 
 ASF_GameMode::ASF_GameMode()
@@ -19,10 +20,15 @@ ASF_GameMode::ASF_GameMode()
 	, HitStopSpeed(0.5f)
 	, HitStopTime(0.f)
 	, Timer_HitStop(0.f)
-{
+	//, InputManager(nullptr)
+	, PlayerCharacter(nullptr)
+	, MainCamera(nullptr)
+{	
 	PrimaryActorTick.bCanEverTick = true;
 
-	InputManager = CreateDefaultSubobject<USF_InputManager>(TEXT("InputManager"));
+	//InputManager = CreateDefaultSubobject<USF_InputManager>(TEXT("InputManager"));
+
+	PlayerControllerClass = ASF_PlayerController::StaticClass();
 }
 
 void ASF_GameMode::BeginPlay()
@@ -48,12 +54,12 @@ void ASF_GameMode::Tick(float DeltaTime)
 	}
 }
 
-void ASF_GameMode::SetupPlayerInputComponent(UInputComponent* const InPlayerInputComponent)
-{
-	if (!IsValid(InputManager)) return;
-
-	InputManager->SetupPlayerInputComponent(InPlayerInputComponent);
-}
+//void ASF_GameMode::SetupPlayerInputComponent(UInputComponent* const InPlayerInputComponent)
+//{
+//	if (!IsValid(InputManager)) return;
+//
+//	InputManager->SetupPlayerInputComponent(InPlayerInputComponent);
+//}
 
 // ヒットストップの速度、　ヒットストップさせる時間
 void ASF_GameMode::StartHitStop(const float InHitStopSpeed, const float InHitStopTime)
