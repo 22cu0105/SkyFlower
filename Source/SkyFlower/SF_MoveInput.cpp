@@ -89,7 +89,7 @@ void USF_MoveInput::MoveUp(const float InValue)
 void USF_MoveInput::AddForce(const FVector InDirection)
 {
 	// プレイヤーの速度を０にする
-	//GetPlayerCharacter()->GetCharacterMovement()->Velocity = FVector::Zero();
+	GetPlayerCharacter()->GetCharacterMovement()->Velocity = FVector::Zero();
 	// ダッシュ
 	//UE_LOG(LogTemp, Warning, TEXT("AddForce()"))
 	GetPlayerCharacter()->GetCharacterMovement()->AddImpulse(InDirection * dashSpeed, true);
