@@ -9,26 +9,29 @@
 
 
 #include "SF_GameMode.h"
-#include "SF_InputManager.h"
 #include "SF_Player.h"
-#include "Kismet/GameplayStatics.h"
 #include "SF_PlayerController.h"
+#include "SF_EnemyManager.h"
+#include "DebugHelpers.h"
+#include "Kismet/GameplayStatics.h"
+using namespace Debug;
 
 
 ASF_GameMode::ASF_GameMode()
-	: bIsInHitStop(false)
+	: EnemyManager(nullptr)
+	, PlayerCharacter(nullptr)
+	, MainCamera(nullptr)
+	, bIsInHitStop(false)
 	, HitStopSpeed(0.5f)
 	, HitStopTime(0.f)
 	, Timer_HitStop(0.f)
-	//, InputManager(nullptr)
-	, PlayerCharacter(nullptr)
-	, MainCamera(nullptr)
 {	
 	PrimaryActorTick.bCanEverTick = true;
 
-	//InputManager = CreateDefaultSubobject<USF_InputManager>(TEXT("InputManager"));
-
 	PlayerControllerClass = ASF_PlayerController::StaticClass();
+
+	// コンポーネント生成
+	EnemyManager = CreateDefaultSubobject<USF_EnemyManager>(TEXT("EnemyManager"));
 }
 
 void ASF_GameMode::BeginPlay()
@@ -54,13 +57,6 @@ void ASF_GameMode::Tick(float DeltaTime)
 	}
 }
 
-//void ASF_GameMode::SetupPlayerInputComponent(UInputComponent* const InPlayerInputComponent)
-//{
-//	if (!IsValid(InputManager)) return;
-//
-//	InputManager->SetupPlayerInputComponent(InPlayerInputComponent);
-//}
-
 // ヒットストップの速度、　ヒットストップさせる時間
 void ASF_GameMode::StartHitStop(const float InHitStopSpeed, const float InHitStopTime)
 {
@@ -71,4 +67,17 @@ void ASF_GameMode::StartHitStop(const float InHitStopSpeed, const float InHitSto
 
 	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), HitStopSpeed);
 	bIsInHitStop = true;
+}
+
+/// @brief プレイヤーから一番近い敵の座標を取得する
+/// @return FVector(0.f) : 取得できなかった
+FVector ASF_GameMode::GetRockOnEnemyPos() const
+{
+	if (!IsValid(EnemyManager))
+	{
+		Debug::Print("not found EnemyManager.");
+		return FVector(0.f);
+	}
+
+	return EnemyManager->GetNearestEnemyPos(PlayerCharacter->GetActorLocation());
 }

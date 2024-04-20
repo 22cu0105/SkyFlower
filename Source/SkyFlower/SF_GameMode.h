@@ -5,6 +5,7 @@
 // Description:Playerから送られてくる情報を受け取る
 // Update	:	2024/04/08
 //				2024/04/16 小田島 ヒットストップ処理
+//				2024/04/16 小田島 ロックオン処理
 // ==================================================
 #pragma once
 
@@ -12,7 +13,7 @@
 #include "GameFramework/GameModeBase.h"
 #include "SF_GameMode.generated.h"
 
-class USF_InputManager;
+class USF_EnemyManager;
 class ASF_Player;
 class ASF_MainCamera;
 
@@ -31,15 +32,18 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 public:
-	//void SetupPlayerInputComponent(UInputComponent* const InPlayerInputComponent);
-
 	// ヒットストップ開始
 	UFUNCTION(BlueprintCallable, Category = "GameMode")
 	void StartHitStop(const float InHitStopSpeed, const float InHitStopTime);
 
+	// ロックオンした敵の座標を取得
+	UFUNCTION(BlueprintCallable, Category = "GameMode")
+	FVector GetRockOnEnemyPos() const;
+
 private:
-	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
-	//USF_InputManager* InputManager;
+	// 敵を生成し、管理するコンポーネント
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component", meta = (AllowPrivateAccess = "true"))
+	USF_EnemyManager* EnemyManager;
 
 	UPROPERTY(VisibleAnywhere, Category = "Input")
 	ASF_Player* PlayerCharacter;
@@ -47,17 +51,12 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = "Input")
 	ASF_MainCamera* MainCamera;
 
-
 public:
-	UFUNCTION(BlueprintCallable, Category = "SF_GameMode")
 	void SetPlayerCharacter(ASF_Player* const InPlayerCharacter) { PlayerCharacter = InPlayerCharacter; }
-
-	UFUNCTION(BlueprintCallable, Category = "SF_GameMode")
 	void SetMainCamera(ASF_MainCamera* const InMainCamera) { MainCamera = InMainCamera; }
 
 	UFUNCTION(BlueprintCallable, Category = "SF_GameMode")
 	ASF_Player* GetPlayerCharacter() const { return PlayerCharacter; }
-
 	UFUNCTION(BlueprintCallable, Category = "SF_GameMode")
 	ASF_MainCamera* GetMainCamera() const { return MainCamera; }
 

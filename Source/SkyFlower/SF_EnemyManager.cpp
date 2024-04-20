@@ -1,6 +1,7 @@
 #include "SF_EnemyManager.h"
 #include "SF_EnemyGenerator.h"
 #include "SF_EnemyBase.h"
+#include "Kismet/GameplayStatics.h"
 
 
 USF_EnemyManager::USF_EnemyManager()
@@ -14,6 +15,16 @@ void USF_EnemyManager::BeginPlay()
 {
 	Super::BeginPlay();
 
+	// 事前にマップ上に敵が配置されている敵を検索し、格納
+	// デバッグ用。実際は事前にマップ上に敵がいることは決してない
+	TArray<AActor*> PrevSpawnedEnemyList;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ASF_EnemyBase::StaticClass(), PrevSpawnedEnemyList);
+	for (AActor* EnemyActor : PrevSpawnedEnemyList)
+	{
+		if (!IsValid(EnemyActor)) continue;
+
+		EnemyList.Add(Cast<ASF_EnemyBase>(EnemyActor));
+	}
 }
 
 void USF_EnemyManager::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -46,6 +57,9 @@ void USF_EnemyManager::SpawnAIEnemyFromGenerationType(const ESF_SpawnType InSpaw
 	}
 }
 
+/// @brief 引数で渡された座標に一番近い敵の座標を取得
+/// @param InLocation 比較する座標
+/// @return 
 FVector USF_EnemyManager::GetNearestEnemyPos(const FVector& InLocation)
 {
 	FVector NearestEnemyPos = InLocation;
