@@ -10,6 +10,8 @@ ASF_MainCamera::ASF_MainCamera()
 	: CameraState(ESF_CameraState::None)
 	, ViewPoint(FVector(0.f))
 	, MaxPitch(20.f)
+	, CurrentCameraEventType(ESF_CameraEventType::None)
+	, FOVInfoMap()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
@@ -86,6 +88,35 @@ void ASF_MainCamera::Tick(float DeltaTime)
 		break;
 	}
 
+	// ToDo
+	switch (CurrentCameraEventType)
+	{
+	case ESF_CameraEventType::Dash:
+		// FOV
+		if (FSF_CameraInfo* const CurrentFOVInfo = FOVInfoMap.Find(CurrentCameraEventType))
+		{
+			switch (CurrentFOVInfo->CurrentMode)
+			{
+			case ESF_AddValueMode::Add:
+				if (FSF_ChangeValueInfo* const CurrentChangeValueInfo = CurrentFOVInfo->InfoMap.Find(ESF_AddValueMode::Add))
+				{
+					CurrentChangeValueInfo->CurrentValue += CurrentChangeValueInfo->AddValue;
+					if (CurrentChangeValueInfo->CurrentValue > CurrentChangeValueInfo->MaxOrMinValue)
+						CurrentFOVInfo->CurrentMode = ESF_AddValueMode::Reduce;
+				}
+				break;
+			case ESF_AddValueMode::Reduce:
+				if (FSF_ChangeValueInfo* const CurrentChangeValueInfo = CurrentFOVInfo->InfoMap.Find(ESF_AddValueMode::Add))
+				{
+					CurrentChangeValueInfo->CurrentValue -= CurrentChangeValueInfo->AddValue;
+					if (CurrentChangeValueInfo->CurrentValue < CurrentChangeValueInfo->MaxOrMinValue)
+						CurrentFOVInfo->CurrentMode = ESF_AddValueMode::None;
+				}
+				break;
+			}
+		}
+		break;
+	}
 }
 
 /// @brief Pitch‚Ì‰ñ“]ˆ—

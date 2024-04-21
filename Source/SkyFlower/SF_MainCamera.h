@@ -13,6 +13,7 @@
 class USpringArmComponent;
 class UCameraComponent;
 
+/// @brief カメラステートの列挙型
 UENUM(BlueprintType)
 enum class ESF_CameraState : uint8
 {
@@ -22,26 +23,63 @@ enum class ESF_CameraState : uint8
 	CloseBattle			UMETA(DisplayName = "近接バトル時"),
 };
 
-//USTRUCT(BlueprintType)
-//struct FSF_CameraInfo
-//{
-//	GENERATED_BODY()
-//
-//public:
-//	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-//	float Distance;
-//	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-//	float LerpSpeed;
-//	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-//	float FOV;
-//
-//public:
-//	FSF_CameraInfo()
-//		: Distance(500.f)
-//		, LerpSpeed(1.f)
-//		, FOV(1.f)
-//	{}
-//};
+/// @brief イベント時の処理をMapで管理するための列挙型
+UENUM(BlueprintType)
+enum class ESF_CameraEventType : uint8
+{
+	None = 0			UMETA(DisplayName = "なし"),
+	Dash				UMETA(DisplayName = "ダッシュ時"),
+};
+
+/// @brief 値の変化状態をMapで管理するための列挙型
+UENUM(BlueprintType)
+enum class ESF_AddValueMode : uint8
+{
+	None = 0			UMETA(DisplayName = "なし"),
+	Add					UMETA(DisplayName = "加法"),
+	Reduce				UMETA(DisplayName = "減法"),
+};
+
+/// @brief 値を加減法で変化させる構造体
+USTRUCT(BlueprintType)
+struct FSF_ChangeValueInfo
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	float MaxOrMinValue;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	float CurrentValue;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	float AddValue;
+
+public:
+	FSF_ChangeValueInfo()
+		: MaxOrMinValue(0.f)
+		, AddValue(0.f)
+		, CurrentValue(0.f)
+	{}
+};
+
+/// @brief MapでMapを管理するための構造体
+USTRUCT(BlueprintType)
+struct FSF_CameraInfo
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	ESF_AddValueMode CurrentMode;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TMap<ESF_AddValueMode, FSF_ChangeValueInfo> InfoMap;
+
+public:
+	FSF_CameraInfo()
+		: CurrentMode(ESF_AddValueMode::None)
+		, InfoMap()
+	{}
+};
 
 //------------------------------------------------------------------
 
@@ -75,6 +113,12 @@ private:
 	FVector ViewPoint;
 	UPROPERTY(EditAnywhere, Category = "Camera | Edit")
 	float MaxPitch;
+
+	UPROPERTY(VisibleAnywhere, Category = "Camera | Visible")
+	ESF_CameraEventType CurrentCameraEventType;
+
+	UPROPERTY(EditAnywhere, Category = "Camera | Edit")
+	TMap<ESF_CameraEventType, FSF_CameraInfo> FOVInfoMap;
 
 public:
 	ESF_CameraState GetCameraState() const { return CameraState; }
