@@ -83,7 +83,7 @@ void USF_MoveInput::MoveUp(const float InValue)
 	if (!IsValid(GetPlayerCharacter())) return;
 
 	// “ü—Í•ûŒü‚ÉˆÚ“®
-	GetPlayerCharacter()->AddMovementInput(GetMainCamera()->GetActorUpVector(), InValue);
+	GetPlayerCharacter()->AddMovementInput(GetPlayerCharacter()->GetActorUpVector(), InValue);
 }
 
 void USF_MoveInput::AddForce(const FVector InDirection)
