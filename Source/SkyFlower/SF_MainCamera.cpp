@@ -9,7 +9,7 @@
 ASF_MainCamera::ASF_MainCamera()
 	: CameraState(ESF_CameraState::None)
 	, ViewPoint(FVector(0.f))
-	, MaxPitch(20.f)
+	, MaxPitch(60.f)
 	, CurrentCameraEventType(ESF_CameraEventType::None)
 	, FOVInfoMap()
 {
