@@ -1,6 +1,7 @@
 #include "SF_CharacterBase.h"
 #include "SF_WeaponBase.h"
 #include "SF_Shield.h"
+#include "DebugHelpers.h"
 
 ASF_CharacterBase::ASF_CharacterBase()
 	: WeaponActor(nullptr)
@@ -54,4 +55,9 @@ void ASF_CharacterBase::EquipShield(ASF_Shield* const InShield, const FName& InS
 	// 銃アクターをプレイヤーメッシュのソケットにアタッチする
 	FAttachmentTransformRules AttachTransform = { EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, EAttachmentRule::KeepWorld, true };
 	ShieldActor->AttachToComponent(GetMesh(), AttachTransform, InSoketName);
+}
+
+void ASF_CharacterBase::GetDamage(int32 damage)
+{
+	Debug::PrintFixedLine("GetDamage CharacterBase");
 }

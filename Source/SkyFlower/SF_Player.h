@@ -47,4 +47,8 @@ private:
 	USF_MoveInput* MoveInputComponent;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component", meta = (AllowPrivateAccess = "true"))
 	USF_AttackInput* AttackInputComponent;
+
+private:
+	// ISF_DamageableInterface ‚ğ‰î‚µ‚ÄŒp³‚³‚ê‚Ü‚µ‚½
+	virtual void GetDamage(int32 damage) override;
 };

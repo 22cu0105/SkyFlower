@@ -109,3 +109,8 @@ void ASF_EnemyBase::OnEndDead()
 {
 	Destroy();
 }
+
+void ASF_EnemyBase::GetDamage(int32 damage)
+{
+	Debug::PrintFixedLine("GetDamage EnemyBase");
+}

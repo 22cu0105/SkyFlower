@@ -8,19 +8,25 @@
 #include "DebugHelpers.h"
 #include "Particles/ParticleSystem.h"
 #include "Kismet/GameplayStatics.h"
+#include "SF_Player.h"
 
 // Sets default values
 ASF_Magicball::ASF_Magicball()
+	:hitDamage(20)
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
 	SphereComp = CreateDefaultSubobject<USphereComponent>("SphereComp");
-	SphereComp->SetCollisionObjectType(ECC_WorldDynamic);
-	SphereComp->SetCollisionResponseToAllChannels(ECR_Ignore);
-	SphereComp->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
-	//SphereComp->SetCollisionProfileName("Projectile");
 	RootComponent = SphereComp;
+	SphereComp->SetCollisionProfileName("Projectile");
+	SphereComp->InitSphereRadius(20.0f);
+	//SphereComp->SetCollisionObjectType(ECC_WorldDynamic);
+	//SphereComp->SetCollisionResponseToAllChannels(ECR_Overlap);
+	//SphereComp->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
+
+	SphereComp->OnComponentHit.AddDynamic(this, &ASF_Magicball::OnHit);
+	SphereComp->OnComponentBeginOverlap.AddDynamic(this, &ASF_Magicball::OnBeginOverlap);
 
 	EffectComp = CreateDefaultSubobject<UParticleSystemComponent>("EffectComp");
 	EffectComp->SetupAttachment(SphereComp);
@@ -49,6 +55,7 @@ void ASF_Magicball::Tick(float DeltaTime)
 
 void ASF_Magicball::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
+	/*
 	if (OtherActor == nullptr || OtherActor == this) return;
 
 	DRAW_SPHERE(GetActorLocation());
@@ -59,6 +66,41 @@ void ASF_Magicball::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
 		FRotator Rotation = FRotator(0.0f, 0.0f, 0.0f);
 		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ParticleEffect, Location, Rotation, true);
 	}
+
+	this->Destroy();
+	*/
+
+	Debug::PrintFixedLine("Magicball OnHit", 45);
+
+
+}
+
+void ASF_Magicball::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	Debug::PrintFixedLine("Magicball OnBeginOverlap", 46);
+	
+	//filter
+	if (OtherActor == nullptr || OtherActor == this) return;
+	if (OtherActor->IsA<ASF_Player>()) return;
+
+	//debug
+	DRAW_SPHERE(GetActorLocation());
+
+	//spawn explosion
+	if (ParticleEffect)
+	{
+		FVector Location = GetActorLocation();
+		FRotator Rotation = FRotator(0.0f, 0.0f, 0.0f);
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ParticleEffect, Location, Rotation, true);
+	}
+
+	//apply damage
+	ISF_DamageableInterface* damageInterface = Cast<ISF_DamageableInterface>(OtherActor);
+	if (damageInterface)
+	{
+		damageInterface->GetDamage(hitDamage);
+	}
+
 
 	this->Destroy();
 }

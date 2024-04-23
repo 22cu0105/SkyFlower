@@ -1,4 +1,12 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// ==================================================
+// Filename	:	SF_EnemyMiddle.h
+// Author	:	22cu0214 JinWener
+// Description: 中型エネミー
+// Notes:		
+//				
+// Update:		2024/04/23 22cu0214 revise collision profile
+//				2024/04/19 22cu0214 create
+// ==================================================
 
 #pragma once
 
@@ -29,6 +37,9 @@ public:
 	UFUNCTION()
 	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
+	UFUNCTION()
+	void OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
 	///////////////////////////// custom variable
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
@@ -43,8 +54,7 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "TEST")
 	UParticleSystem* ParticleEffect;
 
+private:
 
-
-
-
+	int32 hitDamage;
 };

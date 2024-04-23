@@ -118,17 +118,20 @@ void USF_AttackInput::LongRangeAttack()
 	GetPlayerCharacter()->SetCharacterState(ESF_CharacterState::LongRangeAttack);
 
 	//throw magicball
-	FVector HandLocation = GetPlayerCharacter()->GetMesh()->GetSocketLocation("Magicball");
+	{
+		if (!ProjectileClass) return;
+		FVector HandLocation = GetPlayerCharacter()->GetMesh()->GetSocketLocation("Magicball");
 
-	ASF_MainCamera* camera = GetGameMode()->GetMainCamera();
-	FTransform SpawnTM = FTransform(camera->GetActorRotation(), HandLocation);
+		ASF_MainCamera* camera = GetGameMode()->GetMainCamera();
+		FTransform SpawnTM = FTransform(camera->GetActorRotation(), HandLocation);
 
-	FActorSpawnParameters SpawnParams;
-	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-	SpawnParams.Instigator = GetPlayerCharacter();
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+		SpawnParams.Instigator = GetPlayerCharacter();
 
-	GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTM, SpawnParams);
-	Debug::PrintFixedLine("AttackRanged", 22);
+		GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTM, SpawnParams);
+		Debug::PrintFixedLine("AttackRanged", 22);
+	}
 }
 
 void USF_AttackInput::MoveToEnemy(float DeltaTime)

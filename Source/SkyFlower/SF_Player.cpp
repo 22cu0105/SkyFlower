@@ -4,6 +4,7 @@
 #include "SF_AttackInput.h"
 #include "SF_PlayerController.h"
 #include "Kismet/GameplayStatics.h"
+#include "DebugHelpers.h"
 
 ASF_Player::ASF_Player()
 {
@@ -28,6 +29,11 @@ void ASF_Player::BeginPlay()
 		Cast<ASF_PlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0))) {
 		CustomController->SetPlayerCharacter(this);
 	}
+}
+
+void ASF_Player::GetDamage(int32 damage)
+{
+	Debug::PrintFixedLine("GetDamage Player");
 }
 
 void ASF_Player::Tick(float DeltaTime)

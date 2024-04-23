@@ -49,4 +49,7 @@ private:
 	virtual void OnBeginDead() override;
 	virtual void UpdateOnDead(const float InDeltaTime) override;
 	virtual void OnEndDead() override;
+
+	// ISF_DamageableInterface を介して継承されました
+	virtual void GetDamage(int32 damage) override;
 };

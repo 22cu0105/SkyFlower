@@ -9,6 +9,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "SF_DamageableInterface.h"
 #include "SF_CharacterBase.generated.h"
 
 class ASF_EquipmentBase;
@@ -60,7 +61,7 @@ public:
 };
 
 UCLASS()
-class SKYFLOWER_API ASF_CharacterBase : public ACharacter
+class SKYFLOWER_API ASF_CharacterBase : public ACharacter, public ISF_DamageableInterface
 {
 	GENERATED_BODY()
 
@@ -133,4 +134,7 @@ private:
 	virtual void OnBeginDead() {}
 	virtual void UpdateOnDead(const float InDeltaTime) {}
 	virtual void OnEndDead() {}
+
+	// ISF_DamageableInterface を介して継承されました
+	virtual void GetDamage(int32 damage) override;
 };
