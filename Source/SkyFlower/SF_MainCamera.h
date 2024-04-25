@@ -1,6 +1,6 @@
-// ==================================================
+ï»¿// ==================================================
 // Filename	:	SF_MainCamera.h
-// Author	:	22cu0105 ¬“c“‡ —Ål
+// Author	:	22cu0105 å°ç”°å³¶ ç¨œäºº
 // Description:
 // Update	:	2024/04/05
 // ==================================================
@@ -13,34 +13,34 @@
 class USpringArmComponent;
 class UCameraComponent;
 
-/// @brief ƒJƒƒ‰ƒXƒe[ƒg‚Ì—ñ‹“Œ^
+/// @brief ã‚«ãƒ¡ãƒ©ã‚¹ãƒ†ãƒ¼ãƒˆã®åˆ—æŒ™å‹
 UENUM(BlueprintType)
 enum class ESF_CameraState : uint8
 {
-	None = 0			UMETA(DisplayName = "‚È‚µ"),
-	Normal				UMETA(DisplayName = "’Êí"),
-	NormalBattle		UMETA(DisplayName = "’Êíƒoƒgƒ‹"),
-	CloseBattle			UMETA(DisplayName = "‹ßÚƒoƒgƒ‹"),
+	None = 0			UMETA(DisplayName = "ãªã—"),
+	Normal				UMETA(DisplayName = "é€šå¸¸æ™‚"),
+	NormalBattle		UMETA(DisplayName = "é€šå¸¸ãƒãƒˆãƒ«æ™‚"),
+	CloseBattle			UMETA(DisplayName = "è¿‘æ¥ãƒãƒˆãƒ«æ™‚"),
 };
 
-/// @brief ƒCƒxƒ“ƒg‚Ìˆ—‚ğMap‚ÅŠÇ—‚·‚é‚½‚ß‚Ì—ñ‹“Œ^
+/// @brief ã‚¤ãƒ™ãƒ³ãƒˆæ™‚ã®å‡¦ç†ã‚’Mapã§ç®¡ç†ã™ã‚‹ãŸã‚ã®åˆ—æŒ™å‹
 UENUM(BlueprintType)
 enum class ESF_CameraEventType : uint8
 {
-	None = 0			UMETA(DisplayName = "‚È‚µ"),
-	Dash				UMETA(DisplayName = "ƒ_ƒbƒVƒ…"),
+	None = 0			UMETA(DisplayName = "ãªã—"),
+	Dash				UMETA(DisplayName = "ãƒ€ãƒƒã‚·ãƒ¥æ™‚"),
 };
 
-/// @brief ’l‚Ì•Ï‰»ó‘Ô‚ğMap‚ÅŠÇ—‚·‚é‚½‚ß‚Ì—ñ‹“Œ^
+/// @brief å€¤ã®å¤‰åŒ–çŠ¶æ…‹ã‚’Mapã§ç®¡ç†ã™ã‚‹ãŸã‚ã®åˆ—æŒ™å‹
 UENUM(BlueprintType)
 enum class ESF_AddValueMode : uint8
 {
-	None = 0			UMETA(DisplayName = "‚È‚µ"),
-	Add					UMETA(DisplayName = "‰Á–@"),
-	Reduce				UMETA(DisplayName = "Œ¸–@"),
+	None = 0			UMETA(DisplayName = "ãªã—"),
+	Add					UMETA(DisplayName = "åŠ æ³•"),
+	Reduce				UMETA(DisplayName = "æ¸›æ³•"),
 };
 
-/// @brief ’l‚ğ‰ÁŒ¸–@‚Å•Ï‰»‚³‚¹‚é\‘¢‘Ì
+/// @brief å€¤ã‚’åŠ æ¸›æ³•ã§å¤‰åŒ–ã•ã›ã‚‹æ§‹é€ ä½“
 USTRUCT(BlueprintType)
 struct FSF_ChangeValueInfo
 {
@@ -48,21 +48,24 @@ struct FSF_ChangeValueInfo
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	float MaxOrMinValue;
+	float BeginValue;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	float EndValue;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	float CurrentValue;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	float AddValue;
 
 public:
 	FSF_ChangeValueInfo()
-		: MaxOrMinValue(0.f)
+		: BeginValue(0.f)
 		, AddValue(0.f)
+		, EndValue(0.f)
 		, CurrentValue(0.f)
 	{}
 };
 
-/// @brief Map‚ÅMap‚ğŠÇ—‚·‚é‚½‚ß‚Ì\‘¢‘Ì
+/// @brief Mapã§Mapã‚’ç®¡ç†ã™ã‚‹ãŸã‚ã®æ§‹é€ ä½“
 USTRUCT(BlueprintType)
 struct FSF_CameraInfo
 {
@@ -87,23 +90,23 @@ UCLASS()
 class SKYFLOWER_API ASF_MainCamera : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
+
+public:
 	ASF_MainCamera();
 
 protected:
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	virtual void Tick(float DeltaTime) override;
 
 	void AddPitchRotation(float InValue);
 	void AddYawRotation(float InValue);
 
 private:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera | Visible", meta = (AllowPrivateAccess = "true"))
 	USpringArmComponent* SpringArmComponent;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera | Visible", meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* CameraComponent;
 
 	UPROPERTY(VisibleAnywhere, Category = "Camera | Visible")
@@ -123,4 +126,8 @@ private:
 public:
 	ESF_CameraState GetCameraState() const { return CameraState; }
 	FVector GetViewPoint() const { return ViewPoint; }
+
+	void StartCameraEvent(const ESF_CameraEventType InEventType);
+	void AddChangeValue(FSF_CameraInfo& OutCameraInfo);
+	void ReduceChangeValue(FSF_CameraInfo& OutCameraInfo);
 };

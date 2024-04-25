@@ -1,10 +1,12 @@
 #include "SF_MainCamera.h"
 #include "SF_Player.h"
 #include "SF_GameMode.h"
+#include "DebugHelpers.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "SF_PlayerController.h"
+using namespace Debug;
 
 ASF_MainCamera::ASF_MainCamera()
 	: CameraState(ESF_CameraState::None)
@@ -98,20 +100,10 @@ void ASF_MainCamera::Tick(float DeltaTime)
 			switch (CurrentFOVInfo->CurrentMode)
 			{
 			case ESF_AddValueMode::Add:
-				if (FSF_ChangeValueInfo* const CurrentChangeValueInfo = CurrentFOVInfo->InfoMap.Find(ESF_AddValueMode::Add))
-				{
-					CurrentChangeValueInfo->CurrentValue += CurrentChangeValueInfo->AddValue;
-					if (CurrentChangeValueInfo->CurrentValue > CurrentChangeValueInfo->MaxOrMinValue)
-						CurrentFOVInfo->CurrentMode = ESF_AddValueMode::Reduce;
-				}
+				AddChangeValue(*CurrentFOVInfo);
 				break;
 			case ESF_AddValueMode::Reduce:
-				if (FSF_ChangeValueInfo* const CurrentChangeValueInfo = CurrentFOVInfo->InfoMap.Find(ESF_AddValueMode::Add))
-				{
-					CurrentChangeValueInfo->CurrentValue -= CurrentChangeValueInfo->AddValue;
-					if (CurrentChangeValueInfo->CurrentValue < CurrentChangeValueInfo->MaxOrMinValue)
-						CurrentFOVInfo->CurrentMode = ESF_AddValueMode::None;
-				}
+				ReduceChangeValue(*CurrentFOVInfo);
 				break;
 			}
 		}
@@ -151,4 +143,45 @@ void ASF_MainCamera::AddYawRotation(float InValue)
 
 	// “K—p
 	SetActorRotation(NewRotation);
+}
+
+void ASF_MainCamera::StartCameraEvent(const ESF_CameraEventType InEventType)
+{
+	CurrentCameraEventType = InEventType;
+	if (FSF_CameraInfo* const CurrentFOVInfo = FOVInfoMap.Find(CurrentCameraEventType))
+	{
+		CurrentFOVInfo->CurrentMode = ESF_AddValueMode::Add;
+		if (FSF_ChangeValueInfo* CurrentChangeValueInfo = CurrentFOVInfo->InfoMap.Find(ESF_AddValueMode::Reduce))
+			CurrentChangeValueInfo->CurrentValue = CurrentChangeValueInfo->BeginValue;
+	}
+}
+
+void ASF_MainCamera::AddChangeValue(FSF_CameraInfo& OutCameraInfo)
+{
+	if (FSF_ChangeValueInfo* const CurrentChangeValueInfo = OutCameraInfo.InfoMap.Find(ESF_AddValueMode::Add))
+	{
+		CurrentChangeValueInfo->CurrentValue += CurrentChangeValueInfo->AddValue;
+		CameraComponent->SetFieldOfView(CurrentChangeValueInfo->CurrentValue);
+
+		if (CurrentChangeValueInfo->CurrentValue > CurrentChangeValueInfo->EndValue)
+		{
+			OutCameraInfo.CurrentMode = ESF_AddValueMode::Reduce;
+			CurrentChangeValueInfo->CurrentValue = CurrentChangeValueInfo->BeginValue;
+		}
+	}
+}
+
+void ASF_MainCamera::ReduceChangeValue(FSF_CameraInfo& OutCameraInfo)
+{
+	if (FSF_ChangeValueInfo* const CurrentChangeValueInfo = OutCameraInfo.InfoMap.Find(ESF_AddValueMode::Reduce))
+	{
+		CurrentChangeValueInfo->CurrentValue -= CurrentChangeValueInfo->AddValue;
+		CameraComponent->SetFieldOfView(CurrentChangeValueInfo->CurrentValue);
+
+		if (CurrentChangeValueInfo->CurrentValue < CurrentChangeValueInfo->EndValue)
+		{
+			OutCameraInfo.CurrentMode = ESF_AddValueMode::None;
+			CurrentChangeValueInfo->CurrentValue = CurrentChangeValueInfo->BeginValue;
+		}
+	}
 }
