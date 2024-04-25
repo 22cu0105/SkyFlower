@@ -21,6 +21,8 @@ class SKYFLOWER_API ASF_EnemyMiddle : public ASF_EnemyBase
 {
 	GENERATED_BODY()
 	
+public:
+	ASF_EnemyMiddle();
 
 public:
 	// ISF_DamageableInterface ‚ğ‰î‚µ‚ÄŒp³‚³‚ê‚Ü‚µ‚½
