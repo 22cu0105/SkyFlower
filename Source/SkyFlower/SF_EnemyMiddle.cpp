@@ -5,7 +5,7 @@
 ASF_EnemyMiddle::ASF_EnemyMiddle()
 {
 	// Create and attach AIController
-	AIControllerClass = ASF_AttackerController::StaticClass();
+	//AIControllerClass = ASF_AttackerController::StaticClass();
 }
 
 void ASF_EnemyMiddle::GetDamage(int32 damage)
