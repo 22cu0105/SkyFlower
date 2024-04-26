@@ -44,48 +44,55 @@ private:
 	void LongRangeAttack();
 
 	UFUNCTION()
-		void MoveToEnemy(float DeltaTime);
+	void MoveToEnemy(float DeltaTime);
 
 	////////////////////////////////////////// custom variable
 public:
 	// 自分と敵の位置
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		FVector playerPos;
+	FVector playerPos;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		FVector enemyPos;
+	FVector enemyPos;
 	UPROPERTY(BlueprintReadOnly)
-		bool beginShortAttack = false;
+	bool beginShortAttack = false;
 
 	// 振り向き速度
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		float rotationSpeed = 30.0f;
+	float rotationSpeed = 30.0f;
 
 	// 敵を追いかける速度
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		float moveSpeed = 1500.f;
+	float moveSpeed = 1500.f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		float moveTimeLimit = 1.5f;
+	float moveTimeLimit = 1.5f;
 	UPROPERTY(BlueprintReadOnly)
-		float moveTime = 0.f;
+	float moveTime = 0.f;
 
 	// 押された時間でレーザーかそれ以外か判定する
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		float gatherPowerTime = 3.0f;
+	float gatherPowerTime = 3.0f;
 	UPROPERTY(BlueprintReadOnly)
-		float pressedTime = 0.f;
+	float pressedTime = 0.f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		bool isButtonPressed = false;
+	bool isButtonPressed = false;
 
 	// 近接攻撃の距離
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		float attackableDistance = 400.0;
+	float attackableDistance = 400.0;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		float stoppingDistance = 100.f;
+	float stoppingDistance = 100.f;
 
 	UPROPERTY(EditAnywhere, Category = "TEST")
-		TSubclassOf<AActor> ProjectileClass;
+	TSubclassOf<AActor> ProjectileClass;
 
-	////////////////////////////////////////// Get関数
+	// homing attack parameter
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 magicballNumber = 10;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float angleStep = 360.f;
+
+////////////////////////////////////////// Get関数
 	FORCEINLINE ASF_GameMode* GetGameMode() const;
 
 	FORCEINLINE ASF_Player* GetPlayerCharacter() const;

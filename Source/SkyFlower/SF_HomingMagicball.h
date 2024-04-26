@@ -1,31 +1,33 @@
 // ==================================================
-// Filename	:	SF_Magicball.h
+// Filename	:	SF_HomingMagicball.h
 // Author	:	22cu0214 JinWener
-// Description: NormalâìäuçUåÇópñÇñ@íe
+// Description: HomingçUåÇópñÇñ@íe
 // Notes:		
 //				
-// Update:		2024/04/23 22cu0214 create
+// Update:		2024/04/26 22cu0214 create
 // ==================================================
 
 #pragma once
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "SF_Magicball.generated.h"
+#include "SF_HomingMagicball.generated.h"
 
 
 class USphereComponent;
 class UProjectileMovementComponent;
 class UParticleSystemComponent;
 class UParticleSystem;
+class ASF_EnemyBase;
 
 UCLASS()
-class SKYFLOWER_API ASF_Magicball : public AActor
+class SKYFLOWER_API ASF_HomingMagicball : public AActor
 {
 	GENERATED_BODY()
+	
 	///////////////////////////// override function	
-public:	
-	ASF_Magicball();
+public:
+	ASF_HomingMagicball(/*ASF_EnemyBase* targetEnemy = nullptr*/);
 	virtual void Tick(float DeltaTime) override;
 protected:
 
@@ -33,11 +35,11 @@ protected:
 
 	///////////////////////////// custom function
 public:
-	UFUNCTION()
-	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+	//UFUNCTION()
+	//void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
-	UFUNCTION()
-	void OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	//UFUNCTION()
+	//void OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 	///////////////////////////// custom variable
 protected:
@@ -54,6 +56,7 @@ protected:
 	UParticleSystem* ParticleEffect;
 
 private:
-
+	ASF_EnemyBase* target;
 	int32 hitDamage;
+	float accelerate;
 };
