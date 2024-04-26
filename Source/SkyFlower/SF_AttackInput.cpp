@@ -57,7 +57,8 @@ void USF_AttackInput::EndNormalAttack()
 	if (pressedTime < gatherPowerTime)
 	{
 		playerPos = GetPlayerCharacter()->GetActorLocation();
-		enemyPos = GetGameMode()->GetRockOnEnemy()->GetActorLocation();
+		if (ASF_EnemyBase* const RockOnEnemy = GetGameMode()->GetRockOnEnemy())
+			enemyPos = RockOnEnemy->GetActorLocation();
 
 		// 2つの点間の距離を測るためにユークリッド距離の2乗を取得する
 		const float DistanceSquared = FVector::DistSquared(playerPos, enemyPos);

@@ -64,7 +64,7 @@ ASF_EnemyBase* USF_EnemyManager::GetNearestEnemyPos(const FVector& playerLocatio
 {
 	//init
 	ASF_EnemyBase* OutNearestEnemy = nullptr;
-	FVector PrevNearestEnemyPos = playerLocation;
+	float PrevLength = playerLocation.Size();
 
 	//find target in EnemyList
 	for (ASF_EnemyBase* CheackEnemy : EnemyList)
@@ -74,13 +74,12 @@ ASF_EnemyBase* USF_EnemyManager::GetNearestEnemyPos(const FVector& playerLocatio
 
 		//get distance for this enemy
 		const FVector EnemyPos = CheackEnemy->GetActorLocation();
-		const float CurrentLength = (playerLocation - EnemyPos).Size();
-		const float PrevLength = PrevNearestEnemyPos.Size();
+		const float CurrentLength = (EnemyPos - playerLocation).Size();
 
 		if (CurrentLength < PrevLength)
 		{
 			OutNearestEnemy = CheackEnemy;
-			PrevNearestEnemyPos = EnemyPos;
+			PrevLength = CurrentLength;
 		}
 	}
 
