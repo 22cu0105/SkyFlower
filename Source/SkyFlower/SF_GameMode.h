@@ -38,7 +38,7 @@ public:
 
 	// ロックオンした敵の座標を取得
 	UFUNCTION(BlueprintCallable, Category = "GameMode")
-	FVector GetRockOnEnemyPos() const;
+	ASF_EnemyBase* GetRockOnEnemy() const;
 
 private:
 	// 敵を生成し、管理するコンポーネント

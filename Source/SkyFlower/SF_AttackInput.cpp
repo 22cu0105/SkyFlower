@@ -1,5 +1,6 @@
 #include "SF_AttackInput.h"
 #include "SF_Player.h"
+#include "SF_EnemyBase.h"
 #include "SF_GameMode.h"
 #include "Components/InputComponent.h"
 #include "GameFramework/Pawn.h"
@@ -56,8 +57,7 @@ void USF_AttackInput::EndNormalAttack()
 	if (pressedTime < gatherPowerTime)
 	{
 		playerPos = GetPlayerCharacter()->GetActorLocation();
-		enemyPos = GetGameMode()->GetRockOnEnemyPos();
-		//UE_LOG(LogTemp, Warning, TEXT("%s"), *enemyPos.ToString());
+		enemyPos = GetGameMode()->GetRockOnEnemy()->GetActorLocation();
 
 		// 2つの点間の距離を測るためにユークリッド距離の2乗を取得する
 		const float DistanceSquared = FVector::DistSquared(playerPos, enemyPos);
@@ -138,8 +138,6 @@ void USF_AttackInput::MoveToEnemy(float DeltaTime)
 {
 	if (!beginShortAttack) return;
 
-	UE_LOG(LogTemp, Warning, TEXT("aaaaaRange"));
-
 	if (stoppingDistance >= FVector::Distance(playerPos, enemyPos) || moveTime >= moveTimeLimit)
 	{
 		beginShortAttack = false;
@@ -152,7 +150,7 @@ void USF_AttackInput::MoveToEnemy(float DeltaTime)
 
 	// 位置を取得する
 	playerPos = GetPlayerCharacter()->GetActorLocation();
-	enemyPos = GetGameMode()->GetRockOnEnemyPos();
+	enemyPos = GetGameMode()->GetRockOnEnemy()->GetActorLocation();
 
 	// プレイヤーが敵に近づく方向を計算する
 	const FVector DirectionToEnemy = (enemyPos - playerPos).GetSafeNormal();

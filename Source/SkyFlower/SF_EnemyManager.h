@@ -44,7 +44,7 @@ public:
 
 	// ˆø”‚ÌÀ•W‚Éˆê”Ô‹ß‚¢“G‚ÌÀ•W‚ğæ“¾
 	UFUNCTION(BlueprintCallable, Category = "EnemyManager")
-	FVector GetNearestEnemyPos(const FVector& InLocation);
+	ASF_EnemyBase* GetNearestEnemyPos(const FVector& InLocation);
 
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "EnemyManager", meta = (AllowPrivateAccess = "true"))

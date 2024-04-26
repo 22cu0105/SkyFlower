@@ -60,23 +60,31 @@ void USF_EnemyManager::SpawnAIEnemyFromGenerationType(const ESF_SpawnType InSpaw
 /// @brief ˆø”‚Å“n‚³‚ê‚½À•W‚Éˆê”Ô‹ß‚¢“G‚ÌÀ•W‚ðŽæ“¾
 /// @param InLocation ”äŠr‚·‚éÀ•W
 /// @return 
-FVector USF_EnemyManager::GetNearestEnemyPos(const FVector& InLocation)
+ASF_EnemyBase* USF_EnemyManager::GetNearestEnemyPos(const FVector& playerLocation)
 {
-	FVector NearestEnemyPos = InLocation;
+	//init
+	ASF_EnemyBase* OutNearestEnemy = nullptr;
+	FVector PrevNearestEnemyPos = playerLocation;
 
+	//find target in EnemyList
 	for (ASF_EnemyBase* CheackEnemy : EnemyList)
 	{
+		//if null return
 		if (!IsValid(CheackEnemy)) continue;
 
+		//get distance for this enemy
 		const FVector EnemyPos = CheackEnemy->GetActorLocation();
-		const float CurrentLength = (InLocation - EnemyPos).Size();
-		const float PrevLength = NearestEnemyPos.Size();
+		const float CurrentLength = (playerLocation - EnemyPos).Size();
+		const float PrevLength = PrevNearestEnemyPos.Size();
 
 		if (CurrentLength < PrevLength)
-			NearestEnemyPos = EnemyPos;
+		{
+			OutNearestEnemy = CheackEnemy;
+			PrevNearestEnemyPos = EnemyPos;
+		}
 	}
 
-	return NearestEnemyPos;
+	return OutNearestEnemy;
 }
 
 /// @brief Ž€–S‚µ‚Ä‚¢‚é“GƒLƒƒƒ‰ƒNƒ^[‚ðŽæ“¾

@@ -1,5 +1,6 @@
 #include "SF_MainCamera.h"
 #include "SF_Player.h"
+#include "SF_EnemyBase.h"
 #include "SF_GameMode.h"
 #include "DebugHelpers.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -80,7 +81,7 @@ void ASF_MainCamera::Tick(float DeltaTime)
 
 			if (ASF_GameMode* const SF_GameMode = Cast<ASF_GameMode>(UGameplayStatics::GetGameMode(GetWorld())))
 			{
-				const FVector RockOnEnemyPos = SF_GameMode->GetRockOnEnemyPos();
+				const FVector RockOnEnemyPos = SF_GameMode->GetRockOnEnemy()->GetActorLocation();
 				const FRotator CameraDirection = (RockOnEnemyPos - GetActorLocation()).Rotation();
 				SetActorRotation(CameraDirection);
 			}

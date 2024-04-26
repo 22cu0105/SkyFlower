@@ -70,13 +70,13 @@ void ASF_GameMode::StartHitStop(const float InHitStopSpeed, const float InHitSto
 }
 
 /// @brief ƒvƒŒƒCƒ„[‚©‚çˆê”Ô‹ß‚¢“G‚ÌÀ•W‚ðŽæ“¾‚·‚é
-/// @return FVector(0.f) : Žæ“¾‚Å‚«‚È‚©‚Á‚½
-FVector ASF_GameMode::GetRockOnEnemyPos() const
+/// @return nullptr : “G‚ª‚¢‚È‚¢
+ASF_EnemyBase* ASF_GameMode::GetRockOnEnemy() const
 {
 	if (!IsValid(EnemyManager))
 	{
 		Debug::Print("not found EnemyManager.");
-		return FVector(0.f);
+		return nullptr;
 	}
 
 	return EnemyManager->GetNearestEnemyPos(PlayerCharacter->GetActorLocation());
