@@ -77,6 +77,13 @@ void ASF_MainCamera::Tick(float DeltaTime)
 		{
 			ViewPoint = Player->GetActorLocation();
 			SetActorLocation(ViewPoint);
+
+			if (ASF_GameMode* const SF_GameMode = Cast<ASF_GameMode>(UGameplayStatics::GetGameMode(GetWorld())))
+			{
+				const FVector RockOnEnemyPos = SF_GameMode->GetRockOnEnemyPos();
+				const FRotator CameraDirection = (RockOnEnemyPos - GetActorLocation()).Rotation();
+				SetActorRotation(CameraDirection);
+			}
 		}
 		break;
 	case ESF_CameraState::CloseBattle:
@@ -97,6 +104,7 @@ void ASF_MainCamera::Tick(float DeltaTime)
 		// FOV
 		if (FSF_CameraInfo* const CurrentFOVInfo = FOVInfoMap.Find(CurrentCameraEventType))
 		{
+			// Add/Reduce
 			switch (CurrentFOVInfo->CurrentMode)
 			{
 			case ESF_AddValueMode::Add:

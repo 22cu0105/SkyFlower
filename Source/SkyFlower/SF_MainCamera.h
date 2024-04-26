@@ -124,6 +124,7 @@ private:
 	TMap<ESF_CameraEventType, FSF_CameraInfo> FOVInfoMap;
 
 public:
+	void SetCameraState(const ESF_CameraState InCameraState) { CameraState = InCameraState; }
 	ESF_CameraState GetCameraState() const { return CameraState; }
 	FVector GetViewPoint() const { return ViewPoint; }
 
