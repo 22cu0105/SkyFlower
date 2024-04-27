@@ -14,14 +14,14 @@ class USpringArmComponent;
 class UCameraComponent;
 
 /// @brief カメラステートの列挙型
-UENUM(BlueprintType)
-enum class ESF_CameraState : uint8
-{
-	None = 0			UMETA(DisplayName = "なし"),
-	Normal				UMETA(DisplayName = "通常時"),
-	NormalBattle		UMETA(DisplayName = "通常バトル時"),
-	CloseBattle			UMETA(DisplayName = "近接バトル時"),
-};
+//UENUM(BlueprintType)
+//enum class ESF_CameraState : uint8
+//{
+//	None = 0			UMETA(DisplayName = "なし"),
+//	Normal				UMETA(DisplayName = "通常時"),
+//	NormalBattle		UMETA(DisplayName = "通常バトル時"),
+//	CloseBattle			UMETA(DisplayName = "近接バトル時"),
+//};
 
 /// @brief イベント時の処理をMapで管理するための列挙型
 UENUM(BlueprintType)
@@ -103,14 +103,18 @@ public:
 	void AddPitchRotation(float InValue);
 	void AddYawRotation(float InValue);
 
+	void StartCameraEvent(const ESF_CameraEventType InEventType);
+	void AddChangeValue(FSF_CameraInfo& OutCameraInfo);
+	void ReduceChangeValue(FSF_CameraInfo& OutCameraInfo);
+
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera | Visible", meta = (AllowPrivateAccess = "true"))
 	USpringArmComponent* SpringArmComponent;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera | Visible", meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* CameraComponent;
 
-	UPROPERTY(VisibleAnywhere, Category = "Camera | Visible")
-	ESF_CameraState CameraState;
+	//UPROPERTY(VisibleAnywhere, Category = "Camera | Visible")
+	//ESF_CameraState CameraState;
 
 	UPROPERTY(VisibleAnywhere, Category = "Camera | Visible")
 	FVector ViewPoint;
@@ -124,11 +128,12 @@ private:
 	TMap<ESF_CameraEventType, FSF_CameraInfo> FOVInfoMap;
 
 public:
-	void SetCameraState(const ESF_CameraState InCameraState) { CameraState = InCameraState; }
-	ESF_CameraState GetCameraState() const { return CameraState; }
+	//void SetCameraState(const ESF_CameraState InCameraState) { CameraState = InCameraState; }
+	//ESF_CameraState GetCameraState() const { return CameraState; }
 	FVector GetViewPoint() const { return ViewPoint; }
 
-	void StartCameraEvent(const ESF_CameraEventType InEventType);
-	void AddChangeValue(FSF_CameraInfo& OutCameraInfo);
-	void ReduceChangeValue(FSF_CameraInfo& OutCameraInfo);
+private:
+	void UpdateOnNormal(const float InDeltaTime);
+	void UpdateOnShortRangeAttack(const float InDeltaTime);
+	void UpdateOnLongRangeAttack(const float InDeltaTime);
 };

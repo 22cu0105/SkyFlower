@@ -10,8 +10,8 @@
 using namespace Debug;
 
 ASF_MainCamera::ASF_MainCamera()
-	: CameraState(ESF_CameraState::None)
-	, ViewPoint(FVector(0.f))
+	//: CameraState(ESF_CameraState::None)
+	: ViewPoint(FVector(0.f))
 	, MaxPitch(60.f)
 	, CurrentCameraEventType(ESF_CameraEventType::None)
 	, FOVInfoMap()
@@ -55,82 +55,54 @@ void ASF_MainCamera::BeginPlay()
 	if (CustomController)
 		CustomController->SetMainCamera(this);
 
-	CameraState = ESF_CameraState::Normal;
+	//CameraState = ESF_CameraState::Normal;
 
 }
 
 void ASF_MainCamera::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	if (APawn* const Player = UGameplayStatics::GetPlayerPawn(GetWorld(), 0))
+
+	ASF_GameMode* const SF_GameMode = Cast<ASF_GameMode>(UGameplayStatics::GetGameMode(GetWorld()));
+	if (!IsValid(SF_GameMode)) return;
+
+	ASF_Player* const SF_Player = SF_GameMode->GetPlayerCharacter();
+	if (!IsValid(SF_Player)) return;
+
+	// 注視点
+	switch (SF_Player->GetCharacterState())
 	{
-		ViewPoint = Player->GetActorLocation();
-		SetActorLocation(ViewPoint);
-		if (ASF_GameMode* const SF_GameMode = Cast<ASF_GameMode>(UGameplayStatics::GetGameMode(GetWorld())))
+	case ESF_CharacterState::Normal:
+		UpdateOnNormal(DeltaTime);
+		break;
+	case ESF_CharacterState::ShortRangeAttack:
+		UpdateOnShortRangeAttack(DeltaTime);
+		break;
+	case ESF_CharacterState::LongRangeAttack:
+		UpdateOnLongRangeAttack(DeltaTime);
+		break;
+	}
+
+	// ToDo
+	switch (CurrentCameraEventType)
+	{
+	case ESF_CameraEventType::Dash:
+		// FOV
+		if (FSF_CameraInfo* const CurrentFOVInfo = FOVInfoMap.Find(CurrentCameraEventType))
 		{
-			if (ASF_EnemyBase* const RockOnEnemy = SF_GameMode->GetRockOnEnemy())
+			// Add/Reduce
+			switch (CurrentFOVInfo->CurrentMode)
 			{
-				const FVector RockOnEnemyPos = RockOnEnemy->GetActorLocation();
-				const FRotator CameraDirection = (RockOnEnemyPos - GetActorLocation()).Rotation();
-				SetActorRotation(CameraDirection);
+			case ESF_AddValueMode::Add:
+				AddChangeValue(*CurrentFOVInfo);
+				break;
+			case ESF_AddValueMode::Reduce:
+				ReduceChangeValue(*CurrentFOVInfo);
+				break;
 			}
 		}
+		break;
 	}
-	// ToDo
-	//switch (CameraState)
-	//{
-	//case ESF_CameraState::Normal:
-	//	if (APawn* const Player = UGameplayStatics::GetPlayerPawn(GetWorld(), 0))
-	//	{
-	//		ViewPoint = Player->GetActorLocation();
-	//		SetActorLocation(ViewPoint);
-	//	}
-	//	break;
-	//case ESF_CameraState::NormalBattle:
-	//	if (APawn* const Player = UGameplayStatics::GetPlayerPawn(GetWorld(), 0))
-	//	{
-	//		ViewPoint = Player->GetActorLocation();
-	//		SetActorLocation(ViewPoint);
-
-	//		if (ASF_GameMode* const SF_GameMode = Cast<ASF_GameMode>(UGameplayStatics::GetGameMode(GetWorld())))
-	//		{
-	//			const FVector RockOnEnemyPos = SF_GameMode->GetRockOnEnemy()->GetActorLocation();
-	//			const FRotator CameraDirection = (RockOnEnemyPos - GetActorLocation()).Rotation();
-	//			SetActorRotation(CameraDirection);
-	//		}
-	//	}
-	//	break;
-	//case ESF_CameraState::CloseBattle:
-	//	// EnemyManagerからロックオンした敵の情報を受け取り、
-	//	// その敵とプレイヤーの座標の中心を注視点にする
-	//	if (APawn* const Player = UGameplayStatics::GetPlayerPawn(GetWorld(), 0))
-	//	{
-	//		ViewPoint = Player->GetActorLocation();
-	//		SetActorLocation(ViewPoint);
-	//	}
-	//	break;
-	//}
-
-	//// ToDo
-	//switch (CurrentCameraEventType)
-	//{
-	//case ESF_CameraEventType::Dash:
-	//	// FOV
-	//	if (FSF_CameraInfo* const CurrentFOVInfo = FOVInfoMap.Find(CurrentCameraEventType))
-	//	{
-	//		// Add/Reduce
-	//		switch (CurrentFOVInfo->CurrentMode)
-	//		{
-	//		case ESF_AddValueMode::Add:
-	//			AddChangeValue(*CurrentFOVInfo);
-	//			break;
-	//		case ESF_AddValueMode::Reduce:
-	//			ReduceChangeValue(*CurrentFOVInfo);
-	//			break;
-	//		}
-	//	}
-	//	break;
-	//}
 }
 
 /// @brief Pitchの回転処理
@@ -205,5 +177,52 @@ void ASF_MainCamera::ReduceChangeValue(FSF_CameraInfo& OutCameraInfo)
 			OutCameraInfo.CurrentMode = ESF_AddValueMode::None;
 			CurrentChangeValueInfo->CurrentValue = CurrentChangeValueInfo->BeginValue;
 		}
+	}
+}
+
+void ASF_MainCamera::UpdateOnNormal(const float InDeltaTime)
+{
+	if (APawn* const Player = UGameplayStatics::GetPlayerPawn(GetWorld(), 0)
+		)
+	{
+		ViewPoint = Player->GetActorLocation();
+		SetActorLocation(ViewPoint);
+	}
+}
+
+void ASF_MainCamera::UpdateOnShortRangeAttack(const float InDeltaTime)
+{
+	if (ASF_GameMode* const SF_GameMode = Cast<ASF_GameMode>(UGameplayStatics::GetGameMode(GetWorld())))
+	{
+		ASF_Player* const Player = SF_GameMode->GetPlayerCharacter();
+		ASF_EnemyBase* const RockOnEnemy = SF_GameMode->GetRockOnEnemy();
+
+		if (!IsValid(Player)) return;
+		if (!IsValid(RockOnEnemy)) return;
+
+		const FVector RockOnEnemyPos = RockOnEnemy->GetActorLocation();
+		const FVector PlayerPos = Player->GetActorLocation();
+
+		ViewPoint = ((RockOnEnemyPos - PlayerPos) / 2.f) + PlayerPos;
+		SetActorLocation(ViewPoint);
+	}
+}
+
+void ASF_MainCamera::UpdateOnLongRangeAttack(const float InDeltaTime)
+{
+	if (ASF_GameMode* const SF_GameMode = Cast<ASF_GameMode>(UGameplayStatics::GetGameMode(GetWorld())))
+	{
+		ASF_Player* const Player = SF_GameMode->GetPlayerCharacter();
+		ASF_EnemyBase* const RockOnEnemy = SF_GameMode->GetRockOnEnemy();
+
+		if (!IsValid(Player)) return;
+		if (!IsValid(RockOnEnemy)) return;
+
+		ViewPoint = Player->GetActorLocation();
+		SetActorLocation(ViewPoint);
+
+		const FVector RockOnEnemyPos = RockOnEnemy->GetActorLocation();
+		const FRotator CameraDirection = (RockOnEnemyPos - GetActorLocation()).Rotation();
+		SetActorRotation(CameraDirection);
 	}
 }
