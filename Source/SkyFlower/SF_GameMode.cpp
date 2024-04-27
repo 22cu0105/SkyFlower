@@ -21,6 +21,7 @@ ASF_GameMode::ASF_GameMode()
 	: EnemyManager(nullptr)
 	, PlayerCharacter(nullptr)
 	, MainCamera(nullptr)
+	, LockOnEnemy(nullptr)
 	, bIsInHitStop(false)
 	, HitStopSpeed(0.5f)
 	, HitStopTime(0.f)
@@ -71,7 +72,7 @@ void ASF_GameMode::StartHitStop(const float InHitStopSpeed, const float InHitSto
 
 /// @brief プレイヤーから一番近い敵の座標を取得する
 /// @return nullptr : 敵がいない
-ASF_EnemyBase* ASF_GameMode::GetRockOnEnemy() const
+ASF_EnemyBase* ASF_GameMode::GetNearestEnemy() const
 {
 	if (!IsValid(EnemyManager))
 	{

@@ -182,8 +182,8 @@ void ASF_MainCamera::ReduceChangeValue(FSF_CameraInfo& OutCameraInfo)
 
 void ASF_MainCamera::UpdateOnNormal(const float InDeltaTime)
 {
-	if (APawn* const Player = UGameplayStatics::GetPlayerPawn(GetWorld(), 0)
-		)
+	Debug::PrintFixedLine("Normal");
+	if (APawn* const Player = UGameplayStatics::GetPlayerPawn(GetWorld(), 0))
 	{
 		ViewPoint = Player->GetActorLocation();
 		SetActorLocation(ViewPoint);
@@ -192,37 +192,39 @@ void ASF_MainCamera::UpdateOnNormal(const float InDeltaTime)
 
 void ASF_MainCamera::UpdateOnShortRangeAttack(const float InDeltaTime)
 {
-	if (ASF_GameMode* const SF_GameMode = Cast<ASF_GameMode>(UGameplayStatics::GetGameMode(GetWorld())))
+	Debug::PrintFixedLine("ShortRange");
+	if (const ASF_GameMode* const SF_GameMode = Cast<ASF_GameMode>(UGameplayStatics::GetGameMode(GetWorld())))
 	{
 		ASF_Player* const Player = SF_GameMode->GetPlayerCharacter();
-		ASF_EnemyBase* const RockOnEnemy = SF_GameMode->GetRockOnEnemy();
+		ASF_EnemyBase* const LockOnEnemy = SF_GameMode->GetLockOnEnemy();
 
 		if (!IsValid(Player)) return;
-		if (!IsValid(RockOnEnemy)) return;
+		if (!IsValid(LockOnEnemy)) return;
 
-		const FVector RockOnEnemyPos = RockOnEnemy->GetActorLocation();
+		const FVector LockOnEnemyPos = LockOnEnemy->GetActorLocation();
 		const FVector PlayerPos = Player->GetActorLocation();
 
-		ViewPoint = ((RockOnEnemyPos - PlayerPos) / 2.f) + PlayerPos;
+		ViewPoint = ((LockOnEnemyPos - PlayerPos) / 2.f) + PlayerPos;
 		SetActorLocation(ViewPoint);
 	}
 }
 
 void ASF_MainCamera::UpdateOnLongRangeAttack(const float InDeltaTime)
 {
+	Debug::PrintFixedLine("LongRange");
 	if (ASF_GameMode* const SF_GameMode = Cast<ASF_GameMode>(UGameplayStatics::GetGameMode(GetWorld())))
 	{
 		ASF_Player* const Player = SF_GameMode->GetPlayerCharacter();
-		ASF_EnemyBase* const RockOnEnemy = SF_GameMode->GetRockOnEnemy();
+		ASF_EnemyBase* const LockOnEnemy = SF_GameMode->GetLockOnEnemy();
 
 		if (!IsValid(Player)) return;
-		if (!IsValid(RockOnEnemy)) return;
+		if (!IsValid(LockOnEnemy)) return;
 
 		ViewPoint = Player->GetActorLocation();
 		SetActorLocation(ViewPoint);
 
-		const FVector RockOnEnemyPos = RockOnEnemy->GetActorLocation();
-		const FRotator CameraDirection = (RockOnEnemyPos - GetActorLocation()).Rotation();
+		const FVector LockOnEnemyPos = LockOnEnemy->GetActorLocation();
+		const FRotator CameraDirection = (LockOnEnemyPos - GetActorLocation()).Rotation();
 		SetActorRotation(CameraDirection);
 	}
 }

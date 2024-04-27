@@ -43,7 +43,7 @@ void USF_AttackInput::BeginNormalAttack()
 
 	Debug::PrintFixedLine("BeginNormalAttack()", 15);
 
-	GetPlayerCharacter()->SetCharacterState(ESF_CharacterState::BeginAttack);
+	//GetPlayerCharacter()->SetCharacterState(ESF_CharacterState::BeginAttack);
 
 	isButtonPressed = true;
 }
@@ -57,7 +57,7 @@ void USF_AttackInput::EndNormalAttack()
 	if (pressedTime < gatherPowerTime)
 	{
 		playerPos = GetPlayerCharacter()->GetActorLocation();
-		if (ASF_EnemyBase* const RockOnEnemy = GetGameMode()->GetRockOnEnemy())
+		if (ASF_EnemyBase* const RockOnEnemy = GetGameMode()->GetNearestEnemy())
 			enemyPos = RockOnEnemy->GetActorLocation();
 
 		// 2つの点間の距離を測るためにユークリッド距離の2乗を取得する
@@ -102,7 +102,7 @@ void USF_AttackInput::ShortRangeAttack()
 {
 	if (!GetPlayerCharacter()) return;
 
-	GetPlayerCharacter()->SetCharacterState(ESF_CharacterState::ShortRangeAttack);
+	//GetPlayerCharacter()->SetCharacterState(ESF_CharacterState::ShortRangeAttack);
 
 	UE_LOG(LogTemp, Warning, TEXT("ShortRange"));
 
@@ -116,7 +116,7 @@ void USF_AttackInput::LongRangeAttack()
 	// if (!IsValid(SF_Player)) return;
 	UE_LOG(LogTemp, Warning, TEXT("LongRange"));
 
-	GetPlayerCharacter()->SetCharacterState(ESF_CharacterState::LongRangeAttack);
+	//GetPlayerCharacter()->SetCharacterState(ESF_CharacterState::LongRangeAttack);
 
 	//throw magicball
 	{
@@ -151,7 +151,7 @@ void USF_AttackInput::MoveToEnemy(float DeltaTime)
 
 	// 位置を取得する
 	playerPos = GetPlayerCharacter()->GetActorLocation();
-	enemyPos = GetGameMode()->GetRockOnEnemy()->GetActorLocation();
+	enemyPos = GetGameMode()->GetNearestEnemy()->GetActorLocation();
 
 	// プレイヤーが敵に近づく方向を計算する
 	const FVector DirectionToEnemy = (enemyPos - playerPos).GetSafeNormal();

@@ -36,20 +36,23 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "GameMode")
 	void StartHitStop(const float InHitStopSpeed, const float InHitStopTime);
 
-	// ロックオンした敵の座標を取得
+	// プレイヤーに一番近い敵を取得
 	UFUNCTION(BlueprintCallable, Category = "GameMode")
-	ASF_EnemyBase* GetRockOnEnemy() const;
+	ASF_EnemyBase* GetNearestEnemy() const;
 
 private:
 	// 敵を生成し、管理するコンポーネント
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component", meta = (AllowPrivateAccess = "true"))
 	USF_EnemyManager* EnemyManager;
 
-	UPROPERTY(VisibleAnywhere, Category = "Input")
+	UPROPERTY(VisibleAnywhere, Category = "GameMode")
 	ASF_Player* PlayerCharacter;
 
-	UPROPERTY(VisibleAnywhere, Category = "Input")
+	UPROPERTY(VisibleAnywhere, Category = "GameMode")
 	ASF_MainCamera* MainCamera;
+
+	UPROPERTY(VisibleAnywhere, Category = "GameMode")
+	ASF_EnemyBase* LockOnEnemy;
 
 public:
 	void SetPlayerCharacter(ASF_Player* const InPlayerCharacter) { PlayerCharacter = InPlayerCharacter; }
@@ -59,6 +62,10 @@ public:
 	ASF_Player* GetPlayerCharacter() const { return PlayerCharacter; }
 	UFUNCTION(BlueprintCallable, Category = "SF_GameMode")
 	ASF_MainCamera* GetMainCamera() const { return MainCamera; }
+
+	void SetLockOnEnemy(ASF_EnemyBase* const InEnemy) { LockOnEnemy = InEnemy; }
+	UFUNCTION(BlueprintCallable, Category = "SF_GameMode")
+	ASF_EnemyBase* GetLockOnEnemy() const { return LockOnEnemy; }
 
 private:
 	// ヒットストップ中か

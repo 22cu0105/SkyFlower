@@ -13,6 +13,7 @@
 
 class USF_MoveInput;
 class USF_AttackInput;
+class ASF_EnemyBase;
 
 UCLASS()
 class SKYFLOWER_API ASF_Player : public ASF_CharacterBase
@@ -51,4 +52,6 @@ private:
 private:
 	// ISF_DamageableInterface を介して継承されました
 	virtual void GetDamage(int32 damage) override;
+	/// @brief プレイヤーの状態を常に変更
+	void UpdateSetPlayerState();
 };

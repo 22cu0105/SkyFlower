@@ -105,7 +105,7 @@ public:
 	void SetCharacterState(const ESF_CharacterState InCharacterState) { CharacterState = InCharacterState; }
 	UFUNCTION(BlueprintCallable, Category = "CharacterBase")
 	ESF_CharacterState GetCharacterState() { return CharacterState; }
-	// 死亡しているか
+	/// @brief 死亡しているか
 	UFUNCTION(BlueprintCallable, Category = "CharacterBase")
 	bool IsDead() const { 
 		return  CharacterState == ESF_CharacterState::BeginDead ||
@@ -113,12 +113,19 @@ public:
 				CharacterState == ESF_CharacterState::EndDead ? 
 				true : false;
 	}
-	// 近距離攻撃をしているか
+	/// @brief 近距離攻撃をしているか
 	UFUNCTION(BlueprintCallable, Category = "CharacterBase")
 	bool IsAttack_ShortRange() const { return CharacterState == ESF_CharacterState::ShortRangeAttack ? true : false; }
-	// 遠距離攻撃をしているか
+	/// @brief 遠距離攻撃をしているか
 	UFUNCTION(BlueprintCallable, Category = "CharacterBase")
 	bool IsAttack_LongRange() const { return CharacterState == ESF_CharacterState::LongRangeAttack ? true : false; }
+
+	/// @brief 近距離攻撃可能距離を取得
+	UFUNCTION(BlueprintCallable, Category = "CharacterBase")
+	float GetAttackableDistance_ShortRange() const { return CharacterParam.AttackableDistance_ShortRange; }
+	/// @brief 遠距離攻撃可能距離を取得
+	UFUNCTION(BlueprintCallable, Category = "CharacterBase")
+	float GetAttackableDistance_LongRange() const { return CharacterParam.AttackableDistance_LongRange; }
 
 	UFUNCTION(BlueprintCallable, Category = "CharacterBase")
 	void SetCurretnHP(const float InHP) { CurrentHP = InHP; }
