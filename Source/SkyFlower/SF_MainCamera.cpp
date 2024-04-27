@@ -13,6 +13,7 @@ ASF_MainCamera::ASF_MainCamera()
 	//: CameraState(ESF_CameraState::None)
 	: ViewPoint(FVector(0.f))
 	, MaxPitch(60.f)
+	, LockOnRotateSpeed(1.f)
 	, CurrentCameraEventType(ESF_CameraEventType::None)
 	, FOVInfoMap()
 {
@@ -182,7 +183,6 @@ void ASF_MainCamera::ReduceChangeValue(FSF_CameraInfo& OutCameraInfo)
 
 void ASF_MainCamera::UpdateOnNormal(const float InDeltaTime)
 {
-	Debug::PrintFixedLine("Normal");
 	if (APawn* const Player = UGameplayStatics::GetPlayerPawn(GetWorld(), 0))
 	{
 		ViewPoint = Player->GetActorLocation();
@@ -192,7 +192,6 @@ void ASF_MainCamera::UpdateOnNormal(const float InDeltaTime)
 
 void ASF_MainCamera::UpdateOnShortRangeAttack(const float InDeltaTime)
 {
-	Debug::PrintFixedLine("ShortRange");
 	if (const ASF_GameMode* const SF_GameMode = Cast<ASF_GameMode>(UGameplayStatics::GetGameMode(GetWorld())))
 	{
 		ASF_Player* const Player = SF_GameMode->GetPlayerCharacter();
@@ -211,7 +210,6 @@ void ASF_MainCamera::UpdateOnShortRangeAttack(const float InDeltaTime)
 
 void ASF_MainCamera::UpdateOnLongRangeAttack(const float InDeltaTime)
 {
-	Debug::PrintFixedLine("LongRange");
 	if (ASF_GameMode* const SF_GameMode = Cast<ASF_GameMode>(UGameplayStatics::GetGameMode(GetWorld())))
 	{
 		ASF_Player* const Player = SF_GameMode->GetPlayerCharacter();
@@ -225,6 +223,7 @@ void ASF_MainCamera::UpdateOnLongRangeAttack(const float InDeltaTime)
 
 		const FVector LockOnEnemyPos = LockOnEnemy->GetActorLocation();
 		const FRotator CameraDirection = (LockOnEnemyPos - GetActorLocation()).Rotation();
-		SetActorRotation(CameraDirection);
+		const FRotator NewRotation = FMath::RInterpTo(GetActorRotation(), CameraDirection, InDeltaTime, LockOnRotateSpeed);
+		SetActorRotation(NewRotation);
 	}
 }

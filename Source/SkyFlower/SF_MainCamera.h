@@ -120,6 +120,8 @@ private:
 	FVector ViewPoint;
 	UPROPERTY(EditAnywhere, Category = "Camera | Edit")
 	float MaxPitch;
+	UPROPERTY(EditAnywhere, Category = "Camera | Edit")
+	float LockOnRotateSpeed;
 
 	UPROPERTY(VisibleAnywhere, Category = "Camera | Visible")
 	ESF_CameraEventType CurrentCameraEventType;
