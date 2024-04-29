@@ -1,7 +1,7 @@
 // ==================================================
 // Filename	:	SF_Magicball.h
 // Author	:	22cu0214 JinWener
-// Description: Normal‰“ŠuUŒ‚—p–‚–@’e
+// Description: Normalé éš”æ”»æ’ƒç”¨é­”æ³•å¼¾
 // Notes:		
 //				
 // Update:		2024/04/23 22cu0214 create

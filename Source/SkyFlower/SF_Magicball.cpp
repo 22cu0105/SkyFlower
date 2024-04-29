@@ -27,6 +27,7 @@ ASF_Magicball::ASF_Magicball()
 
 	SphereComp->OnComponentHit.AddDynamic(this, &ASF_Magicball::OnHit);
 	SphereComp->OnComponentBeginOverlap.AddDynamic(this, &ASF_Magicball::OnBeginOverlap);
+	InitialLifeSpan = 4.0f;
 
 	EffectComp = CreateDefaultSubobject<UParticleSystemComponent>("EffectComp");
 	EffectComp->SetupAttachment(SphereComp);

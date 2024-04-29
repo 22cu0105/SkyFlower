@@ -1,7 +1,7 @@
 // ==================================================
 // Filename	:	SF_HomingMagicball.h
 // Author	:	22cu0214 JinWener
-// Description: HomingçUåÇópñÇñ@íe
+// Description: HomingÊîªÊíÉÁî®È≠îÊ≥ïÂºæ
 // Notes:		
 //				
 // Update:		2024/04/26 22cu0214 create
@@ -27,20 +27,21 @@ class SKYFLOWER_API ASF_HomingMagicball : public AActor
 	
 	///////////////////////////// override function	
 public:
-	ASF_HomingMagicball(/*ASF_EnemyBase* targetEnemy = nullptr*/);
+	ASF_HomingMagicball();
 	virtual void Tick(float DeltaTime) override;
+
+	UFUNCTION()
+	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+
+	UFUNCTION()
+	void OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 protected:
 
 	virtual void BeginPlay() override;
 
 	///////////////////////////// custom function
 public:
-	//UFUNCTION()
-	//void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
-
-	//UFUNCTION()
-	//void OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-
+	void InitTarget(ASF_EnemyBase* targetenemy);
 	///////////////////////////// custom variable
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
@@ -58,5 +59,5 @@ protected:
 private:
 	ASF_EnemyBase* target;
 	int32 hitDamage;
-	float accelerate;
+	float accelerateDelta;
 };
