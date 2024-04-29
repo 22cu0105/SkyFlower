@@ -30,16 +30,6 @@ protected:
 public:
 	virtual void Tick(float DeltaTime) override;
 
-public:
-	// コリジョン
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Collision")
-	UBoxComponent* CollisionBox;
-
-public:
-	// オーバーラップイベント
-	UFUNCTION()
-	void OnOverlapBegin(class AActor* OverlappedActor, class AActor* OtherActor);
-
 private:
 	virtual void UpdateOnNormal(const float InDeltaTime) override;
 	virtual void OnBeginAttack() override;

@@ -8,16 +8,6 @@
 ASF_EnemyBase::ASF_EnemyBase()
 {
 	PrimaryActorTick.bCanEverTick = true;
-
-	ASF_EnemyControllerBase* const EnemyController = Cast<ASF_EnemyControllerBase>(GetController());
-	// プレイヤー
-	ASF_Player* const player = Cast<ASF_Player>(GetOwner());
-
-	if (EnemyController && player)
-	{
-		// AIControllerにプレイヤー情報を設定
-		EnemyController->SetPlayerKey(player);
-	}
 }
 
 void ASF_EnemyBase::BeginPlay()
@@ -48,11 +38,6 @@ void ASF_EnemyBase::Tick(float DeltaTime)
 		OnEndDead();
 		break;
 	}
-}
-
-void ASF_EnemyBase::OnOverlapBegin(AActor* OverlappedActor, AActor* OtherActor)
-{
-
 }
 
 /// ToDo

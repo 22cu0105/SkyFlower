@@ -13,16 +13,7 @@
 #include "SF_EnemyControllerBase.h"
 #include "SF_AttackerController.generated.h"
 
-class ASF_GameMode;
-class ASF_Player;
 
-UENUM(BlueprintType)
-enum class ESF_AttackerEnemyState : uint8
-{
-    Idle                UMETA(DisplayName = "なし"),
-    MovingTowardsPlayer UMETA(DisplayName = "移動"),
-    Attacking           UMETA(DisplayName = "攻撃"),
-};
 
 UCLASS()
 class SKYFLOWER_API ASF_AttackerController : public ASF_EnemyControllerBase
@@ -49,19 +40,12 @@ protected:
 
 private:
     // Function to move AI towards the player
-    void MoveTowardsPlayer(const float DeltaTime);
+    void Move(const float DeltaTime);
 
     // Distance within which the AI will start chasing the player
     UPROPERTY(EditAnywhere)
-    float ChaseDistance = 1000.0f;
+        float ChaseDistance = 1000.0f;
 
-    // エネミーの状態
-    UPROPERTY(VisibleAnywhere, Category = "Visible | State")
-    ESF_AttackerEnemyState AttackerEnemyState;
-
-public:
-    ////////////////////////////////////////// Get関数
-    FORCEINLINE ASF_GameMode* GetGameMode() const;
-
-    FORCEINLINE ASF_Player* GetPlayerCharacter() const;
+    UPROPERTY(EditAnywhere, Category = "TEST")
+        TSubclassOf<AActor> ProjectileClass;
 };
