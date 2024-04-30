@@ -111,6 +111,7 @@ void USF_AttackInput::HomingAttack()
 	// find Target
 	/* TODO get target from LockOn */
 
+	/* step 0 */
 	// get an enemy on the map as target 
 	ASF_EnemyBase* target = nullptr;
 	for (TActorIterator<ASF_EnemyBase> It(GetWorld()); It; ++It)
@@ -128,6 +129,8 @@ void USF_AttackInput::HomingAttack()
 			return;
 		}
 	}
+
+	/* step 1 */
 	// get Axis
 	FVector axis = FVector::ZeroVector;
 #define AXIS_PLAYER 0
@@ -136,6 +139,8 @@ void USF_AttackInput::HomingAttack()
 #else
 	axis = USF_FunctionLibrary::GetGameMode(this)->GetMainCamera()->GetActorForwardVector();
 #endif
+
+	/* step 2 */
 	// spawnRot = basicDirection + angleDeg + correction
 	// calculate basicDirection
 	FRotator pitchRotator = FRotator(90.f, 0.f, 0.f);
@@ -144,12 +149,10 @@ void USF_AttackInput::HomingAttack()
 	// calculate angleDeg
 	float angleDeg = angleStep / (float)magicballNumber;
 	// calculate correction
-	FVector cameraOrientation = USF_FunctionLibrary::GetGameMode(this)
-		->GetMainCamera()->GetActorForwardVector();
-	float magnitude = 1.5f;
-	FVector correction = -cameraOrientation * magnitude;
+	float offsetMagnitude = -1.5f;
+	FVector correctionVector = axis * offsetMagnitude;
 
-	// spawn
+	/* step 3 */
 	// spawn position
 	FVector spawnPos = USF_FunctionLibrary::GetPlayer(this)->GetActorLocation();
 	for (int32 i = 0; i < magicballNumber; i++)
@@ -157,7 +160,7 @@ void USF_AttackInput::HomingAttack()
 		// calculate rotation
 		double angleRadians = (double)FMath::DegreesToRadians(angleDeg * (float)i);
 		FQuat quat = FQuat(axis, angleRadians);
-		FVector direction = (quat.RotateVector(basicDirection) + correction).GetSafeNormal();
+		FVector direction = (quat.RotateVector(basicDirection) + correctionVector).GetSafeNormal();
 		FRotator spawnRot = FRotationMatrix::MakeFromX(direction).Rotator();
 
 		// spawn

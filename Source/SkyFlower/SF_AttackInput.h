@@ -2,7 +2,8 @@
 // Filename	:	SF_CharacterBase.h
 // Author	:	22cu0115 â‰º‘ñl
 // Description: UŒ‚‚ÌŠÖ”’è‹`
-// Update	:	2024/04/09
+// Update	:	2024/04/30 22cu0214 HomingAttackÀ‘•
+//				2024/04/09
 // ==================================================
 
 #pragma once
