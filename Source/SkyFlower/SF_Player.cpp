@@ -1,5 +1,6 @@
 #include "SF_Player.h"
 #include "SF_EnemyBase.h"
+#include "SF_MainCamera.h"
 #include "SF_GameMode.h"
 #include "SF_MoveInput.h"
 #include "SF_AttackInput.h"
@@ -111,6 +112,10 @@ void ASF_Player::MoveDash()
 	if (!IsValid(MoveInputComponent)) return;
 
 	MoveInputComponent->MoveDash();
+	if (ASF_GameMode* const SF_GameMode = Cast<ASF_GameMode>(UGameplayStatics::GetGameMode(GetWorld())))
+	{
+		SF_GameMode->GetMainCamera()->StartCameraEvent(ESF_CameraEventType::Dash);
+	}
 }
 
 void ASF_Player::MoveUp(const float InValue)

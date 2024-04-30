@@ -1,4 +1,11 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// ==================================================
+// Filename	:	SF_AttackerEnemy.h
+// Author	:	22cu0115 ç‚â∫ëÒêl
+// Description: AttackerEnemyÇÃä«óù
+// Notes:		ó·
+//				
+// Update:		
+// ==================================================
 
 #pragma once
 
@@ -6,9 +13,6 @@
 #include "SF_EnemyBase.h"
 #include "SF_AttackerEnemy.generated.h"
 
-/**
- * 
- */
 UCLASS()
 class SKYFLOWER_API ASF_AttackerEnemy : public ASF_EnemyBase
 {

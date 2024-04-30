@@ -37,10 +37,16 @@ protected:
     // Called every frame
     virtual void Tick(float DeltaTime) override;
 
-
-private:
+public:
     // Function to move AI towards the player
-    void Move(const float DeltaTime);
+    void StateCheck(const float DeltaTime);
+    void StateSwitch();
+    void Idle();
+    void Move();
+    void BeginAttack();
+    void MoveAttack();
+    void ShortRangeAttack();
+    void LongRangeAttack();
 
     // Distance within which the AI will start chasing the player
     UPROPERTY(EditAnywhere)

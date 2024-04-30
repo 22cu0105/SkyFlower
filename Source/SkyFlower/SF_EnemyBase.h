@@ -13,9 +13,6 @@
 #include "SF_CharacterBase.h"
 #include "SF_EnemyBase.generated.h"
 
-class UPawnSensingComponent;
-class UBoxComponent;
-
 UCLASS()
 class SKYFLOWER_API ASF_EnemyBase : public ASF_CharacterBase
 {
