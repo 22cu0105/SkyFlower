@@ -16,8 +16,8 @@
 // Sets default values
 ASF_HomingMagicball::ASF_HomingMagicball()// get LockOnTarget from player
 	: target(nullptr)
-	, hitDamage(50.f)
-	, accelerateDelta(300)
+	, hitDamage(10.f)
+	, accelerateDelta(100)
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -35,13 +35,13 @@ ASF_HomingMagicball::ASF_HomingMagicball()// get LockOnTarget from player
 	EffectComp->SetupAttachment(SphereComp);
 
 	MovementComp = CreateDefaultSubobject<UProjectileMovementComponent>("MovementComp");
-	MovementComp->InitialSpeed = 1000.0f;
+	MovementComp->InitialSpeed = 800.0f;
 	MovementComp->bRotationFollowsVelocity = true;
 	MovementComp->bInitialVelocityInLocalSpace = true;
 	MovementComp->ProjectileGravityScale = 0.f;
 
 	MovementComp->bIsHomingProjectile = true;
-	MovementComp->HomingAccelerationMagnitude = 2000.f;
+	MovementComp->HomingAccelerationMagnitude = 800.f;
 }
 
 // Called when the game starts or when spawned
@@ -49,8 +49,19 @@ void ASF_HomingMagicball::BeginPlay()
 {
 	Super::BeginPlay();
 
+	if (!FindTarget())
+		Debug::PrintFixedLine("NO ENEMY FOR HOMING ATTACK", 85);
+}
+
+void ASF_HomingMagicball::InitTarget(ASF_EnemyBase* targetenemy)
+{
+	target = targetenemy;
+}
+
+bool ASF_HomingMagicball::FindTarget()
+{
 	// find an enemy on the map as target
-	if (!target)
+	if (!IsValid(target))
 	{
 		for (TActorIterator<ASF_EnemyBase> It(GetWorld()); It; ++It)
 		{
@@ -62,20 +73,17 @@ void ASF_HomingMagicball::BeginPlay()
 			}
 		}
 
-		if (!target)
+		if (!IsValid(target))
 		{
-			Debug::PrintFixedLine("NO ENEMY FOR HOMING ATTACK", 65);
-			this->Destroy();
+			MovementComp->bIsHomingProjectile = false;
+			return false;
 		}
 	}
 
 	USceneComponent* targetRootComponent = target->GetRootComponent();
 	MovementComp->HomingTargetComponent = targetRootComponent;
-}
 
-void ASF_HomingMagicball::InitTarget(ASF_EnemyBase* targetenemy)
-{
-	target = targetenemy;
+	return true;
 }
 
 // Called every frame
@@ -83,12 +91,17 @@ void ASF_HomingMagicball::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (!target) return;
-
-	float accelerationTemp = MovementComp->HomingAccelerationMagnitude;
-	accelerationTemp += accelerateDelta;
-	accelerationTemp = FMath::Clamp(accelerationTemp, /* min */0.0f, /* max */ 3000.0f);
-	MovementComp->HomingAccelerationMagnitude = accelerationTemp;
+	if (IsValid(target)) {
+		float accelerationTemp = MovementComp->HomingAccelerationMagnitude;
+		accelerationTemp += accelerateDelta;
+		accelerationTemp = FMath::Clamp(accelerationTemp, /* min */0.0f, /* max */ 5000.0f);
+		//MovementComp->MaxSpeed = FMath::Clamp(MovementComp->GetMaxSpeed(), /* min */0.0f, /* max */ 20000.0f);
+		MovementComp->HomingAccelerationMagnitude = accelerationTemp;
+	}
+	else // test
+	{
+		FindTarget();
+	}
 
 }
 
@@ -122,9 +135,7 @@ void ASF_HomingMagicball::OnBeginOverlap(UPrimitiveComponent* OverlappedComponen
 		damageInterface->GetDamage(hitDamage);
 	}
 
-
 	this->Destroy();
-
 }
 
 

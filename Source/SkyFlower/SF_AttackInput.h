@@ -22,11 +22,12 @@ class SKYFLOWER_API USF_AttackInput : public UActorComponent
 public:
 	// Sets default values for this component's properties
 	USF_AttackInput();
-
 public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
+protected:
+	// Called when the game starts
+	virtual void BeginPlay() override;
 
 	////////////////////////////////////////// custom function
 public:
@@ -34,10 +35,6 @@ public:
 	void EndNormalAttack();
 	void HomingAttack();
 	void LaserAttack();
-
-protected:
-	// Called when the game starts
-	virtual void BeginPlay() override;
 
 private:
 	void ShortRangeAttack();
@@ -83,7 +80,7 @@ public:
 	float stoppingDistance = 100.f;
 
 	UPROPERTY(EditAnywhere, Category = "TEST")
-	TSubclassOf<AActor> ProjectileClass;
+	TSubclassOf<AActor> MagicballClass;
 
 	// homing attack parameter
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -91,6 +88,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float angleStep = 360.f;
+
+	UPROPERTY(EditAnywhere, Category = "TEST")
+	TSubclassOf<AActor> HomingAttackClass;
 
 ////////////////////////////////////////// Getä÷êî
 	FORCEINLINE ASF_GameMode* GetGameMode() const;

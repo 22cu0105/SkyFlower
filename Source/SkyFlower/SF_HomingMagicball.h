@@ -42,6 +42,9 @@ protected:
 	///////////////////////////// custom function
 public:
 	void InitTarget(ASF_EnemyBase* targetenemy);
+
+protected:
+	bool FindTarget();
 	///////////////////////////// custom variable
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)

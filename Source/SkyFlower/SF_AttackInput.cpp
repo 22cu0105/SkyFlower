@@ -1,12 +1,23 @@
 #include "SF_AttackInput.h"
+
+// for normal attack
 #include "SF_Player.h"
 #include "SF_EnemyBase.h"
 #include "SF_GameMode.h"
 #include "Components/InputComponent.h"
 #include "GameFramework/Pawn.h"
 #include "DebugHelpers.h"
+
+// for homing attack
 #include "Kismet/GameplayStatics.h"
 #include "SF_MainCamera.h"
+#include "SF_FunctionLibrary.h"
+#include "SF_HomingMagicball.h"
+#include "Math/Vector.h"
+#include "Math/Quat.h"
+#include "Math/RotationMatrix.h"
+#include "SF_EnemyBase.h"
+#include "EngineUtils.h"  
 
 
 // Sets default values for this component's properties
@@ -88,7 +99,77 @@ void USF_AttackInput::HomingAttack()
 {
 	if (!GetPlayerCharacter()) return;
 
-	Debug::PrintFixedLine("HomingAttack()");
+	Debug::Print("HomingAttack()");
+
+	// to launch HomingMagicballs we need:
+	// 0. check Target
+	// 1. PlayerForwardDirection as basic Axis
+	// 2. LaunchDirection for each HomingMagicball
+	// 3. Spawn
+
+
+	// find Target
+	/* TODO get target from LockOn */
+
+	// get an enemy on the map as target 
+	ASF_EnemyBase* target = nullptr;
+	for (TActorIterator<ASF_EnemyBase> It(GetWorld()); It; ++It)
+	{
+		ASF_EnemyBase* FoundEnemy = *It;
+		if (FoundEnemy)
+		{
+			target = FoundEnemy;
+			break; // stop searching
+		}
+
+		if (!IsValid(target))
+		{
+			Debug::PrintFixedLine("NO ENEMY FOR HOMING ATTACK", 85);
+			return;
+		}
+	}
+	// get Axis
+	FVector axis = FVector::ZeroVector;
+#define AXIS_PLAYER 0
+#if AXIS_PLAYER
+	axis = USF_FunctionLibrary::GetPlayer(this)->GetActorForwardVector();
+#else
+	axis = USF_FunctionLibrary::GetGameMode(this)->GetMainCamera()->GetActorForwardVector();
+#endif
+	// spawnRot = basicDirection + angleDeg + correction
+	// calculate basicDirection
+	FRotator pitchRotator = FRotator(90.f, 0.f, 0.f);
+	FQuat quatRotation = FQuat(pitchRotator);
+	FVector basicDirection = quatRotation.RotateVector(axis);
+	// calculate angleDeg
+	float angleDeg = angleStep / (float)magicballNumber;
+	// calculate correction
+	FVector cameraOrientation = USF_FunctionLibrary::GetGameMode(this)
+		->GetMainCamera()->GetActorForwardVector();
+	float magnitude = 1.5f;
+	FVector correction = -cameraOrientation * magnitude;
+
+	// spawn
+	// spawn position
+	FVector spawnPos = USF_FunctionLibrary::GetPlayer(this)->GetActorLocation();
+	for (int32 i = 0; i < magicballNumber; i++)
+	{
+		// calculate rotation
+		double angleRadians = (double)FMath::DegreesToRadians(angleDeg * (float)i);
+		FQuat quat = FQuat(axis, angleRadians);
+		FVector direction = (quat.RotateVector(basicDirection) + correction).GetSafeNormal();
+		FRotator spawnRot = FRotationMatrix::MakeFromX(direction).Rotator();
+
+		// spawn
+		FActorSpawnParameters spawnParams;
+		spawnParams.Owner = this->GetOwner();
+		spawnParams.Instigator = this->GetOwner()->GetInstigator();
+
+		AActor* projectile = GetWorld()->SpawnActor<AActor>(
+			HomingAttackClass, spawnPos, spawnRot, spawnParams);
+		Cast<ASF_HomingMagicball>(projectile)->InitTarget(target);
+	}
+
 }
 
 void USF_AttackInput::LaserAttack()
@@ -120,7 +201,7 @@ void USF_AttackInput::LongRangeAttack()
 
 	//throw magicball
 	{
-		if (!ProjectileClass) return;
+		if (!MagicballClass) return;
 		FVector HandLocation = GetPlayerCharacter()->GetMesh()->GetSocketLocation("Magicball");
 
 		ASF_MainCamera* camera = GetGameMode()->GetMainCamera();
@@ -130,7 +211,7 @@ void USF_AttackInput::LongRangeAttack()
 		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 		SpawnParams.Instigator = GetPlayerCharacter();
 
-		GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTM, SpawnParams);
+		GetWorld()->SpawnActor<AActor>(MagicballClass, SpawnTM, SpawnParams);
 		Debug::PrintFixedLine("AttackRanged", 22);
 	}
 }
