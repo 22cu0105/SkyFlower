@@ -16,10 +16,10 @@ class SKYFLOWER_API USF_FunctionLibrary : public UBlueprintFunctionLibrary
 	GENERATED_BODY()
 	
 public:
-	UFUNCTION(BlueprintCallable, Category = "SkyFlower")
+	UFUNCTION(BlueprintPure, Category = "SkyFlower")
 	static ASF_GameMode* GetGameMode(UObject* WorldContextObject);
 
-	UFUNCTION(BlueprintCallable, Category = "SkyFlower")
+	UFUNCTION(BlueprintPure, Category = "SkyFlower")
 	static ASF_Player* GetPlayer(UObject* WorldContextObject, int32 PlayerIndex = 0);
 
 };
