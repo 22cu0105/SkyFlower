@@ -1,7 +1,7 @@
 // ==================================================
 // Filename	:	SF_EnemyGenerator.h
-// Author	:	22cu0105 ¬“c“‡ —Ål
-// Description: “G‚Ì¶¬ˆ—‚ğs‚¤ƒRƒ“ƒ|[ƒlƒ“ƒg
+// Author	:	22cu0105 å°ç”°å³¶ ç¨œäºº
+// Description: æ•µã®ç”Ÿæˆå‡¦ç†ã‚’è¡Œã†ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 // Update	:	2024/04/09
 // ==================================================
 #pragma once
@@ -27,7 +27,7 @@ protected:
 public:	
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	// “GAI‚ğ¶¬‚·‚éˆ—
+	// æ•µAIã‚’ç”Ÿæˆã™ã‚‹å‡¦ç†
 	UFUNCTION(BlueprintCallable, Category = "EnemyGenerator")
 	TArray<ASF_EnemyBase*> SpawnAIEnemy(const FVector& InLocation, TSubclassOf<ASF_EnemyBase> const InEnemyChara, UBehaviorTree* const InBehaviorTree = nullptr, const int InNum = 1);
 };

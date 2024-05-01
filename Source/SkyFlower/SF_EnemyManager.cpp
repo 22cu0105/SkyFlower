@@ -15,8 +15,8 @@ void USF_EnemyManager::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// –‘O‚Éƒ}ƒbƒvã‚É“G‚ª”z’u‚³‚ê‚Ä‚¢‚é“G‚ğŒŸõ‚µAŠi”[
-	// ƒfƒoƒbƒO—pBÀÛ‚Í–‘O‚Éƒ}ƒbƒvã‚É“G‚ª‚¢‚é‚±‚Æ‚ÍŒˆ‚µ‚Ä‚È‚¢
+	// äº‹å‰ã«ãƒãƒƒãƒ—ä¸Šã«æ•µãŒé…ç½®ã•ã‚Œã¦ã„ã‚‹æ•µã‚’æ¤œç´¢ã—ã€æ ¼ç´
+	// ãƒ‡ãƒãƒƒã‚°ç”¨ã€‚å®Ÿéš›ã¯äº‹å‰ã«ãƒãƒƒãƒ—ä¸Šã«æ•µãŒã„ã‚‹ã“ã¨ã¯æ±ºã—ã¦ãªã„
 	TArray<AActor*> PrevSpawnedEnemyList;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ASF_EnemyBase::StaticClass(), PrevSpawnedEnemyList);
 	for (AActor* EnemyActor : PrevSpawnedEnemyList)
@@ -31,8 +31,8 @@ void USF_EnemyManager::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	// ŠÇ—‚µ‚Ä‚¢‚é“G‚ª€–S‚µ‚Ä‚¢‚é‚©ŠÄ‹‚·‚é
-	// €–S‚µ‚Ä‚¢‚½‚ç—Ìˆæ‚ğ‰ğ•ú‚·‚é
+	// ç®¡ç†ã—ã¦ã„ã‚‹æ•µãŒæ­»äº¡ã—ã¦ã„ã‚‹ã‹ç›£è¦–ã™ã‚‹
+	// æ­»äº¡ã—ã¦ã„ãŸã‚‰é ˜åŸŸã‚’è§£æ”¾ã™ã‚‹
 	for (ASF_EnemyBase* DestroyEnemy : TryGetDeadEnemies())
 	{
 		if (EnemyList.Contains(DestroyEnemy))
@@ -40,7 +40,7 @@ void USF_EnemyManager::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 	}
 }
 
-/// @brief SpawnType‚Å¶¬•û–@‚ğ•ª‚¯‚é
+/// @brief SpawnTypeã§ç”Ÿæˆæ–¹æ³•ã‚’åˆ†ã‘ã‚‹
 /// @param InSpawnType 
 /// @param InLocation 
 /// @param InEnemy 
@@ -57,8 +57,8 @@ void USF_EnemyManager::SpawnAIEnemyFromGenerationType(const ESF_SpawnType InSpaw
 	}
 }
 
-/// @brief ˆø”‚Å“n‚³‚ê‚½À•W‚Éˆê”Ô‹ß‚¢“G‚ÌÀ•W‚ğæ“¾
-/// @param InLocation ”äŠr‚·‚éÀ•W
+/// @brief å¼•æ•°ã§æ¸¡ã•ã‚ŒãŸåº§æ¨™ã«ä¸€ç•ªè¿‘ã„æ•µã®åº§æ¨™ã‚’å–å¾—
+/// @param InLocation æ¯”è¼ƒã™ã‚‹åº§æ¨™
 /// @return 
 ASF_EnemyBase* USF_EnemyManager::GetNearestEnemyPos(const FVector& playerLocation)
 {
@@ -86,18 +86,18 @@ ASF_EnemyBase* USF_EnemyManager::GetNearestEnemyPos(const FVector& playerLocatio
 	return OutNearestEnemy;
 }
 
-/// @brief €–S‚µ‚Ä‚¢‚é“GƒLƒƒƒ‰ƒNƒ^[‚ğæ“¾
-/// @return €–S‚µ‚Ä‚¢‚é“G‚Ì”z—ñ
+/// @brief æ­»äº¡ã—ã¦ã„ã‚‹æ•µã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ã‚’å–å¾—
+/// @return æ­»äº¡ã—ã¦ã„ã‚‹æ•µã®é…åˆ—
 TArray<ASF_EnemyBase*> USF_EnemyManager::TryGetDeadEnemies() const
 {
-	// €–S‚µ‚Ä‚¢‚é“G‚ÌƒAƒhƒŒƒXŠi”[—p
+	// æ­»äº¡ã—ã¦ã„ã‚‹æ•µã®ã‚¢ãƒ‰ãƒ¬ã‚¹æ ¼ç´ç”¨
 	TArray<ASF_EnemyBase*> DeadEnemyList;
 
 	for (ASF_EnemyBase* CheackEnemy : EnemyList)
 	{
 		if (!IsValid(CheackEnemy)) continue;
 
-		// €–S‚µ‚Ä‚¢‚é‚©”»’è‚µA”z—ñ‚É’Ç‰Á
+		// æ­»äº¡ã—ã¦ã„ã‚‹ã‹åˆ¤å®šã—ã€é…åˆ—ã«è¿½åŠ 
 		if (CheackEnemy->IsDead())
 			DeadEnemyList.Add(CheackEnemy);
 	}
@@ -105,7 +105,7 @@ TArray<ASF_EnemyBase*> USF_EnemyManager::TryGetDeadEnemies() const
 	return DeadEnemyList;
 }
 
-/// @brief ’Êí“G‚Ì¶¬ˆ—
+/// @brief é€šå¸¸æ•µã®ç”Ÿæˆå‡¦ç†
 /// @param InEnemy 
 /// @param InLocation 
 /// @param InNum 
@@ -115,7 +115,7 @@ void USF_EnemyManager::NormalAIEnemySpawn(TSubclassOf<ASF_EnemyBase> const InEne
 
 	TArray<ASF_EnemyBase*> CreateEnemyList = EnemyGenerator->SpawnAIEnemy(InLocation, InEnemy, nullptr, InNum);
 
-	// ¶¬”•ª‚¾‚¯ˆ—
+	// ç”Ÿæˆæ•°åˆ†ã ã‘å‡¦ç†
 	for (ASF_EnemyBase* CreateEnemy : CreateEnemyList)
 	{
 		if (IsValid(CreateEnemy))
@@ -123,7 +123,7 @@ void USF_EnemyManager::NormalAIEnemySpawn(TSubclassOf<ASF_EnemyBase> const InEne
 	}
 }
 
-/// @brief ŒQO“G‚Ì¶¬ˆ—
+/// @brief ç¾¤è¡†æ•µã®ç”Ÿæˆå‡¦ç†
 /// @param InEnemy 
 /// @param InLocation 
 /// @param InNum 
@@ -133,11 +133,11 @@ void USF_EnemyManager::FlockAIEnemySpawn(TSubclassOf<ASF_EnemyBase> const InEnem
 
 	TArray<ASF_EnemyBase*> CreateEnemyList;
 
-	// ¶¬ƒƒWƒbƒN‚ğ‚±‚±‚É‘‚­
+	// ç”Ÿæˆãƒ­ã‚¸ãƒƒã‚¯ã‚’ã“ã“ã«æ›¸ã
 
 	CreateEnemyList = EnemyGenerator->SpawnAIEnemy(InLocation, InEnemy, nullptr, InNum);
 
-	// ¶¬”•ª‚¾‚¯ˆ—
+	// ç”Ÿæˆæ•°åˆ†ã ã‘å‡¦ç†
 	for (ASF_EnemyBase* CreateEnemy : CreateEnemyList)
 	{
 		if (IsValid(CreateEnemy))

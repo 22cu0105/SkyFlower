@@ -26,17 +26,17 @@ void ASF_AttackerController::Tick(float DeltaTime)
 }
 
 /// <summary>
-/// ƒXƒe[ƒg•ÏX
+/// ã‚¹ãƒ†ãƒ¼ãƒˆå¤‰æ›´
 /// </summary>
 /// <param name="DeltaTime"></param>
 void ASF_AttackerController::StateCheck(const float DeltaTime)
 {
     TimeSinceLastAttack += DeltaTime;
 
-    // ƒvƒŒƒCƒ„[‚ÌˆÊ’u‚ğQÆ‚µ‚Ä“ËŒ‚‚·‚éğŒ‚ğ–‚½‚·‚©‚Ç‚¤‚©‚ğƒ`ƒFƒbƒN
+    // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ä½ç½®ã‚’å‚ç…§ã—ã¦çªæ’ƒã™ã‚‹æ¡ä»¶ã‚’æº€ãŸã™ã‹ã©ã†ã‹ã‚’ãƒã‚§ãƒƒã‚¯
     if (FVector::Dist(GetPlayerCharacter()->GetActorLocation(), GetPawn()->GetActorLocation()) <= ChaseDistance)
     {
-        // “ËŒ‚‚·‚éó‘Ô‚ÉˆÚs
+        // çªæ’ƒã™ã‚‹çŠ¶æ…‹ã«ç§»è¡Œ
         if (GetEnemyState() != ESF_EnemyState::Move && bCanAttack)
         {
             SetEnemyState(ESF_EnemyState::Move);
@@ -45,7 +45,7 @@ void ASF_AttackerController::StateCheck(const float DeltaTime)
     }
     else if (FVector::Dist(GetPlayerCharacter()->GetActorLocation(), GetPawn()->GetActorLocation()) <= ChaseDistance * 2)
     {
-        // “ËŒ‚‚·‚éó‘Ô‚ÉˆÚs
+        // çªæ’ƒã™ã‚‹çŠ¶æ…‹ã«ç§»è¡Œ
         if (GetEnemyState() != ESF_EnemyState::LongRangeAttack && bCanAttack)
         {
             SetEnemyState(ESF_EnemyState::LongRangeAttack);
@@ -55,7 +55,7 @@ void ASF_AttackerController::StateCheck(const float DeltaTime)
 }
 
 /// <summary>
-/// ƒXƒe[ƒg‚²‚Æ‚Ìˆ—
+/// ã‚¹ãƒ†ãƒ¼ãƒˆã”ã¨ã®å‡¦ç†
 /// </summary>
 void ASF_AttackerController::StateSwitch()
 {
@@ -99,11 +99,11 @@ void ASF_AttackerController::StateSwitch()
 
 void ASF_AttackerController::Idle()
 {
-    // “ËŒ‚‚ªŠ®—¹‚µ‚½‚çÄ‚ÑƒvƒŒƒCƒ„[‚ÌˆÊ’u‚ğŒ©‚é‚½‚ß‚Éƒtƒ‰ƒO‚ğƒŠƒZƒbƒg
+    // çªæ’ƒãŒå®Œäº†ã—ãŸã‚‰å†ã³ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ä½ç½®ã‚’è¦‹ã‚‹ãŸã‚ã«ãƒ•ãƒ©ã‚°ã‚’ãƒªã‚»ãƒƒãƒˆ
     if (TimeSinceLastAttack >= AttackCooldown)
     {
         bCanAttack = true;
-        TimeSinceLastAttack = 0.0f; // ƒŠƒZƒbƒg
+        TimeSinceLastAttack = 0.0f; // ãƒªã‚»ãƒƒãƒˆ
         GetCharacter()->GetCharacterMovement()->Velocity = FVector::Zero();
     }
 }
@@ -112,10 +112,10 @@ void ASF_AttackerController::Move()
 {
     if (!GetCharacter()) return;
 
-    // ƒfƒoƒbƒOƒƒbƒZ[ƒW‚ğo—Í
+    // ãƒ‡ãƒãƒƒã‚°ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’å‡ºåŠ›
     Debug::Print("Totugeki");
 
-    // “ËŒ‚‚Ì•ûŒü‚ğŒvZ‚µ‚ÄAddImpulse‚ğg‚Á‚Ä“ËŒ‚‚·‚é
+    // çªæ’ƒã®æ–¹å‘ã‚’è¨ˆç®—ã—ã¦AddImpulseã‚’ä½¿ã£ã¦çªæ’ƒã™ã‚‹
     FVector Direction = (GetPlayerCharacter()->GetActorLocation() - GetPawn()->GetActorLocation()).GetSafeNormal();
     GetCharacter()->GetCharacterMovement()->Velocity = FVector::Zero();
     GetCharacter()->GetCharacterMovement()->AddImpulse(Direction * ChasePower, true);
@@ -123,54 +123,54 @@ void ASF_AttackerController::Move()
     FRotator Rotation = Direction.Rotation();
     GetPawn()->SetActorRotation(Rotation);
 
-    // “G‚Ìó‘Ô‚ğƒAƒCƒhƒ‹‚É•ÏX
+    // æ•µã®çŠ¶æ…‹ã‚’ã‚¢ã‚¤ãƒ‰ãƒ«ã«å¤‰æ›´
     SetEnemyState(ESF_EnemyState::Idle);
 }
 
 void ASF_AttackerController::BeginAttack()
 {
-    // “G‚Ìó‘Ô‚ğƒAƒCƒhƒ‹‚É•ÏX
+    // æ•µã®çŠ¶æ…‹ã‚’ã‚¢ã‚¤ãƒ‰ãƒ«ã«å¤‰æ›´
     SetEnemyState(ESF_EnemyState::Idle);
 }
 
 void ASF_AttackerController::MoveAttack()
 {
-    // “G‚Ìó‘Ô‚ğƒAƒCƒhƒ‹‚É•ÏX
+    // æ•µã®çŠ¶æ…‹ã‚’ã‚¢ã‚¤ãƒ‰ãƒ«ã«å¤‰æ›´
     SetEnemyState(ESF_EnemyState::Idle);
 }
 
 void ASF_AttackerController::ShortRangeAttack()
 {
-    // “G‚Ìó‘Ô‚ğƒAƒCƒhƒ‹‚É•ÏX
+    // æ•µã®çŠ¶æ…‹ã‚’ã‚¢ã‚¤ãƒ‰ãƒ«ã«å¤‰æ›´
     SetEnemyState(ESF_EnemyState::Idle);
 }
 
 void ASF_AttackerController::LongRangeAttack()
 {
-    // ProjectileClass‚ÆGetPawn()‚Ìnullƒ`ƒFƒbƒN‚ğs‚¤
+    // ProjectileClassã¨GetPawn()ã®nullãƒã‚§ãƒƒã‚¯ã‚’è¡Œã†
     if (!ProjectileClass || !GetPawn()) return;
 
-    // “G‚ÌˆÊ’u‚ÆƒvƒŒƒCƒ„[‚ÌˆÊ’u‚ğæ“¾‚µA•ûŒüƒxƒNƒgƒ‹‚ğŒvZ
+    // æ•µã®ä½ç½®ã¨ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ä½ç½®ã‚’å–å¾—ã—ã€æ–¹å‘ãƒ™ã‚¯ãƒˆãƒ«ã‚’è¨ˆç®—
     FVector EnemyLocation = GetPawn()->GetActorLocation();
     FVector TargetLocation = GetPlayerCharacter()->GetActorLocation();
     FVector Direction = (TargetLocation - EnemyLocation).GetSafeNormal();
 
-    // •ûŒüƒxƒNƒgƒ‹‚©‚ç‰ñ“]‚ğŒvZ‚µA“G‚ÌŒü‚«‚ğƒvƒŒƒCƒ„[‚Ì•ûŒü‚É•ÏX
+    // æ–¹å‘ãƒ™ã‚¯ãƒˆãƒ«ã‹ã‚‰å›è»¢ã‚’è¨ˆç®—ã—ã€æ•µã®å‘ãã‚’ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æ–¹å‘ã«å¤‰æ›´
     FRotator Rotation = Direction.Rotation();
     GetPawn()->SetActorRotation(Rotation);
 
-    // ƒvƒƒWƒFƒNƒ^ƒCƒ‹‚ÌƒXƒ|[ƒ“ˆÊ’u‚ğŒvZiEnemyLocation‚Ì­‚µ‘O•û‚ÉˆÚ“®j
-    float Distance = 100.0f; // ‘O•û‚ÉˆÚ“®‚·‚é‹——£‚ğİ’è
+    // ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ã‚¿ã‚¤ãƒ«ã®ã‚¹ãƒãƒ¼ãƒ³ä½ç½®ã‚’è¨ˆç®—ï¼ˆEnemyLocationã®å°‘ã—å‰æ–¹ã«ç§»å‹•ï¼‰
+    float Distance = 100.0f; // å‰æ–¹ã«ç§»å‹•ã™ã‚‹è·é›¢ã‚’è¨­å®š
     FVector SpawnLocation = EnemyLocation + Direction * Distance;
     FTransform SpawnTM = FTransform(Rotation, SpawnLocation);
 
-    // ƒvƒƒWƒFƒNƒ^ƒCƒ‹‚ğƒXƒ|[ƒ“‚³‚¹‚é
+    // ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ã‚¿ã‚¤ãƒ«ã‚’ã‚¹ãƒãƒ¼ãƒ³ã•ã›ã‚‹
     FActorSpawnParameters SpawnParams;
     SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
     SpawnParams.Instigator = GetPawn();
     GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTM, SpawnParams);
 
-    // “G‚Ìó‘Ô‚ğƒAƒCƒhƒ‹‚É•ÏX
+    // æ•µã®çŠ¶æ…‹ã‚’ã‚¢ã‚¤ãƒ‰ãƒ«ã«å¤‰æ›´
     SetEnemyState(ESF_EnemyState::Idle);
 }
 

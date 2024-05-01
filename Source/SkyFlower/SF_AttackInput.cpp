@@ -39,10 +39,10 @@ void USF_AttackInput::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	// ‰Ÿ‚³‚ê‚Ä‚©‚ç‚ÌŽžŠÔ‚ðŒv‘ª‚µ‚ÄƒŒ[ƒU[UŒ‚‚©‚»‚êˆÈŠO‚ð”»’è‚·‚é
+	// æŠ¼ã•ã‚Œã¦ã‹ã‚‰ã®æ™‚é–“ã‚’è¨ˆæ¸¬ã—ã¦ãƒ¬ãƒ¼ã‚¶ãƒ¼æ”»æ’ƒã‹ãã‚Œä»¥å¤–ã‚’åˆ¤å®šã™ã‚‹
 	if (isButtonPressed)
 	{
-		// ƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‘±‚¯‚Ä‚¢‚éˆ—‚ðs‚¤
+		// ãƒœã‚¿ãƒ³ãŒæŠ¼ã•ã‚Œç¶šã‘ã¦ã„ã‚‹å‡¦ç†ã‚’è¡Œã†
 		pressedTime += DeltaTime;
 	}
 	MoveToEnemy(DeltaTime);
@@ -71,11 +71,11 @@ void USF_AttackInput::EndNormalAttack()
 		if (ASF_EnemyBase* const RockOnEnemy = GetGameMode()->GetNearestEnemy())
 			enemyPos = RockOnEnemy->GetActorLocation();
 
-		// 2‚Â‚Ì“_ŠÔ‚Ì‹——£‚ð‘ª‚é‚½‚ß‚Éƒ†[ƒNƒŠƒbƒh‹——£‚Ì2æ‚ðŽæ“¾‚·‚é
+		// 2ã¤ã®ç‚¹é–“ã®è·é›¢ã‚’æ¸¬ã‚‹ãŸã‚ã«ãƒ¦ãƒ¼ã‚¯ãƒªãƒƒãƒ‰è·é›¢ã®2ä¹—ã‚’å–å¾—ã™ã‚‹
 		const float DistanceSquared = FVector::DistSquared(playerPos, enemyPos);
 
-		// FMath::Square()‚ÍA—^‚¦‚ç‚ê‚½’l‚Ì2æ‚ðŒvŽZ‚·‚é
-		// ‚È‚º‚©ƒtƒB[ƒ‹ƒhã‚É“G‚ª‚¢‚È‚¢ê‡ƒvƒŒƒCƒ„[‚ÌÀ•W‚Æ“¯‚¶‚É‚È‚é
+		// FMath::Square()ã¯ã€ä¸Žãˆã‚‰ã‚ŒãŸå€¤ã®2ä¹—ã‚’è¨ˆç®—ã™ã‚‹
+		// ãªãœã‹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ä¸Šã«æ•µãŒã„ãªã„å ´åˆãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®åº§æ¨™ã¨åŒã˜ã«ãªã‚‹
 		if (enemyPos == playerPos || DistanceSquared > FMath::Square(attackableDistance))
 		{
 			LongRangeAttack();
@@ -85,7 +85,7 @@ void USF_AttackInput::EndNormalAttack()
 			ShortRangeAttack();
 		}
 	}
-	// gatherPowerTimeˆÈã‚¾‚Á‚½‚ç
+	// gatherPowerTimeä»¥ä¸Šã ã£ãŸã‚‰
 	else
 	{
 		LaserAttack();
@@ -190,7 +190,7 @@ void USF_AttackInput::ShortRangeAttack()
 
 	UE_LOG(LogTemp, Warning, TEXT("ShortRange"));
 
-	// “G‚ð’Ç‚¢‚©‚¯‚é
+	// æ•µã‚’è¿½ã„ã‹ã‘ã‚‹
 	beginShortAttack = true;
 }
 
@@ -230,24 +230,24 @@ void USF_AttackInput::MoveToEnemy(float DeltaTime)
 		return;
 	}
 
-	// Œv‘ªŠJŽn
+	// è¨ˆæ¸¬é–‹å§‹
 	moveTime += DeltaTime;
 
-	// ˆÊ’u‚ðŽæ“¾‚·‚é
+	// ä½ç½®ã‚’å–å¾—ã™ã‚‹
 	playerPos = GetPlayerCharacter()->GetActorLocation();
 	enemyPos = GetGameMode()->GetNearestEnemy()->GetActorLocation();
 
-	// ƒvƒŒƒCƒ„[‚ª“G‚É‹ß‚Ã‚­•ûŒü‚ðŒvŽZ‚·‚é
+	// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒæ•µã«è¿‘ã¥ãæ–¹å‘ã‚’è¨ˆç®—ã™ã‚‹
 	const FVector DirectionToEnemy = (enemyPos - playerPos).GetSafeNormal();
 
-	// ƒvƒŒƒCƒ„[‚ð“G‚ÉŒü‚©‚Á‚ÄˆÚ“®‚³‚¹‚é
+	// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’æ•µã«å‘ã‹ã£ã¦ç§»å‹•ã•ã›ã‚‹
 	const FVector newPos = FMath::VInterpConstantTo(playerPos, enemyPos, DeltaTime, moveSpeed);
 
-	// ‰ñ“]
+	// å›žè»¢
 	const FRotator currentRot = { 0.f, GetPlayerCharacter()->GetActorRotation().Yaw, 0.f };
 	const FRotator targetRot = { 0.f, DirectionToEnemy.Rotation().Yaw, 0.f };
 
-	// ƒvƒŒƒCƒ„[î•ñ‚ðXV
+	// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼æƒ…å ±ã‚’æ›´æ–°
 	GetPlayerCharacter()->SetActorLocation(newPos);
 	GetPlayerCharacter()->SetActorRotation(FMath::RInterpTo(currentRot, targetRot, DeltaTime, rotationSpeed));
 }

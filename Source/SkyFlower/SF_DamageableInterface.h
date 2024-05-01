@@ -1,7 +1,7 @@
 // ==================================================
 // Filename	:	SF_DamageableInterface.h
 // Author	:	22cu0214 JinWener
-// Description: ダメージを受けられるActor用インタフェース
+// Description: 繝繝｡繝ｼ繧ｸ繧貞女縺代ｉ繧後ｋActor逕ｨ繧､繝ｳ繧ｿ繝輔ぉ繝ｼ繧ｹ
 // Notes:		
 //				
 // Update:		2024/04/23 22cu0214 

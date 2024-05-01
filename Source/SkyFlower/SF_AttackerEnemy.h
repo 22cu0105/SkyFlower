@@ -1,8 +1,8 @@
 // ==================================================
 // Filename	:	SF_AttackerEnemy.h
-// Author	:	22cu0115 â‰º‘ñl
-// Description: AttackerEnemy‚ÌŠÇ—
-// Notes:		—á
+// Author	:	22cu0115 å‚ä¸‹æ‹“äºº
+// Description: AttackerEnemyã®ç®¡ç†
+// Notes:		ä¾‹
 //				
 // Update:		
 // ==================================================
@@ -20,7 +20,7 @@ class SKYFLOWER_API ASF_AttackerEnemy : public ASF_EnemyBase
 public:
 	ASF_AttackerEnemy();
 public:
-	// ISF_DamageableInterface ‚ğ‰î‚µ‚ÄŒp³‚³‚ê‚Ü‚µ‚½
+	// ISF_DamageableInterface ã‚’ä»‹ã—ã¦ç¶™æ‰¿ã•ã‚Œã¾ã—ãŸ
 	virtual void GetDamage(int32 damage) override;
 
 private:

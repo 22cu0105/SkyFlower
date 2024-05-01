@@ -24,7 +24,7 @@ TArray<ASF_EnemyBase*> USF_EnemyGenerator::SpawnAIEnemy(const FVector& InLocatio
 {
 	TArray<ASF_EnemyBase*> CreateEnemyList;
 
-	// ¶¬”•ª‚¾‚¯ˆ—
+	// ç”Ÿæˆæ•°åˆ†ã ã‘å‡¦ç†
 	for (int i = 0; i < InNum; i++)
 		CreateEnemyList.Add(Cast<ASF_EnemyBase>(UAIBlueprintHelperLibrary::SpawnAIFromClass(GetWorld(), InEnemyChara, InBehaviorTree, InLocation)));
 

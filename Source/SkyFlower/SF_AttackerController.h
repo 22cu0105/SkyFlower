@@ -1,8 +1,8 @@
 // ==================================================
 // Filename	:	SF_AttackerController.h
-// Author	:	22cu0115 â‰º‘ñl
-// Description: ålŒö‚É“ËŠÑ‚µ‚Ä‚­‚é“G
-// Notes:		—á
+// Author	:	22cu0115 å‚ä¸‹æ‹“äºº
+// Description: ä¸»äººå…¬ã«çªè²«ã—ã¦ãã‚‹æ•µ
+// Notes:		ä¾‹
 //				
 // Update:		
 // ==================================================
@@ -26,7 +26,7 @@ public:
     float ChasePower = 5000.0f;
 
     float TimeSinceLastAttack = 0.f;
-    float AttackCooldown = 2.0f; // “ËŒ‚ŠÔŠu
+    float AttackCooldown = 2.0f; // çªæ’ƒé–“éš”
     bool bCanAttack = true;
 
 

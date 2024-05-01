@@ -17,7 +17,7 @@ void ASF_CharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	// ‰Šú‰»
+	// åˆæœŸåŒ–
 	CharacterState = ESF_CharacterState::Normal;
 	CurrentHP = CharacterParam.MaxHP;
 }
@@ -28,31 +28,31 @@ void ASF_CharacterBase::Tick(float DeltaTime)
 }
 
 /// ToDo
-/// @brief •Ší‚ð‘•”õ‚·‚é
-/// @param InWeapon	   ƒLƒƒƒ‰ƒNƒ^[‚É‘•”õ‚³‚¹‚éƒV[ƒ‹ƒh
-/// @param InSoketName ƒƒbƒVƒ…‚ÉƒAƒ^ƒbƒ`‚³‚¹‚éƒ\ƒPƒbƒg‚Ì–¼‘O
+/// @brief æ­¦å™¨ã‚’è£…å‚™ã™ã‚‹
+/// @param InWeapon	   ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ã«è£…å‚™ã•ã›ã‚‹ã‚·ãƒ¼ãƒ«ãƒ‰
+/// @param InSoketName ãƒ¡ãƒƒã‚·ãƒ¥ã«ã‚¢ã‚¿ãƒƒãƒã•ã›ã‚‹ã‚½ã‚±ãƒƒãƒˆã®åå‰
 void ASF_CharacterBase::EquipWeapon(ASF_WeaponBase* const InWeapon, const FName& InSoketName)
 {
 	if (!IsValid(InWeapon)) return;
 
 	WeaponActor = InWeapon;
 
-	// eƒAƒNƒ^[‚ðƒvƒŒƒCƒ„[ƒƒbƒVƒ…‚Ìƒ\ƒPƒbƒg‚ÉƒAƒ^ƒbƒ`‚·‚é
+	// éŠƒã‚¢ã‚¯ã‚¿ãƒ¼ã‚’ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãƒ¡ãƒƒã‚·ãƒ¥ã®ã‚½ã‚±ãƒƒãƒˆã«ã‚¢ã‚¿ãƒƒãƒã™ã‚‹
 	FAttachmentTransformRules AttachTransform = { EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, EAttachmentRule::KeepWorld, true };
 	WeaponActor->AttachToComponent(GetMesh(), AttachTransform, InSoketName);
 }
 
 /// ToDo
-/// @brief ƒV[ƒ‹ƒh‚ð‘•”õ‚·‚é
-/// @param InEquipment ƒLƒƒƒ‰ƒNƒ^[‚É‘•”õ‚³‚¹‚éƒV[ƒ‹ƒh
-/// @param InSoketName ƒƒbƒVƒ…‚ÉƒAƒ^ƒbƒ`‚³‚¹‚éƒ\ƒPƒbƒg‚Ì–¼‘O
+/// @brief ã‚·ãƒ¼ãƒ«ãƒ‰ã‚’è£…å‚™ã™ã‚‹
+/// @param InEquipment ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ã«è£…å‚™ã•ã›ã‚‹ã‚·ãƒ¼ãƒ«ãƒ‰
+/// @param InSoketName ãƒ¡ãƒƒã‚·ãƒ¥ã«ã‚¢ã‚¿ãƒƒãƒã•ã›ã‚‹ã‚½ã‚±ãƒƒãƒˆã®åå‰
 void ASF_CharacterBase::EquipShield(ASF_Shield* const InShield, const FName& InSoketName)
 {
 	if (!IsValid(InShield)) return;
 
 	ShieldActor = InShield;
 
-	// eƒAƒNƒ^[‚ðƒvƒŒƒCƒ„[ƒƒbƒVƒ…‚Ìƒ\ƒPƒbƒg‚ÉƒAƒ^ƒbƒ`‚·‚é
+	// éŠƒã‚¢ã‚¯ã‚¿ãƒ¼ã‚’ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãƒ¡ãƒƒã‚·ãƒ¥ã®ã‚½ã‚±ãƒƒãƒˆã«ã‚¢ã‚¿ãƒƒãƒã™ã‚‹
 	FAttachmentTransformRules AttachTransform = { EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, EAttachmentRule::KeepWorld, true };
 	ShieldActor->AttachToComponent(GetMesh(), AttachTransform, InSoketName);
 }

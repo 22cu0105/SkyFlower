@@ -41,7 +41,7 @@ void ASF_EnemyBase::Tick(float DeltaTime)
 }
 
 /// ToDo
-/// @brief ’ÊíŽžXVˆ—
+/// @brief é€šå¸¸æ™‚æ›´æ–°å‡¦ç†
 /// @param InDeltaTime 
 void ASF_EnemyBase::UpdateOnNormal(const float InDeltaTime)
 {
@@ -49,47 +49,47 @@ void ASF_EnemyBase::UpdateOnNormal(const float InDeltaTime)
 }
 
 /// ToDo
-/// @brief UŒ‚ŠJŽnŽžˆ—
+/// @brief æ”»æ’ƒé–‹å§‹æ™‚å‡¦ç†
 void ASF_EnemyBase::OnBeginAttack()
 {
 }
 
 /// ToDo
-/// @brief ‹ßÚUŒ‚XVˆ—
+/// @brief è¿‘æŽ¥æ”»æ’ƒæ›´æ–°å‡¦ç†
 /// @param InDeltaTime 
 void ASF_EnemyBase::UpdateOnShortRangeAttack(const float InDeltaTime)
 {
 }
 
 /// ToDo
-/// @brief ‰“‹——£UŒ‚XVˆ—
+/// @brief é è·é›¢æ”»æ’ƒæ›´æ–°å‡¦ç†
 /// @param InDeltaTime 
 void ASF_EnemyBase::UpdateOnLongRangeAttack(const float InDeltaTime)
 {
 
 }
 
-/// @brief UŒ‚I—¹Žžˆ—
+/// @brief æ”»æ’ƒçµ‚äº†æ™‚å‡¦ç†
 void ASF_EnemyBase::OnEndAttack()
 {
 }
 
 /// ToDo
-/// @brief Ž€–SŠJŽnŽžŽžˆ—
+/// @brief æ­»äº¡é–‹å§‹æ™‚æ™‚å‡¦ç†
 void ASF_EnemyBase::OnBeginDead()
 {
 	SetCharacterState(ESF_CharacterState::Dead);
 }
 
 /// ToDo
-/// @brief Ž€–SŽžXVˆ—
+/// @brief æ­»äº¡æ™‚æ›´æ–°å‡¦ç†
 /// @param InDeltaTime 
 void ASF_EnemyBase::UpdateOnDead(const float InDeltaTime)
 {
 	SetCharacterState(ESF_CharacterState::EndDead);
 }
 
-/// @brief Ž€–SI—¹Žžˆ—
+/// @brief æ­»äº¡çµ‚äº†æ™‚å‡¦ç†
 void ASF_EnemyBase::OnEndDead()
 {
 	Destroy();

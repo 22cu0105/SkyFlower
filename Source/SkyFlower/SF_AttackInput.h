@@ -1,8 +1,8 @@
 // ==================================================
 // Filename	:	SF_CharacterBase.h
-// Author	:	22cu0115 â‰º‘ñl
-// Description: UŒ‚‚ÌŠÖ”’è‹`
-// Update	:	2024/04/30 22cu0214 HomingAttackÀ‘•
+// Author	:	22cu0115 å‚ä¸‹æ‹“äºº
+// Description: æ”»æ’ƒã®é–¢æ•°å®šç¾©
+// Update	:	2024/04/30 22cu0214 HomingAttackå®Ÿè£…
 //				2024/04/09
 // ==================================================
 
@@ -46,7 +46,7 @@ private:
 
 	////////////////////////////////////////// custom variable
 public:
-	// ©•ª‚Æ“G‚ÌˆÊ’u
+	// è‡ªåˆ†ã¨æ•µã®ä½ç½®
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FVector playerPos;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -54,11 +54,11 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 	bool beginShortAttack = false;
 
-	// U‚èŒü‚«‘¬“x
+	// æŒ¯ã‚Šå‘ãé€Ÿåº¦
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float rotationSpeed = 30.0f;
 
-	// “G‚ğ’Ç‚¢‚©‚¯‚é‘¬“x
+	// æ•µã‚’è¿½ã„ã‹ã‘ã‚‹é€Ÿåº¦
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float moveSpeed = 1500.f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -66,7 +66,7 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 	float moveTime = 0.f;
 
-	// ‰Ÿ‚³‚ê‚½ŠÔ‚ÅƒŒ[ƒU[‚©‚»‚êˆÈŠO‚©”»’è‚·‚é
+	// æŠ¼ã•ã‚ŒãŸæ™‚é–“ã§ãƒ¬ãƒ¼ã‚¶ãƒ¼ã‹ãã‚Œä»¥å¤–ã‹åˆ¤å®šã™ã‚‹
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float gatherPowerTime = 3.0f;
 	UPROPERTY(BlueprintReadOnly)
@@ -74,7 +74,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool isButtonPressed = false;
 
-	// ‹ßÚUŒ‚‚Ì‹——£
+	// è¿‘æ¥æ”»æ’ƒã®è·é›¢
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float attackableDistance = 400.0;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -93,7 +93,7 @@ public:
 	UPROPERTY(EditAnywhere, Category = "TEST")
 	TSubclassOf<AActor> HomingAttackClass;
 
-////////////////////////////////////////// GetŠÖ”
+////////////////////////////////////////// Geté–¢æ•°
 	FORCEINLINE ASF_GameMode* GetGameMode() const;
 
 	FORCEINLINE ASF_Player* GetPlayerCharacter() const;

@@ -1,8 +1,8 @@
 // ==================================================
 // Filename	:	SF_MoveInput.cpp
-// Author	:	22cu0115 â‰º‘ñl
-// Description: ˆÚ“®‚ÌŠÖ”’è‹`
-// Notes:		—á
+// Author	:	22cu0115 å‚ä¸‹æ‹“äºº
+// Description: ç§»å‹•ã®é–¢æ•°å®šç¾©
+// Notes:		ä¾‹
 //				
 // Update:		2024/04/05 22cu0115 
 // ==================================================
@@ -47,10 +47,10 @@ void USF_MoveInput::MoveForward(const float InValue)
 	//	0.f };
 	//UE_LOG(LogTemp, Warning, TEXT("Forward: %f"), SF_Player->GetActorUpVector());
 
-	// “ü—Í•ûŒü‚ÉˆÚ“®
+	// å…¥åŠ›æ–¹å‘ã«ç§»å‹•
 	GetPlayerCharacter()->AddMovementInput(GetMainCamera()->GetActorForwardVector(), InValue);
 
-	// ‰ñ“]
+	// å›è»¢
 	CharacterRotate();
 }
 
@@ -59,10 +59,10 @@ void USF_MoveInput::MoveRight(const float InValue)
 	if (!IsValid(GetMainCamera())) return;
 	if (!IsValid(GetPlayerCharacter())) return;
 
-	// “ü—Í•ûŒü‚ÉˆÚ“®
+	// å…¥åŠ›æ–¹å‘ã«ç§»å‹•
 	GetPlayerCharacter()->AddMovementInput(GetMainCamera()->GetActorRightVector(), InValue);
 
-	// ‰ñ“]
+	// å›è»¢
 	CharacterRotate();
 }
 
@@ -82,15 +82,15 @@ void USF_MoveInput::MoveUp(const float InValue)
 	if (!IsValid(GetMainCamera())) return;
 	if (!IsValid(GetPlayerCharacter())) return;
 
-	// “ü—Í•ûŒü‚ÉˆÚ“®
+	// å…¥åŠ›æ–¹å‘ã«ç§»å‹•
 	GetPlayerCharacter()->AddMovementInput(GetPlayerCharacter()->GetActorUpVector(), InValue);
 }
 
 void USF_MoveInput::AddForce(const FVector InDirection)
 {
-	// ƒvƒŒƒCƒ„[‚Ì‘¬“x‚ğ‚O‚É‚·‚é
+	// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®é€Ÿåº¦ã‚’ï¼ã«ã™ã‚‹
 	GetPlayerCharacter()->GetCharacterMovement()->Velocity = FVector::Zero();
-	// ƒ_ƒbƒVƒ…
+	// ãƒ€ãƒƒã‚·ãƒ¥
 	//UE_LOG(LogTemp, Warning, TEXT("AddForce()"))
 	GetPlayerCharacter()->GetCharacterMovement()->AddImpulse(InDirection * dashSpeed, true);
 }
@@ -101,7 +101,7 @@ void USF_MoveInput::CharacterRotate() const
 
 	const FVector movement = GetPlayerCharacter()->GetLastMovementInputVector();
 
-	// “ü—Í‚ª‚ ‚é‚¾‚¯‰ñ“]
+	// å…¥åŠ›ãŒã‚ã‚‹æ™‚ã ã‘å›è»¢
 	if (movement.X != 0 || movement.Y != 0)
 	{
 		//UE_LOG(LogTemp, Warning, TEXT(" : %s"), "rotation");

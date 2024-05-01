@@ -6,7 +6,7 @@
 
 class ASF_EnemyBase;
 
-/// @brief Map‚ÅMap‚ğŠÇ—‚·‚é‚½‚ß‚Ì\‘¢‘Ì
+/// @brief Mapã§Mapã‚’ç®¡ç†ã™ã‚‹ãŸã‚ã®æ§‹é€ ä½“
 //USTRUCT(BlueprintType)
 //struct FSF_BattleEnemyInfo
 //{
@@ -25,7 +25,7 @@ class ASF_EnemyBase;
 //	{}
 //};
 //
-///// @brief Map‚ÅMap‚ğŠÇ—‚·‚é‚½‚ß‚Ì\‘¢‘Ì
+///// @brief Mapã§Mapã‚’ç®¡ç†ã™ã‚‹ãŸã‚ã®æ§‹é€ ä½“
 //USTRUCT(BlueprintType)
 //struct FSF_BattleInfo
 //{

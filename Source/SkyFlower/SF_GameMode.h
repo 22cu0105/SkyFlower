@@ -1,11 +1,11 @@
 // ==================================================
 // Filename	:	SF_GameMode.h
-// Author	:	22cu0115 â‰º ‘ñl
-//				22cu0105 ¬“c“‡ —Ål
-// Description:Player‚©‚ç‘—‚ç‚ê‚Ä‚­‚éî•ñ‚ğó‚¯æ‚é
+// Author	:	22cu0115 å‚ä¸‹ æ‹“äºº
+//				22cu0105 å°ç”°å³¶ ç¨œäºº
+// Description:Playerã‹ã‚‰é€ã‚‰ã‚Œã¦ãã‚‹æƒ…å ±ã‚’å—ã‘å–ã‚‹
 // Update	:	2024/04/08
-//				2024/04/16 ¬“c“‡ ƒqƒbƒgƒXƒgƒbƒvˆ—
-//				2024/04/16 ¬“c“‡ ƒƒbƒNƒIƒ“ˆ—
+//				2024/04/16 å°ç”°å³¶ ãƒ’ãƒƒãƒˆã‚¹ãƒˆãƒƒãƒ—å‡¦ç†
+//				2024/04/16 å°ç”°å³¶ ãƒ­ãƒƒã‚¯ã‚ªãƒ³å‡¦ç†
 // ==================================================
 #pragma once
 
@@ -32,16 +32,16 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 public:
-	// ƒqƒbƒgƒXƒgƒbƒvŠJn
+	// ãƒ’ãƒƒãƒˆã‚¹ãƒˆãƒƒãƒ—é–‹å§‹
 	UFUNCTION(BlueprintCallable, Category = "GameMode")
 	void StartHitStop(const float InHitStopSpeed, const float InHitStopTime);
 
-	// ƒvƒŒƒCƒ„[‚Éˆê”Ô‹ß‚¢“G‚ğæ“¾
+	// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã«ä¸€ç•ªè¿‘ã„æ•µã‚’å–å¾—
 	UFUNCTION(BlueprintCallable, Category = "GameMode")
 	ASF_EnemyBase* GetNearestEnemy() const;
 
 private:
-	// “G‚ğ¶¬‚µAŠÇ—‚·‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+	// æ•µã‚’ç”Ÿæˆã—ã€ç®¡ç†ã™ã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component", meta = (AllowPrivateAccess = "true"))
 	USF_EnemyManager* EnemyManager;
 
@@ -68,16 +68,16 @@ public:
 	ASF_EnemyBase* GetLockOnEnemy() const { return LockOnEnemy; }
 
 private:
-	// ƒqƒbƒgƒXƒgƒbƒv’†‚©
+	// ãƒ’ãƒƒãƒˆã‚¹ãƒˆãƒƒãƒ—ä¸­ã‹
 	UPROPERTY(VisibleInstanceOnly, Category = "HitStop | Visible")
 	bool bIsInHitStop;
-	// ƒqƒbƒgƒXƒgƒbƒv‚Ì‘¬“x
+	// ãƒ’ãƒƒãƒˆã‚¹ãƒˆãƒƒãƒ—ã®é€Ÿåº¦
 	UPROPERTY(EditAnywhere, Category = "HitStop | Edit")
 	float HitStopSpeed;
-	// ƒqƒbƒgƒXƒgƒbƒv‚ÌŠÔ
+	// ãƒ’ãƒƒãƒˆã‚¹ãƒˆãƒƒãƒ—ã®æ™‚é–“
 	UPROPERTY(VisibleInstanceOnly, Category = "HitStop | Visible")
 	float HitStopTime;
-	// ƒqƒbƒgƒXƒgƒbƒvƒ^ƒCƒ}[—p
+	// ãƒ’ãƒƒãƒˆã‚¹ãƒˆãƒƒãƒ—ã‚¿ã‚¤ãƒãƒ¼ç”¨
 	UPROPERTY(VisibleInstanceOnly, Category = "HitStop | Visible")
 	float Timer_HitStop;
 };

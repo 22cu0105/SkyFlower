@@ -1,6 +1,6 @@
 // ==================================================
 // Filename	:	SF_Player.h
-// Author	:	22cu0115 â‰º ‘ñl
+// Author	:	22cu0115 å‚ä¸‹ æ‹“äºº
 // Description:
 // Update	:	2024/04/08
 // ==================================================
@@ -50,8 +50,8 @@ private:
 	USF_AttackInput* AttackInputComponent;
 
 private:
-	// ISF_DamageableInterface ‚ğ‰î‚µ‚ÄŒp³‚³‚ê‚Ü‚µ‚½
+	// ISF_DamageableInterface ã‚’ä»‹ã—ã¦ç¶™æ‰¿ã•ã‚Œã¾ã—ãŸ
 	virtual void GetDamage(int32 damage) override;
-	/// @brief ƒvƒŒƒCƒ„[‚Ìó‘Ô‚ğí‚É•ÏX
+	/// @brief ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®çŠ¶æ…‹ã‚’å¸¸ã«å¤‰æ›´
 	void UpdateSetPlayerState();
 };

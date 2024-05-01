@@ -1,9 +1,9 @@
 // ==================================================
 // Filename	:	SF_GameMode.h
-// Author	:	22cu0115 â‰º ‘ñl
-//				22cu0105 ¬“c“‡ —Ål
+// Author	:	22cu0115 å‚ä¸‹ æ‹“äºº
+//				22cu0105 å°ç”°å³¶ ç¨œäºº
 // 
-// Description:“ü—Íˆ—‚ğŠeActor,Character‚É‘—‚é
+// Description:å…¥åŠ›å‡¦ç†ã‚’å„Actor,Characterã«é€ã‚‹
 // Update	:	2024/04/08
 // ==================================================
 #include "SF_InputManager.h"

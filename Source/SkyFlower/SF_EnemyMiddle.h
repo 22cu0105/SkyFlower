@@ -1,7 +1,7 @@
 // ==================================================
 // Filename	:	SF_EnemyMiddle.h
 // Author	:	22cu0214 JinWener
-// Description: 中型エネミー
+// Description: 荳ｭ蝙九お繝阪Α繝ｼ
 // Notes:		
 //				
 // Update:		2024/04/23 22cu0214 
@@ -25,7 +25,7 @@ public:
 	ASF_EnemyMiddle();
 
 public:
-	// ISF_DamageableInterface を介して継承されました
+	// ISF_DamageableInterface 繧剃ｻ九＠縺ｦ邯呎価縺輔ｌ縺ｾ縺励◆
 	virtual void GetDamage(int32 damage) override;
 
 private:

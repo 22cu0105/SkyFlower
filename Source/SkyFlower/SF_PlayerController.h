@@ -21,24 +21,24 @@ class SKYFLOWER_API ASF_PlayerController : public APlayerController
 protected:
 	virtual void BeginPlay() override;
 
-	////////////////////////////////////////// “ü—ÍƒoƒCƒ“ƒhˆ—
+	////////////////////////////////////////// å…¥åŠ›ãƒã‚¤ãƒ³ãƒ‰å‡¦ç†
 protected:
 
 	virtual void SetupInputComponent() override;
 private:
 	/********************MovementInput********************/
-	// Ž‹“_YŽ²‰ñ“]ˆ—
+	// è¦–ç‚¹Yè»¸å›žè»¢å‡¦ç†
 	void LookUp(const float InValue);
-	// Ž‹“_XŽ²‰ñ“]ˆ—
+	// è¦–ç‚¹Xè»¸å›žè»¢å‡¦ç†
 	void Turn(const float InValue);
 
-	// ‘O•ûŒüˆÚ“®ˆ—
+	// å‰æ–¹å‘ç§»å‹•å‡¦ç†
 	void MoveForward(const float InValue);
-	// ‰¡•ûŒüˆÚ“®ˆ—
+	// æ¨ªæ–¹å‘ç§»å‹•å‡¦ç†
 	void MoveRight(const float InValue);
-	// ‘O•ûŒü‚Éƒ_ƒbƒVƒ…‚·‚é
+	// å‰æ–¹å‘ã«ãƒ€ãƒƒã‚·ãƒ¥ã™ã‚‹
 	void MoveDash();
-	// ã•ûŒüˆÚ“®ˆ—
+	// ä¸Šæ–¹å‘ç§»å‹•å‡¦ç†
 	void MoveUp(const float InValue);
 
 	/********************AttackInput********************/

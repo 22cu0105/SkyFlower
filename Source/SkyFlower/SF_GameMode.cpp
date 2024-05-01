@@ -1,9 +1,9 @@
 // ==================================================
 // Filename	:	SF_GameMode.h
-// Author	:	22cu0115 â‰º ‘ñl
-//				22cu0105 ¬“c“‡ —Ål
+// Author	:	22cu0115 å‚ä¸‹ æ‹“äºº
+//				22cu0105 å°ç”°å³¶ ç¨œäºº
 // 
-// Description:Player‚©‚ç‘—‚ç‚ê‚Ä‚­‚éî•ñ‚ğó‚¯æ‚é
+// Description:Playerã‹ã‚‰é€ã‚‰ã‚Œã¦ãã‚‹æƒ…å ±ã‚’å—ã‘å–ã‚‹
 // Update	:	2024/04/08
 // ==================================================
 
@@ -31,7 +31,7 @@ ASF_GameMode::ASF_GameMode()
 
 	PlayerControllerClass = ASF_PlayerController::StaticClass();
 
-	// ƒRƒ“ƒ|[ƒlƒ“ƒg¶¬
+	// ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆç”Ÿæˆ
 	EnemyManager = CreateDefaultSubobject<USF_EnemyManager>(TEXT("EnemyManager"));
 }
 
@@ -46,7 +46,7 @@ void ASF_GameMode::Tick(float DeltaTime)
 
 	if (bIsInHitStop)
 	{
-		// ƒqƒbƒgƒXƒgƒbƒv‚É‚àˆê’è‚ÌDeltaTime‚Ì’l‚É‚·‚é
+		// ãƒ’ãƒƒãƒˆã‚¹ãƒˆãƒƒãƒ—æ™‚ã«ã‚‚ä¸€å®šã®DeltaTimeã®å€¤ã«ã™ã‚‹
 		Timer_HitStop += DeltaTime * (1.f / HitStopSpeed);
 		if (Timer_HitStop > HitStopTime)
 		{
@@ -58,7 +58,7 @@ void ASF_GameMode::Tick(float DeltaTime)
 	}
 }
 
-// ƒqƒbƒgƒXƒgƒbƒv‚Ì‘¬“xA@ƒqƒbƒgƒXƒgƒbƒv‚³‚¹‚éŠÔ
+// ãƒ’ãƒƒãƒˆã‚¹ãƒˆãƒƒãƒ—ã®é€Ÿåº¦ã€ã€€ãƒ’ãƒƒãƒˆã‚¹ãƒˆãƒƒãƒ—ã•ã›ã‚‹æ™‚é–“
 void ASF_GameMode::StartHitStop(const float InHitStopSpeed, const float InHitStopTime)
 {
 	HitStopTime = 0.f;
@@ -70,8 +70,8 @@ void ASF_GameMode::StartHitStop(const float InHitStopSpeed, const float InHitSto
 	bIsInHitStop = true;
 }
 
-/// @brief ƒvƒŒƒCƒ„[‚©‚çˆê”Ô‹ß‚¢“G‚ÌÀ•W‚ğæ“¾‚·‚é
-/// @return nullptr : “G‚ª‚¢‚È‚¢
+/// @brief ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‹ã‚‰ä¸€ç•ªè¿‘ã„æ•µã®åº§æ¨™ã‚’å–å¾—ã™ã‚‹
+/// @return nullptr : æ•µãŒã„ãªã„
 ASF_EnemyBase* ASF_GameMode::GetNearestEnemy() const
 {
 	if (!IsValid(EnemyManager))

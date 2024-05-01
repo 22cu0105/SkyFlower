@@ -1,7 +1,7 @@
 // ==================================================
 // Filename	:	SF_InputManager.h
-// Author	:	22cu0105 ¬“c“‡ —Ål
-// Description:“ü—Íˆ—‚ðŠeActor,Character‚É‘—‚é
+// Author	:	22cu0105 å°ç”°å³¶ ç¨œäºº
+// Description:å…¥åŠ›å‡¦ç†ã‚’å„Actor,Characterã«é€ã‚‹
 // Update	:	2024/04/07
 // ==================================================
 #pragma once
@@ -27,24 +27,24 @@ protected:
 	virtual void BeginPlay() override;
 
 
-	////////////////////////////////////////// “ü—ÍƒoƒCƒ“ƒhˆ—
+	////////////////////////////////////////// å…¥åŠ›ãƒã‚¤ãƒ³ãƒ‰å‡¦ç†
 public:
 	UFUNCTION()
 	void SetupPlayerInputComponent(UInputComponent* const InPlayerInputComponent);
 private:
 	/********************MovementInput********************/
-	// Ž‹“_YŽ²‰ñ“]ˆ—
+	// è¦–ç‚¹Yè»¸å›žè»¢å‡¦ç†
 	void LookUp(const float InValue);
-	// Ž‹“_XŽ²‰ñ“]ˆ—
+	// è¦–ç‚¹Xè»¸å›žè»¢å‡¦ç†
 	void Turn(const float InValue);
 
-	// ‘O•ûŒüˆÚ“®ˆ—
+	// å‰æ–¹å‘ç§»å‹•å‡¦ç†
 	void MoveForward(const float InValue);
-	// ‰¡•ûŒüˆÚ“®ˆ—
+	// æ¨ªæ–¹å‘ç§»å‹•å‡¦ç†
 	void MoveRight(const float InValue);
-	// ‘O•ûŒü‚Éƒ_ƒbƒVƒ…‚·‚é
+	// å‰æ–¹å‘ã«ãƒ€ãƒƒã‚·ãƒ¥ã™ã‚‹
 	void MoveDash();
-	// ã•ûŒüˆÚ“®ˆ—
+	// ä¸Šæ–¹å‘ç§»å‹•å‡¦ç†
 	void MoveUp(const float InValue);
 
 	/********************AttackInput********************/
@@ -53,7 +53,7 @@ private:
 	void HomingAttack();
 	void LaserAttack();
 
-	////////////////////////////////////////// GetŠÖ”
+	////////////////////////////////////////// Geté–¢æ•°
 	FORCEINLINE ASF_GameMode* GetGameMode() const;
 
 	FORCEINLINE ASF_MainCamera* GetMainCamera() const;

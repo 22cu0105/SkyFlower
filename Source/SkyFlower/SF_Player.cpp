@@ -13,7 +13,7 @@ ASF_Player::ASF_Player()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-	// ƒRƒ“ƒ|[ƒlƒ“ƒg¶¬
+	// ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆç”Ÿæˆ
 	MoveInputComponent = CreateDefaultSubobject<USF_MoveInput>(TEXT("MoveInputComponent"));
 	AttackInputComponent = CreateDefaultSubobject<USF_AttackInput>(TEXT("AttackInputComponent"));
 }
@@ -39,14 +39,14 @@ void ASF_Player::GetDamage(int32 damage)
 	Debug::PrintFixedLine("GetDamage Player");
 }
 
-/// @brief ƒvƒŒƒCƒ„[‚Ìó‘Ô‚ğí‚É•ÏX
+/// @brief ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®çŠ¶æ…‹ã‚’å¸¸ã«å¤‰æ›´
 void ASF_Player::UpdateSetPlayerState()
 {
 	ASF_GameMode* const SF_GameMode = Cast<ASF_GameMode>(UGameplayStatics::GetGameMode(GetWorld()));
 	if (!IsValid(SF_GameMode)) return;
 
 	ASF_EnemyBase* const LockOnEnemy = SF_GameMode->GetLockOnEnemy();
-	// ƒ^[ƒQƒbƒg‚ªİ’è‚³‚ê‚Ä‚¢‚È‚¯‚ê‚Î’Êíó‘Ô
+	// ã‚¿ãƒ¼ã‚²ãƒƒãƒˆãŒè¨­å®šã•ã‚Œã¦ã„ãªã‘ã‚Œã°é€šå¸¸çŠ¶æ…‹
 	if (!IsValid(SF_GameMode->GetLockOnEnemy()))
 	{
 		Debug::PrintFixedLine("not found LockOnEnemy");
@@ -54,7 +54,7 @@ void ASF_Player::UpdateSetPlayerState()
 		return;
 	}
 
-	// “G‚ÆƒvƒŒƒCƒ„[‚Ì‹——£‚ğæ“¾‚µA‰“‹——£E‹ß‹——£‚©‚Åó‘Ô‚ğ•Ï‰»‚³‚¹‚é
+	// æ•µã¨ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®è·é›¢ã‚’å–å¾—ã—ã€é è·é›¢ãƒ»è¿‘è·é›¢ã‹ã§çŠ¶æ…‹ã‚’å¤‰åŒ–ã•ã›ã‚‹
 	float Distance = (LockOnEnemy->GetActorLocation() - GetActorLocation()).Length();
 	if (Distance < GetAttackableDistance_LongRange())
 	{
@@ -69,7 +69,7 @@ void ASF_Player::UpdateSetPlayerState()
 			SetCharacterState(ESF_CharacterState::LongRangeAttack);
 		}
 	}
-	// Ë’öŠO‚È‚çƒƒbƒNƒIƒ“‚ğ‰ğœ‚µ’Êíó‘Ô‚É‚·‚é
+	// å°„ç¨‹å¤–ãªã‚‰ãƒ­ãƒƒã‚¯ã‚ªãƒ³ã‚’è§£é™¤ã—é€šå¸¸çŠ¶æ…‹ã«ã™ã‚‹
 	else
 	{
 		Debug::PrintFixedLine("out LongRange");
@@ -133,7 +133,7 @@ void ASF_Player::BeginNormalAttack()
 
 	if (ASF_GameMode* const SF_GameMode = Cast<ASF_GameMode>(UGameplayStatics::GetGameMode(GetWorld())))
 	{
-		// ƒƒbƒNƒIƒ“‚ªİ’è‚³‚ê‚Ä‚¢‚½‚çI—¹
+		// ãƒ­ãƒƒã‚¯ã‚ªãƒ³ãŒè¨­å®šã•ã‚Œã¦ã„ãŸã‚‰çµ‚äº†
 		if (IsValid(SF_GameMode->GetLockOnEnemy()))
 		{
 			Debug::Print("setted lock on enemy");
@@ -178,7 +178,7 @@ void ASF_Player::LaserAttack()
 
 	if (ASF_GameMode* const SF_GameMode = Cast<ASF_GameMode>(UGameplayStatics::GetGameMode(GetWorld())))
 	{
-		// ƒƒbƒNƒIƒ“‚ªİ’è‚³‚ê‚Ä‚¢‚½‚çI—¹
+		// ãƒ­ãƒƒã‚¯ã‚ªãƒ³ãŒè¨­å®šã•ã‚Œã¦ã„ãŸã‚‰çµ‚äº†
 		if (IsValid(SF_GameMode->GetLockOnEnemy()))
 		{
 			Debug::Print("setted lock on enemy");

@@ -1,8 +1,8 @@
 // ==================================================
 // Filename	:	SF_MoveInput.h
-// Author	:	22cu0115 â‰º‘ñl
-// Description: ˆÚ“®‚ÌŠÖ”’è‹`
-// Notes:		—á
+// Author	:	22cu0115 å‚ä¸‹æ‹“äºº
+// Description: ç§»å‹•ã®é–¢æ•°å®šç¾©
+// Notes:		ä¾‹
 //				
 // Update:		2024/04/05 22cu0115 
 // ==================================================
@@ -39,10 +39,10 @@ public:
 	void MoveDash();
 
 protected:
-	// U‚èŒü‚«‘¬“x
+	// æŒ¯ã‚Šå‘ãé€Ÿåº¦
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float rotationSpeed = 8.0f;
-	// ƒ_ƒbƒVƒ…‘¬“x
+	// ãƒ€ãƒƒã‚·ãƒ¥é€Ÿåº¦
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float dashSpeed = 1500.0f;
 
@@ -50,7 +50,7 @@ private:
 	void CharacterRotate() const;
 	void AddForce(const FVector InDirection);
 
-	////////////////////////////////////////// GetŠÖ”
+	////////////////////////////////////////// Geté–¢æ•°
 	FORCEINLINE ASF_GameMode* GetGameMode() const;
 
 	FORCEINLINE ASF_MainCamera* GetMainCamera() const;

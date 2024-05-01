@@ -38,7 +38,7 @@ void ASF_MainCamera::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// ‰Šú‰»
+	// åˆæœŸåŒ–
 	if (ASF_GameMode* const SF_GameMode = Cast<ASF_GameMode>(UGameplayStatics::GetGameMode(GetWorld())))
 	{
 		SF_GameMode->SetMainCamera(this);
@@ -70,7 +70,7 @@ void ASF_MainCamera::Tick(float DeltaTime)
 	ASF_Player* const SF_Player = SF_GameMode->GetPlayerCharacter();
 	if (!IsValid(SF_Player)) return;
 
-	// ’‹“_
+	// æ³¨è¦–ç‚¹
 	switch (SF_Player->GetCharacterState())
 	{
 	case ESF_CharacterState::Normal:
@@ -106,37 +106,37 @@ void ASF_MainCamera::Tick(float DeltaTime)
 	}
 }
 
-/// @brief Pitch‚Ì‰ñ“]ˆ—
-/// @param InValue ‰ñ“]—Ê
+/// @brief Pitchã®å›è»¢å‡¦ç†
+/// @param InValue å›è»¢é‡
 void ASF_MainCamera::AddPitchRotation(float InValue)
 {
 	if (InValue == 0.f) return;
 
-	// Œ»İ‚ÌƒJƒƒ‰‚Ì‰ñ“]—Ê‚É‰ÁZ
+	// ç¾åœ¨ã®ã‚«ãƒ¡ãƒ©ã®å›è»¢é‡ã«åŠ ç®—
 	FRotator NewRotation = GetActorRotation();
 	NewRotation.Pitch += InValue;
 
-	// •â³
+	// è£œæ­£
 	if (NewRotation.Pitch >= MaxPitch)
 		NewRotation.Pitch = MaxPitch;
 	else if (NewRotation.Pitch <= -MaxPitch)
 		NewRotation.Pitch = -MaxPitch;
 
-	// “K—p
+	// é©ç”¨
 	SetActorRotation(NewRotation);
 }
 
-/// @brief Yaw‚Ì‰ñ“]ˆ—
-/// @param InValue ‰ñ“]—Ê
+/// @brief Yawã®å›è»¢å‡¦ç†
+/// @param InValue å›è»¢é‡
 void ASF_MainCamera::AddYawRotation(float InValue)
 {
 	if (InValue == 0.f) return;
 
-	// Œ»İ‚ÌƒJƒƒ‰‚Ì‰ñ“]—Ê‚É‰ÁZ
+	// ç¾åœ¨ã®ã‚«ãƒ¡ãƒ©ã®å›è»¢é‡ã«åŠ ç®—
 	FRotator NewRotation = GetActorRotation();
 	NewRotation.Yaw += InValue;
 
-	// “K—p
+	// é©ç”¨
 	SetActorRotation(NewRotation);
 }
 

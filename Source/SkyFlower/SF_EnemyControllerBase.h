@@ -1,9 +1,9 @@
 // ==================================================
 // Filename	:	SF_EnemyControllerBase.h
-// Author	:	22cu0115 â‰º ‘ñl
-// Description: ƒGƒlƒ~[‚ğ‘€ì‚·‚é
+// Author	:	22cu0115 å‚ä¸‹ æ‹“äºº
+// Description: ã‚¨ãƒãƒŸãƒ¼ã‚’æ“ä½œã™ã‚‹
 // Update	:	2024/04/12
-//				2024/04/30@State,Param
+//				2024/04/30ã€€State,Param
 // ==================================================
 
 #pragma once
@@ -18,29 +18,29 @@ class ASF_Player;
 UENUM(BlueprintType)
 enum class ESF_EnemyState : uint8
 {
-	Idle                UMETA(DisplayName = "‚È‚µ"),
-	Move				UMETA(DisplayName = "ˆÚ“®"),
-	BeginAttack			UMETA(DisplayName = "UŒ‚ŠJn"),
-	MoveAttack			UMETA(DisplayName = "ˆÚ“®UŒ‚"),
-	ShortRangeAttack	UMETA(DisplayName = "‹ß‹——£UŒ‚"),
-	LongRangeAttack		UMETA(DisplayName = "‰“‹——£UŒ‚"),
+	Idle                UMETA(DisplayName = "ãªã—"),
+	Move				UMETA(DisplayName = "ç§»å‹•"),
+	BeginAttack			UMETA(DisplayName = "æ”»æ’ƒé–‹å§‹æ™‚"),
+	MoveAttack			UMETA(DisplayName = "ç§»å‹•æ”»æ’ƒ"),
+	ShortRangeAttack	UMETA(DisplayName = "è¿‘è·é›¢æ”»æ’ƒ"),
+	LongRangeAttack		UMETA(DisplayName = "é è·é›¢æ”»æ’ƒ"),
 };
 
-// ƒLƒƒƒ‰ƒNƒ^[‹¤’Ê‚Ìî•ñ‚ğ‚Ü‚Æ‚ß‚½\‘¢‘Ì
+// ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼å…±é€šã®æƒ…å ±ã‚’ã¾ã¨ã‚ãŸæ§‹é€ ä½“
 USTRUCT(BlueprintType)
 struct FSF_EnemyInfo
 {
 	GENERATED_BODY()
 
 public:
-	// ˆÚ“®‘¬“x
+	// ç§»å‹•é€Ÿåº¦
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	float MoveSpeed;
 
-	// ‹ßÚUŒ‚‰Â”\‹——£
+	// è¿‘æ¥æ”»æ’ƒå¯èƒ½è·é›¢
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	float AttackableDistance_ShortRange;
-	// ‰“‹——£UŒ‚‰Â”\‹——£
+	// é è·é›¢æ”»æ’ƒå¯èƒ½è·é›¢
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	float AttackableDistance_LongRange;
 
@@ -61,10 +61,10 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
-	// ƒGƒlƒ~[‚Ìó‘Ô
+	// ã‚¨ãƒãƒŸãƒ¼ã®çŠ¶æ…‹
 	UPROPERTY(VisibleAnywhere, Category = "Visible | State")
 	ESF_EnemyState EnemyState;
-	// ƒGƒlƒ~[‚Ìƒpƒ‰ƒ[ƒ^î•ñ
+	// ã‚¨ãƒãƒŸãƒ¼ã®ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿æƒ…å ±
 	UPROPERTY(EditAnywhere, Category = "Edit | Param")
 	FSF_EnemyInfo EnemyParam;
 
@@ -76,7 +76,7 @@ public:
 	ESF_EnemyState GetEnemyState() { return EnemyState; }
 
 public:
-	////////////////////////////////////////// GetŠÖ”
+	////////////////////////////////////////// Geté–¢æ•°
 	FORCEINLINE ASF_GameMode* GetGameMode() const;
 
 	FORCEINLINE ASF_Player* GetPlayerCharacter() const;

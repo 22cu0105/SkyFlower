@@ -13,7 +13,6 @@ public class SkyFlower : ModuleRules
 			"CoreUObject",
 			"Engine",
 			"InputCore",
-			/*’Ç‰Á*/
 			"AIModule",});
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
