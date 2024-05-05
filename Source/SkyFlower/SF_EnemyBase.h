@@ -13,6 +13,7 @@
 #include "SF_CharacterBase.h"
 #include "SF_EnemyBase.generated.h"
 
+
 UCLASS()
 class SKYFLOWER_API ASF_EnemyBase : public ASF_CharacterBase
 {
@@ -27,6 +28,21 @@ protected:
 public:
 	virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION(BlueprintCallable, Category = "EnemyBase")
+		float GetAttackCooldown() { return AttackCooldown; }
+	UFUNCTION(BlueprintCallable, Category = "EnemyBase")
+		void SetCanAttack(const bool InCanAttack) { bCanAttack = InCanAttack; }
+	UFUNCTION(BlueprintCallable, Category = "EnemyBase")
+		bool GetCanAttack() { return bCanAttack; }
+
+private:
+	UPROPERTY(EditAnywhere)
+		float AttackCooldown = 2.0f; // 突撃間隔
+	UPROPERTY(VisibleAnywhere)
+		bool bCanAttack = true;
+	virtual void UpdateState(const float InDeltaTime) {};
+	virtual void ChooseActionByState(const float InDeltaTime) {};
+
 private:
 	virtual void UpdateOnNormal(const float InDeltaTime) override;
 	virtual void OnBeginAttack() override;
@@ -39,4 +55,10 @@ private:
 
 	// ISF_DamageableInterface を介して継承されました
 	virtual void GetDamage(int32 damage) override;
+
+public:
+	////////////////////////////////////////// Get関数
+	FORCEINLINE ASF_GameMode* GetGameMode() const;
+
+	FORCEINLINE ASF_Player* GetPlayerCharacter() const;
 };

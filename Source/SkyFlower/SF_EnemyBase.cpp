@@ -1,8 +1,11 @@
 #include "SF_EnemyBase.h"
 #include "SF_Player.h"
+#include "SF_GameMode.h"
+#include "SF_Player.h"
 #include "SF_EnemyControllerBase.h"
 #include "DebugHelpers.h"
 #include "Perception/PawnSensingComponent.h"
+#include <Kismet/GameplayStatics.h>
 #include "Kismet/KismetSystemLibrary.h"
 
 ASF_EnemyBase::ASF_EnemyBase()
@@ -98,4 +101,16 @@ void ASF_EnemyBase::OnEndDead()
 void ASF_EnemyBase::GetDamage(int32 damage)
 {
 	Debug::PrintFixedLine("GetDamage EnemyBase");
+}
+
+/////////////////////////////FORCEINLINE
+ASF_GameMode* ASF_EnemyBase::GetGameMode() const
+{
+	return Cast<ASF_GameMode>(UGameplayStatics::GetGameMode(GetWorld()));
+}
+
+ASF_Player* ASF_EnemyBase::GetPlayerCharacter() const
+{
+	if (!GetGameMode()) return nullptr;
+	return GetGameMode()->GetPlayerCharacter();
 }

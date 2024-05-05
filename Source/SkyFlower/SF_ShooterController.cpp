@@ -1,18 +1,17 @@
-#include "SF_AttackerController.h"
+#include "SF_ShooterController.h"
 #include "SF_Player.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "DebugHelpers.h"
 #include "Kismet/GameplayStatics.h"
 
-void ASF_AttackerController::Normal(const float InDeltaTime)
+void ASF_ShooterController::Normal(const float InDeltaTime)
 {
-
 }
 
-void ASF_AttackerController::ShortRangeAttack(const float InDeltaTime)
+void ASF_ShooterController::ShortRangeAttack(const float InDeltaTime)
 {
-    // çªæ’ƒã®æ–¹å‘ã‚’è¨ˆç®—ã—ã¦AddImpulseã‚’ä½¿ã£ã¦çªæ’ƒã™ã‚‹
+    // “ËŒ‚‚Ì•ûŒü‚ðŒvŽZ‚µ‚ÄAddImpulse‚ðŽg‚Á‚Ä“ËŒ‚‚·‚é
     FVector Direction = (GetPlayerCharacter()->GetActorLocation() - GetPawn()->GetActorLocation()).GetSafeNormal();
 
     GetCharacter()->GetCharacterMovement()->Velocity = FVector::Zero();
@@ -23,30 +22,29 @@ void ASF_AttackerController::ShortRangeAttack(const float InDeltaTime)
     GetPawn()->SetActorRotation(Rotation);
 }
 
-void ASF_AttackerController::LongRangeAttack(const float InDeltaTime)
+void ASF_ShooterController::LongRangeAttack(const float InDeltaTime)
 {
-    // ProjectileClassã¨GetPawn()ã®nullãƒã‚§ãƒƒã‚¯ã‚’è¡Œã†
+    // ProjectileClass‚ÆGetPawn()‚Ìnullƒ`ƒFƒbƒN‚ðs‚¤
     if (!ProjectileClass || !GetPawn()) return;
 
-    // æ•µã®ä½ç½®ã¨ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ä½ç½®ã‚’å–å¾—ã—ã€æ–¹å‘ãƒ™ã‚¯ãƒˆãƒ«ã‚’è¨ˆç®—
+    // “G‚ÌˆÊ’u‚ÆƒvƒŒƒCƒ„[‚ÌˆÊ’u‚ðŽæ“¾‚µA•ûŒüƒxƒNƒgƒ‹‚ðŒvŽZ
     FVector EnemyLocation = GetPawn()->GetActorLocation();
     FVector TargetLocation = GetPlayerCharacter()->GetActorLocation();
     FVector Direction = (TargetLocation - EnemyLocation).GetSafeNormal();
 
-    // æ–¹å‘ãƒ™ã‚¯ãƒˆãƒ«ã‹ã‚‰å›žè»¢ã‚’è¨ˆç®—ã—ã€æ•µã®å‘ãã‚’ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æ–¹å‘ã«å¤‰æ›´
+    // •ûŒüƒxƒNƒgƒ‹‚©‚ç‰ñ“]‚ðŒvŽZ‚µA“G‚ÌŒü‚«‚ðƒvƒŒƒCƒ„[‚Ì•ûŒü‚É•ÏX
     FRotator Rotation = Direction.Rotation();
     GetPawn()->SetActorRotation(Rotation);
 
-    // ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ã‚¿ã‚¤ãƒ«ã®ã‚¹ãƒãƒ¼ãƒ³ä½ç½®ã‚’è¨ˆç®—ï¼ˆEnemyLocationã®å°‘ã—å‰æ–¹ã«ç§»å‹•ï¼‰
-    float Distance = 100.0f; // å‰æ–¹ã«ç§»å‹•ã™ã‚‹è·é›¢ã‚’è¨­å®š
+    // ƒvƒƒWƒFƒNƒ^ƒCƒ‹‚ÌƒXƒ|[ƒ“ˆÊ’u‚ðŒvŽZiEnemyLocation‚Ì­‚µ‘O•û‚ÉˆÚ“®j
+    float Distance = 100.0f; // ‘O•û‚ÉˆÚ“®‚·‚é‹——£‚ðÝ’è
     FVector SpawnLocation = EnemyLocation + Direction * Distance;
     FTransform SpawnTM = FTransform(Rotation, SpawnLocation);
 
-    // ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ã‚¿ã‚¤ãƒ«ã‚’ã‚¹ãƒãƒ¼ãƒ³ã•ã›ã‚‹
+    // ƒvƒƒWƒFƒNƒ^ƒCƒ‹‚ðƒXƒ|[ƒ“‚³‚¹‚é
     FActorSpawnParameters SpawnParams;
     SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
     SpawnParams.Instigator = GetPawn();
     GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTM, SpawnParams);
 }
-
 

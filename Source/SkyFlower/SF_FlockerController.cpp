@@ -9,7 +9,6 @@ ASF_FlockerController::ASF_FlockerController()
 void ASF_FlockerController::BeginPlay()
 {
 	Super::BeginPlay();
-	SetEnemyState(ESF_EnemyState::Idle);
 }
 
 void ASF_FlockerController::Tick(float DeltaTime)

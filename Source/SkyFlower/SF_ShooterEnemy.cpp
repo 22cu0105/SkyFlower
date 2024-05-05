@@ -1,28 +1,23 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
-#include "SF_AttackerEnemy.h"
-#include "SF_AttackerController.h"
-#include "SF_GameMode.h"
-#include "SF_Player.h"
+#include "SF_ShooterEnemy.h"
+#include "SF_ShooterController.h"
 #include "DebugHelpers.h"
 
-ASF_AttackerEnemy::ASF_AttackerEnemy()
+ASF_ShooterEnemy::ASF_ShooterEnemy()
 {
 	PrimaryActorTick.bCanEverTick = true;
 }
 
-void ASF_AttackerEnemy::BeginPlay()
+void ASF_ShooterEnemy::BeginPlay()
 {
-	Super::BeginPlay();
+    Super::BeginPlay();
 
     // 敵の実際の行動
-    SF_AttackerController = Cast<ASF_AttackerController>(GetOwner());
+    SF_ShooterController = Cast<ASF_ShooterController>(GetOwner());
 }
 
-void ASF_AttackerEnemy::Tick(float DeltaTime)
+void ASF_ShooterEnemy::Tick(float DeltaTime)
 {
-	Super::Tick(DeltaTime);
+    Super::Tick(DeltaTime);
 
     UpdateState(DeltaTime);
     ChooseActionByState(DeltaTime);
@@ -32,13 +27,13 @@ void ASF_AttackerEnemy::Tick(float DeltaTime)
 /// ステートを更新する関数 
 /// </summary>
 /// <param name="InDeltaTime"></param>
-void ASF_AttackerEnemy::UpdateState(const float InDeltaTime)
+void ASF_ShooterEnemy::UpdateState(const float InDeltaTime)
 {
-    if (!IsValid(SF_AttackerController)) return;
+    if (!IsValid(SF_ShooterController)) return;
 
     // プレイヤーと自分の直線距離を計算
     const auto dis = FVector::Dist(GetPlayerCharacter()->GetActorLocation(), GetActorLocation());
-    
+
     // ステート反映
     if (dis <= GetAttackableDistance_ShortRange() && GetCanAttack())
     {
@@ -55,9 +50,9 @@ void ASF_AttackerEnemy::UpdateState(const float InDeltaTime)
 /// 現在のステートから行動を決定
 /// </summary>
 /// <param name="InDeltaTime"></param>
-void ASF_AttackerEnemy::ChooseActionByState(const float InDeltaTime)
+void ASF_ShooterEnemy::ChooseActionByState(const float InDeltaTime)
 {
-    if (!IsValid(SF_AttackerController)) return;
+    if (!IsValid(SF_ShooterController)) return;
 
     switch (GetCharacterState()) {
     case ESF_CharacterState::Normal:
@@ -87,7 +82,7 @@ void ASF_AttackerEnemy::ChooseActionByState(const float InDeltaTime)
     }
 }
 
-void ASF_AttackerEnemy::UpdateOnNormal(const float InDeltaTime)
+void ASF_ShooterEnemy::UpdateOnNormal(const float InDeltaTime)
 {
     //SF_AttackerController->Normal(InDeltaTime);
 
@@ -101,46 +96,46 @@ void ASF_AttackerEnemy::UpdateOnNormal(const float InDeltaTime)
     }
 }
 
-void ASF_AttackerEnemy::OnBeginAttack()
+void ASF_ShooterEnemy::OnBeginAttack()
 {
     OnEndAttack();
 }
 
-void ASF_AttackerEnemy::UpdateOnShortRangeAttack(const float InDeltaTime)
+void ASF_ShooterEnemy::UpdateOnShortRangeAttack(const float InDeltaTime)
 {
-    SF_AttackerController->ShortRangeAttack(InDeltaTime);
+    SF_ShooterController->ShortRangeAttack(InDeltaTime);
     OnEndAttack();
 }
 
-void ASF_AttackerEnemy::UpdateOnLongRangeAttack(const float InDeltaTime)
+void ASF_ShooterEnemy::UpdateOnLongRangeAttack(const float InDeltaTime)
 {
-    SF_AttackerController->LongRangeAttack(InDeltaTime);
+    SF_ShooterController->LongRangeAttack(InDeltaTime);
     OnEndAttack();
 }
 
-void ASF_AttackerEnemy::OnEndAttack()
+void ASF_ShooterEnemy::OnEndAttack()
 {
     SetCanAttack(false);
     SetCharacterState(ESF_CharacterState::Normal);
 }
 
-void ASF_AttackerEnemy::OnBeginDead()
+void ASF_ShooterEnemy::OnBeginDead()
 {
 }
 
-void ASF_AttackerEnemy::UpdateOnDead(const float InDeltaTime)
+void ASF_ShooterEnemy::UpdateOnDead(const float InDeltaTime)
 {
 }
 
-void ASF_AttackerEnemy::OnEndDead()
+void ASF_ShooterEnemy::OnEndDead()
 {
 }
 
-void ASF_AttackerEnemy::GetDamage(int32 damage)
+void ASF_ShooterEnemy::GetDamage(int32 damage)
 {
-	hp -= damage;
-	Debug::Print("EnemyMiddle GetDamage : " + FString::FromInt(hp));
+    hp -= damage;
+    Debug::Print("EnemyMiddle GetDamage : " + FString::FromInt(hp));
 
-	if (hp < 1) this->Destroy();
+    if (hp < 1) this->Destroy();
 }
 
