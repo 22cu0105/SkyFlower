@@ -58,6 +58,9 @@ public:
 	// Œ»İ¶‚«‚Ä‚¢‚é“G‚Ì”‚ğæ“¾
 	UFUNCTION(BlueprintCallable, Category = "EnemyManager")
 	int GetCurrentEnemyNum() const { return EnemyList.Num(); }
+	// ŠÇ—‚·‚é“G‚ğ’Ç‰Á‚·‚é
+	UFUNCTION(BlueprintCallable, Category = "EnemyManager")
+	void AddEnemy(ASF_EnemyBase* const InEnemy) { EnemyList.Add(InEnemy); }
 
 private:
 	// ŠÇ—‚µ‚Ä‚¢‚é“G‚ª€–S‚µ‚Ä‚¢‚é‚©”»’è‚µA€‚ñ‚Å‚¢‚½‚çŠÇ——Ìˆæ‚ğ‰ğ•ú‚·‚é

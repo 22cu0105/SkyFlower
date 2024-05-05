@@ -55,6 +55,8 @@ private:
 	ASF_EnemyBase* LockOnEnemy;
 
 public:
+	USF_EnemyManager* GetEnemyManager() const { return EnemyManager; }
+
 	void SetPlayerCharacter(ASF_Player* const InPlayerCharacter) { PlayerCharacter = InPlayerCharacter; }
 	void SetMainCamera(ASF_MainCamera* const InMainCamera) { MainCamera = InMainCamera; }
 

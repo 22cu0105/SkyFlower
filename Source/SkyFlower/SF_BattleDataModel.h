@@ -24,10 +24,7 @@ public:
 
 	// 生成上限数
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	int MaxGenerateNum;
-	// 現在生成したエネミーの数
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	int CurrentGenerateNum;
+	uint8 MaxGenerateNum;
 	// 生成座標
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TArray<FVector> SpawnPosList;
@@ -36,7 +33,6 @@ public:
 	FSF_GeneratEnemyInfo()
 		: EnemyChara(nullptr)
 		, MaxGenerateNum(0)
-		, CurrentGenerateNum(0)
 		, SpawnPosList()
 	{}
 };
