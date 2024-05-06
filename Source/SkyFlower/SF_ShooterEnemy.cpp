@@ -30,6 +30,7 @@ void ASF_ShooterEnemy::Tick(float DeltaTime)
 void ASF_ShooterEnemy::UpdateState(const float InDeltaTime)
 {
     if (!IsValid(SF_ShooterController)) return;
+    if (GetCharacterState() != ESF_CharacterState::Normal)return;
 
     // プレイヤーと自分の直線距離を計算
     const auto dis = FVector::Dist(GetPlayerCharacter()->GetActorLocation(), GetActorLocation());
@@ -84,7 +85,7 @@ void ASF_ShooterEnemy::ChooseActionByState(const float InDeltaTime)
 
 void ASF_ShooterEnemy::UpdateOnNormal(const float InDeltaTime)
 {
-    //SF_AttackerController->Normal(InDeltaTime);
+    SF_ShooterController->Normal(InDeltaTime);
 
     TimeSinceLastAttack += InDeltaTime;
 
@@ -104,7 +105,15 @@ void ASF_ShooterEnemy::OnBeginAttack()
 void ASF_ShooterEnemy::UpdateOnShortRangeAttack(const float InDeltaTime)
 {
     SF_ShooterController->ShortRangeAttack(InDeltaTime);
-    OnEndAttack();
+   
+    // プレイヤーと自分の直線距離を計算
+    const auto dis = FVector::Dist(GetPlayerCharacter()->GetActorLocation(), GetActorLocation());
+
+    // ステート反映
+    if (dis <= GetAttackableDistance_LongRange() && GetCanAttack())
+    {
+        OnEndAttack();
+    }
 }
 
 void ASF_ShooterEnemy::UpdateOnLongRangeAttack(const float InDeltaTime)

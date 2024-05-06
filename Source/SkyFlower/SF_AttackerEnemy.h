@@ -26,7 +26,8 @@ protected:
 
 public:
 	virtual void Tick(float DeltaTime) override;
-	
+	UFUNCTION(BlueprintImplementableEvent)
+		void AttackCollision(float InValue);
 private:
 	UPROPERTY(VisibleAnywhere)
 	float TimeSinceLastAttack = 0.f;

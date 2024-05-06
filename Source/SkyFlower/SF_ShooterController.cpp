@@ -7,12 +7,15 @@
 
 void ASF_ShooterController::Normal(const float InDeltaTime)
 {
+    FVector Direction = (GetPlayerCharacter()->GetActorLocation() - GetPawn()->GetActorLocation()).GetSafeNormal();
+    FRotator Rotation = Direction.Rotation();
+    GetPawn()->SetActorRotation(Rotation);
 }
 
 void ASF_ShooterController::ShortRangeAttack(const float InDeltaTime)
 {
     // 突撃の方向を計算してAddImpulseを使って突撃する
-    FVector Direction = (GetPlayerCharacter()->GetActorLocation() - GetPawn()->GetActorLocation()).GetSafeNormal();
+    FVector Direction = -(GetPlayerCharacter()->GetActorLocation() - GetPawn()->GetActorLocation()).GetSafeNormal();
 
     GetCharacter()->GetCharacterMovement()->Velocity = FVector::Zero();
 
@@ -26,6 +29,9 @@ void ASF_ShooterController::LongRangeAttack(const float InDeltaTime)
 {
     // ProjectileClassとGetPawn()のnullチェックを行う
     if (!ProjectileClass || !GetPawn()) return;
+
+    GetCharacter()->GetCharacterMovement()->Velocity = FVector::Zero();
+    GetCharacter()->GetCharacterMovement()->StopMovementImmediately();
 
     // 敵の位置とプレイヤーの位置を取得し、方向ベクトルを計算
     FVector EnemyLocation = GetPawn()->GetActorLocation();
