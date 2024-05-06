@@ -36,7 +36,7 @@ void ASF_BattleField::Tick(float DeltaTime)
 	TArray<ASF_EnemyBase*> DeadEnemyList;
 	for (ASF_EnemyBase* CheackEnemy : StageEnemyList)
 	{
-		if (CheackEnemy->IsDead())
+		if (!IsValid(CheackEnemy))
 			DeadEnemyList.Add(CheackEnemy);
 	}
 
