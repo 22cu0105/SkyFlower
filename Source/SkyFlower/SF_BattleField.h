@@ -29,7 +29,7 @@ private:
 	UPROPERTY()
 	TArray<ASF_EnemyBase*> StageEnemyList;
 	UPROPERTY()
-	uint8 CurrentWaveCnt;
+	int CurrentWaveCnt;
 
 private:
 	FSF_BattleStageInfo GetBattleStageData() const;
@@ -38,5 +38,5 @@ private:
 	void OnPlayerEnterBattleField();
 
 	void UpdateOnActive(const float InDeltaTime);
-	void SpawnAllEnemiesInWave(const int32 InWaveCnt);
+	void SpawnAllEnemiesInWave(const int InWaveCnt);
 };

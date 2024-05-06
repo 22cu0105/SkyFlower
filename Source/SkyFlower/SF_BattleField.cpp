@@ -22,6 +22,8 @@ ASF_BattleField::ASF_BattleField()
 
 void ASF_BattleField::BeginPlay()
 {
+	Super::BeginPlay();
+
 	// 初期化
 	FieldEventType = ESF_FieldEventType::Waiting;
 	BattleStageInfo = GetBattleStageData();
@@ -29,6 +31,8 @@ void ASF_BattleField::BeginPlay()
 
 void ASF_BattleField::Tick(float DeltaTime)
 {
+	Super::Tick(DeltaTime);
+
 	TArray<ASF_EnemyBase*> DeadEnemyList;
 	for (ASF_EnemyBase* CheackEnemy : StageEnemyList)
 	{
@@ -43,6 +47,9 @@ void ASF_BattleField::Tick(float DeltaTime)
 	}
 
 
+	if (FieldEventType != ESF_FieldEventType::Active) return;
+
+	UpdateOnActive(DeltaTime);
 }
 
 FSF_BattleStageInfo ASF_BattleField::GetBattleStageData() const
@@ -63,46 +70,49 @@ void ASF_BattleField::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, A
 	// プレイヤーがトリガーボックスに入ったらバトル開始
 	if (Cast<ASF_Player>(OtherActor))
 	{
-		Debug::Print("Player : OnBeginOverlap");
+		Debug::Print("BattleField : OnBeginOverlap : Player");
 		OnPlayerEnterBattleField();
 	}
 }
 
 void ASF_BattleField::OnPlayerEnterBattleField()
 {
+	if (FieldEventType != ESF_FieldEventType::Waiting) return;
+
 	FieldEventType = ESF_FieldEventType::Active;
 
+	// 一括で生成処理を行う
+	SpawnAllEnemiesInWave(CurrentWaveCnt);
 	// 壁生成処理などを行うことが出来る
 }
 
 void ASF_BattleField::UpdateOnActive(const float InDeltaTime)
 {
-	if (FieldEventType == ESF_FieldEventType::Active) return;
+	ASF_GameMode* const SF_GameMode = USF_FunctionLibrary::GetGameMode(GetWorld());
+	if (!IsValid(SF_GameMode)) return;
 
-	if (ASF_GameMode* const SF_GameMode = USF_FunctionLibrary::GetGameMode(GetWorld()))
+	// ToDo	敵の管理構造を変更するかも
+	// 現在のフェーズの敵をすべて倒したら
+	if (StageEnemyList.Num() <= 0)
 	{
-		// ToDo	敵の管理構造を変更するかも
-		// 現在のフェーズの敵をすべて倒したら
-		if (SF_GameMode->GetEnemyManager()->GetCurrentEnemyNum() <= 0)
+		CurrentWaveCnt++;
+		// 現在のウェーブが最後のウェーブより多ければ
+		if (CurrentWaveCnt >= BattleStageInfo.WaveInfoList.Num())
 		{
-			CurrentWaveCnt++;
-			// 現在のウェーブが最後のウェーブより多ければ
-			if (CurrentWaveCnt > StageEnemyList.Num())
-			{
-				// 終了処理
-				ESF_FieldEventType::Inactive;
-				return;
-			}
-
-			// 一括で生成処理を行う
-			SpawnAllEnemiesInWave(CurrentWaveCnt);
+			// 終了処理
+			ESF_FieldEventType::Inactive;
+			Debug::Print("BattleField : EndBattleStage");
+			return;
 		}
+
+		// 一括で生成処理を行う
+		SpawnAllEnemiesInWave(CurrentWaveCnt);
 	}
 }
 
 /// @brief ウェーブに対応する敵を全て生成する
 /// @param InWaveCnt 
-void ASF_BattleField::SpawnAllEnemiesInWave(const int32 InWaveCnt)
+void ASF_BattleField::SpawnAllEnemiesInWave(const int InWaveCnt)
 {
 	ASF_GameMode* const SF_GameMode = USF_FunctionLibrary::GetGameMode(GetWorld());
 	if (!IsValid(SF_GameMode)) return;
@@ -118,6 +128,8 @@ void ASF_BattleField::SpawnAllEnemiesInWave(const int32 InWaveCnt)
 		// 生成する敵の数だけ処理を行う
 		for (int e_i = 0; e_i < EnemyInfo.MaxGenerateNum; e_i++)
 		{
+			if (!IsValid(EnemyInfo.EnemyChara)) continue;
+
 			ASF_EnemyBase* const CreateEnemy =
 			USF_FunctionLibrary::SpawnAIEnemy(
 				/*WorldContext = */GetWorld(),
