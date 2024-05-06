@@ -2,6 +2,7 @@
 
 
 #include "SF_Magicball.h"
+#include "DebugHelpers.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Particles/ParticleSystemComponent.h"
@@ -86,13 +87,11 @@ void ASF_Magicball::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AAc
 
 	//debug
 	DRAW_SPHERE(GetActorLocation());
-
-	//spawn explosion
-	if (ParticleEffect)
+	if (OtherActor != nullptr && OtherActor != this)
 	{
-		FVector Location = GetActorLocation();
-		FRotator Rotation = FRotator(0.0f, 0.0f, 0.0f);
-		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ParticleEffect, Location, Rotation, true);
+		FString ActorName = OtherActor->GetName();
+		//UE_LOG(LogTemp, Warning, TEXT("HitActor: %s"), *ActorName);
+		Debug::Print(ActorName);
 	}
 
 	//apply damage
@@ -100,8 +99,15 @@ void ASF_Magicball::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AAc
 	if (damageInterface)
 	{
 		damageInterface->GetDamage(hitDamage);
+
+		//spawn explosion
+		if (ParticleEffect)
+		{
+			FVector Location = GetActorLocation();
+			FRotator Rotation = FRotator(0.0f, 0.0f, 0.0f);
+			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ParticleEffect, Location, Rotation, true);
+
+			this->Destroy();
+		}
 	}
-
-
-	this->Destroy();
 }
