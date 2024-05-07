@@ -22,7 +22,7 @@ ASF_MainCamera::ASF_MainCamera()
 	if (IsValid(SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArmComponent"))))
 	{
 		SpringArmComponent->SetupAttachment(RootComponent);
-		SpringArmComponent->TargetArmLength = 0.f;
+		SpringArmComponent->TargetArmLength = 500.f;
 		SpringArmComponent->bDoCollisionTest = false;
 		SpringArmComponent->bEnableCameraLag = true;
 	}
