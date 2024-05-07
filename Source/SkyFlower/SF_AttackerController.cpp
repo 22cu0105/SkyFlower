@@ -9,21 +9,25 @@
 
 ASF_AttackerController::ASF_AttackerController()
 {
+    PrimaryActorTick.bCanEverTick = true;
 }
 
 void ASF_AttackerController::BeginPlay()
 {
+    Super::BeginPlay();
+
 }
 
 void ASF_AttackerController::OnPossess(APawn* InPawn)
 {
     Super::OnPossess(InPawn);
     SF_AttackerEnemy = Cast<ASF_AttackerEnemy>(InPawn);
-
 }
 
 void ASF_AttackerController::Tick(float DeltaTime)
 {
+    Super::Tick(DeltaTime);
+
     UpdateState(DeltaTime);
     ChooseActionByState(DeltaTime);
 }
@@ -45,6 +49,7 @@ void ASF_AttackerController::ShortRangeAttack(const float InDeltaTime)
 
 void ASF_AttackerController::LongRangeAttack(const float InDeltaTime)
 {
+    Debug::Print("Long");
     // 突撃の方向を計算してAddImpulseを使って突撃する
     FVector Direction = (GetPlayerCharacter()->GetActorLocation() - GetPawn()->GetActorLocation()).GetSafeNormal();
 
