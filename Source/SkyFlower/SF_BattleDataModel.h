@@ -11,7 +11,7 @@
 
 class ASF_EnemyBase;
 
-// 生成する敵の情報
+//// 生成する敵の情報
 USTRUCT(BlueprintType)
 struct FSF_GeneratEnemyInfo
 {
@@ -37,7 +37,7 @@ public:
 	{}
 };
 
-// ステージ毎のフェーズの情報
+/// ステージ毎のフェーズの情報
 USTRUCT(BlueprintType)
 struct FSF_WaveInfo
 {
@@ -53,7 +53,7 @@ public:
 	{}
 };
 
-// ステージの情報
+/// ステージの情報
 USTRUCT(BlueprintType)
 struct FSF_BattleStageInfo
 {
@@ -80,7 +80,7 @@ public:
 	UPROPERTY(EditAnywhere, Category = "BattleData Setting")
 	TMap<uint8, FSF_BattleStageInfo> BattleDataMap;
 
-	//// データ取り込み用ファンクション
+	// データ取り込み用ファンクション
 	//UFUNCTION(CallInEditor)
 	//void LoadData();
 };

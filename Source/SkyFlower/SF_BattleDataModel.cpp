@@ -1,7 +1,7 @@
 #include "SF_BattleDataModel.h"
 
 USF_BattleDataModel::USF_BattleDataModel()
-	: BattleDataMap()
+	//: BattleDataMap()
 {
 }
 
