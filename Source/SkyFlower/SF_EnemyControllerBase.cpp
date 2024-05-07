@@ -3,6 +3,19 @@
 #include "SF_GameMode.h"
 #include <Kismet/GameplayStatics.h>
 
+void ASF_EnemyControllerBase::BeginPlay()
+{
+}
+
+void ASF_EnemyControllerBase::OnPossess(APawn* InPawn)
+{
+	Super::OnPossess(InPawn);
+}
+
+void ASF_EnemyControllerBase::Tick(float DeltaTime)
+{
+}
+
 /////////////////////////////FORCEINLINE
 ASF_GameMode* ASF_EnemyControllerBase::GetGameMode() const
 {

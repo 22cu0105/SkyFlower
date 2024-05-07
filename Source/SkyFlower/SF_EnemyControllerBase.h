@@ -21,13 +21,38 @@ class SKYFLOWER_API ASF_EnemyControllerBase : public AAIController
 {
 	GENERATED_BODY()
 
-private:
-	// 敵の位置とプレイヤーの位置を取得し、方向ベクトルを計算
-	//UPROPERTY(VisibleAnywhere)
-	//FVector Direction;
+protected:
+	virtual void BeginPlay() override;
+
+	virtual void OnPossess(APawn* InPawn) override;
 
 public:
-	//FVector GetPlayerDirection() { return GetPlayerCharacter()->GetActorLocation() - GetPawn()->GetActorLocation().GetSafeNormal();; }
+	virtual void Tick(float DeltaTime) override;
+
+	UFUNCTION(BlueprintCallable, Category = "EnemyBase")
+	float GetAttackCooldown() { return AttackCooldown; }
+	UFUNCTION(BlueprintCallable, Category = "EnemyBase")
+	void SetCanAttack(const bool InCanAttack) { bCanAttack = InCanAttack; }
+	UFUNCTION(BlueprintCallable, Category = "EnemyBase")
+	bool GetCanAttack() { return bCanAttack; }
+
+private:
+	UPROPERTY(EditAnywhere)
+	float AttackCooldown = 2.0f; // 突撃間隔
+	UPROPERTY(VisibleAnywhere)
+	bool bCanAttack = true;
+	virtual void UpdateState(const float InDeltaTime) {};
+	virtual void ChooseActionByState(const float InDeltaTime) {};
+
+private:
+	virtual void UpdateOnNormal(const float InDeltaTime) {};
+	virtual void OnBeginAttack() {};
+	virtual void UpdateOnShortRangeAttack(const float InDeltaTime) {};
+	virtual void UpdateOnLongRangeAttack(const float InDeltaTime) {};
+	virtual void OnEndAttack() {};
+	virtual void OnBeginDead() {};
+	virtual void UpdateOnDead(const float InDeltaTime) {};
+	virtual void OnEndDead() {};
 
 public:
 	virtual void Normal(const float InDeltaTime) {};

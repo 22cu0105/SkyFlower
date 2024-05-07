@@ -24,8 +24,8 @@ void ASF_AttackerEnemy::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-    UpdateState(DeltaTime);
-    ChooseActionByState(DeltaTime);
+    //UpdateState(DeltaTime);
+    //ChooseActionByState(DeltaTime);
 }
 
 /// <summary>
