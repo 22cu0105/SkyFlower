@@ -7,7 +7,6 @@
 #include "SF_FunctionLibrary.h"
 #include "DebugHelpers.h"
 #include "Components/BoxComponent.h"
-using namespace Debug;
 
 ASF_BattleField::ASF_BattleField()
 	: StageID(0)
