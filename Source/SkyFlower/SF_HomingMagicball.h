@@ -41,10 +41,12 @@ protected:
 
 	///////////////////////////// custom function
 public:
+	UFUNCTION(BlueprintCallable)
 	void InitTarget(ASF_EnemyBase* targetenemy);
 
 protected:
 	bool FindTarget();
+	void SetDelayComplete();
 	///////////////////////////// custom variable
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
@@ -63,4 +65,5 @@ private:
 	ASF_EnemyBase* target;
 	int32 hitDamage;
 	float accelerateDelta;
+	bool isDelayComplete = false;
 };

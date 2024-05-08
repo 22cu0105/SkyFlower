@@ -51,11 +51,22 @@ void ASF_HomingMagicball::BeginPlay()
 
 	if (!FindTarget())
 		Debug::PrintFixedLine("NO ENEMY FOR HOMING ATTACK", 85);
+
+	FTimerHandle TimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(
+		TimerHandle,	// タイマーハンドル
+		this,			// タイマーを実行するオブジェクト
+		&ASF_HomingMagicball::SetDelayComplete,	// ターゲット関数
+		1.0f,			// 遅延秒数
+		false			// 繰り返し実行しない
+	);
 }
 
 void ASF_HomingMagicball::InitTarget(ASF_EnemyBase* targetenemy)
 {
 	target = targetenemy;
+
+	//Debug::Print("INIT homingball target " + target->GetName());
 }
 
 bool ASF_HomingMagicball::FindTarget()
@@ -86,15 +97,28 @@ bool ASF_HomingMagicball::FindTarget()
 	return true;
 }
 
+void ASF_HomingMagicball::SetDelayComplete()
+{
+	isDelayComplete = true;
+
+	USceneComponent* targetRootComponent = target->GetRootComponent();
+	MovementComp->HomingTargetComponent = targetRootComponent;
+}
+
 // Called every frame
 void ASF_HomingMagicball::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (!isDelayComplete) {
+		MovementComp->bIsHomingProjectile = false;
+		return;
+	}
+
 	if (IsValid(target)) {
 		float accelerationTemp = MovementComp->HomingAccelerationMagnitude;
 		accelerationTemp += accelerateDelta;
-		accelerationTemp = FMath::Clamp(accelerationTemp, /* min */0.0f, /* max */ 5000.0f);
+		accelerationTemp = FMath::Clamp(accelerationTemp, /* min */0.0f, /* max */ 15000.0f);
 		//MovementComp->MaxSpeed = FMath::Clamp(MovementComp->GetMaxSpeed(), /* min */0.0f, /* max */ 20000.0f);
 		MovementComp->HomingAccelerationMagnitude = accelerationTemp;
 	}
