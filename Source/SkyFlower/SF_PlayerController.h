@@ -47,6 +47,8 @@ private:
 	void HomingAttack();
 	void LaserAttack();
 
+	void LockOn();
+
 	///////////////////////////// custom variable
 protected:
 	ASF_Player* m_pCharacter;

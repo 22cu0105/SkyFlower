@@ -5,6 +5,8 @@
 #include "SF_Player.h"
 #include "SF_MainCamera.h"
 #include "SF_GameMode.h"
+#include "SF_EnemyBase.h"
+#include "SF_FunctionLibrary.h"
 
 #include "Kismet/GameplayStatics.h"
 
@@ -46,6 +48,7 @@ void ASF_PlayerController::SetupInputComponent()
 	InputComponent->BindAction("HomingAttack", IE_Pressed, this, &ASF_PlayerController::HomingAttack);
 	InputComponent->BindAction("LaserAttack", IE_Pressed, this, &ASF_PlayerController::LaserAttack);
 
+	InputComponent->BindAction("LockOn", IE_Pressed, this, & ASF_PlayerController::LockOn);
 }
 
 ///////////////////////// camera
@@ -114,4 +117,24 @@ void ASF_PlayerController::LaserAttack()
 	if (!m_pCharacter) return;
 	m_pCharacter->LaserAttack();
 
+}
+
+void ASF_PlayerController::LockOn()
+{
+	ASF_GameMode* const SF_GameMode = USF_FunctionLibrary::GetGameMode(GetWorld());
+	if (!IsValid(SF_GameMode)) return;
+
+	// ロックオンされていなければロックオン
+	if (!IsValid(SF_GameMode->GetLockOnEnemy()))
+	{
+		ASF_EnemyBase* const enemy = SF_GameMode->GetNearestEnemy();
+		if (!IsValid(enemy)) return;
+
+		SF_GameMode->SetLockOnEnemy(enemy);
+	}
+	// ロックオンされていれば解除
+	else
+	{
+		SF_GameMode->SetLockOnEnemy(nullptr);
+	}
 }
