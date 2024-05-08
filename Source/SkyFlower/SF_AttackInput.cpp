@@ -4,6 +4,7 @@
 #include "SF_Player.h"
 #include "SF_EnemyBase.h"
 #include "SF_GameMode.h"
+#include "SF_AnimNotify.h"
 #include "Components/InputComponent.h"
 #include "GameFramework/Pawn.h"
 #include "DebugHelpers.h"
@@ -31,6 +32,7 @@ USF_AttackInput::USF_AttackInput()
 void USF_AttackInput::BeginPlay()
 {
 	Super::BeginPlay();
+
 }
 
 
@@ -38,6 +40,11 @@ void USF_AttackInput::BeginPlay()
 void USF_AttackInput::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	if (!GetPlayerCharacter()) return;
+	if (!AnimInstance)
+	{
+		AnimInstance = GetPlayerCharacter()->GetMesh()->GetAnimInstance();
+	}
 
 	// 押されてからの時間を計測してレーザー攻撃かそれ以外を判定する
 	if (isButtonPressed)
@@ -52,8 +59,6 @@ void USF_AttackInput::BeginNormalAttack()
 {
 	if (!GetPlayerCharacter()) return;
 
-	Debug::PrintFixedLine("BeginNormalAttack()", 15);
-
 	//GetPlayerCharacter()->SetCharacterState(ESF_CharacterState::BeginAttack);
 
 	isButtonPressed = true;
@@ -62,8 +67,7 @@ void USF_AttackInput::BeginNormalAttack()
 void USF_AttackInput::EndNormalAttack()
 {
 	if (!GetPlayerCharacter()) return;
-
-	Debug::PrintFixedLine("EndNormalAttack()");
+	UE_LOG(LogTemp, Log, TEXT("%f"), pressedTime);
 
 	if (pressedTime < gatherPowerTime)
 	{
@@ -179,7 +183,7 @@ void USF_AttackInput::LaserAttack()
 {
 	if (!GetPlayerCharacter()) return;
 
-	Debug::PrintFixedLine("LaserAttack()");
+	Debug::Print("LaserAttack()");
 }
 
 void USF_AttackInput::ShortRangeAttack()
@@ -191,7 +195,30 @@ void USF_AttackInput::ShortRangeAttack()
 	UE_LOG(LogTemp, Warning, TEXT("ShortRange"));
 
 	// 敵を追いかける
-	beginShortAttack = true;
+	//beginShortAttack = true;
+
+	// ComboMontageはAnimMontageへのポインタを保持している変数です
+	if (ComboMontage && AnimInstance)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("ComboMontage"));
+
+		if (!AnimInstance->Montage_IsPlaying(ComboMontage))
+		{
+			GetPlayerCharacter()->PlayAnimMontage(ComboMontage);
+		}
+
+		// PlayAnimMontageメソッドを使用してComboMontageを再生します
+		const auto NotifyEvents = ComboMontage->Notifies;
+		for (FAnimNotifyEvent EventNortify : NotifyEvents)
+		{
+			if (const auto Attack01 = Cast<USF_AnimNotify>(EventNortify.Notify))
+			{
+				Attack01->OnNotified.AddUObject(this, &USF_AttackInput::NotifyActivateComboInTime);
+			}
+
+		}
+	}
+
 }
 
 void USF_AttackInput::LongRangeAttack()
@@ -209,7 +236,8 @@ void USF_AttackInput::LongRangeAttack()
 
 		ASF_MainCamera* camera = GetGameMode()->GetMainCamera();
 		FTransform SpawnTM = FTransform(camera->GetActorRotation(), HandLocation);
-
+		ASF_EnemyBase* enemy = GetGameMode()->GetNearestEnemy();
+		if (!IsValid(enemy))return;
 		FActorSpawnParameters SpawnParams;
 		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 		SpawnParams.Instigator = GetPlayerCharacter();
@@ -222,6 +250,8 @@ void USF_AttackInput::LongRangeAttack()
 void USF_AttackInput::MoveToEnemy(float DeltaTime)
 {
 	if (!beginShortAttack) return;
+	ASF_EnemyBase* enemy = GetGameMode()->GetNearestEnemy();
+	if (!IsValid(enemy))return;
 
 	if (stoppingDistance >= FVector::Distance(playerPos, enemyPos) || moveTime >= moveTimeLimit)
 	{
@@ -251,6 +281,23 @@ void USF_AttackInput::MoveToEnemy(float DeltaTime)
 	GetPlayerCharacter()->SetActorLocation(newPos);
 	GetPlayerCharacter()->SetActorRotation(FMath::RInterpTo(currentRot, targetRot, DeltaTime, rotationSpeed));
 }
+
+void USF_AttackInput::NotifyActivateComboInTime()
+{
+	// NotifyActivateComboInTimeが呼び出された時の処理をここに記述する
+	UE_LOG(LogTemp, Warning, TEXT("NotifyActivateComboInTime"));
+
+}
+
+//void USF_AttackInput::NotifyDisActivateComboInTime()
+//{
+//	// NotifyDisActivateComboInTimeが呼び出された時の処理をここに記述する
+//}
+//
+//void USF_AttackInput::NotifyCheckJumpSection()
+//{
+//	// NotifyCheckJumpSectionが呼び出された時の処理をここに記述する
+//}
 
 /////////////////////////////FORCEINLINE
 ASF_GameMode* USF_AttackInput::GetGameMode() const
