@@ -15,7 +15,7 @@ ASF_AttackerController::ASF_AttackerController()
 void ASF_AttackerController::BeginPlay()
 {
     Super::BeginPlay();
-
+    //UE_LOG(LogTemp, Warning, TEXT("BeginPlaydayooooo"));
 }
 
 void ASF_AttackerController::OnPossess(APawn* InPawn)
@@ -49,7 +49,6 @@ void ASF_AttackerController::ShortRangeAttack(const float InDeltaTime)
 
 void ASF_AttackerController::LongRangeAttack(const float InDeltaTime)
 {
-    Debug::Print("Long");
     // 突撃の方向を計算してAddImpulseを使って突撃する
     FVector Direction = (GetPlayerCharacter()->GetActorLocation() - GetPawn()->GetActorLocation()).GetSafeNormal();
 
@@ -66,10 +65,13 @@ void ASF_AttackerController::LongRangeAttack(const float InDeltaTime)
 /// <param name="InDeltaTime"></param>
 void ASF_AttackerController::UpdateState(const float InDeltaTime)
 {
+    if (!SF_AttackerEnemy)return;
+    if (!GetPlayerCharacter())return;
+    auto PlayerCharacter = GetPlayerCharacter();
     if (SF_AttackerEnemy->GetCharacterState() != ESF_CharacterState::Normal)return;
 
     // プレイヤーと自分の直線距離を計算
-    const auto dis = FVector::Dist(GetPlayerCharacter()->GetActorLocation(), SF_AttackerEnemy->GetActorLocation());
+    auto dis = FVector::Dist(PlayerCharacter->GetActorLocation(), SF_AttackerEnemy->GetActorLocation());
 
     // ステート反映
     if (dis <= SF_AttackerEnemy->GetAttackableDistance_ShortRange() && GetCanAttack())
@@ -89,9 +91,13 @@ void ASF_AttackerController::UpdateState(const float InDeltaTime)
 /// <param name="InDeltaTime"></param>
 void ASF_AttackerController::ChooseActionByState(const float InDeltaTime)
 {
+    if (!SF_AttackerEnemy)return;
+    if (!GetPlayerCharacter())return;
+
     switch (SF_AttackerEnemy->GetCharacterState()) {
     case ESF_CharacterState::Normal:
     {
+
         UpdateOnNormal(InDeltaTime);
         break;
     }

@@ -14,6 +14,7 @@
 class USF_MoveInput;
 class USF_AttackInput;
 class ASF_EnemyBase;
+class ASF_WeaponBase;
 
 UCLASS()
 class SKYFLOWER_API ASF_Player : public ASF_CharacterBase
@@ -40,14 +41,19 @@ public:
 	void HomingAttack();
 	void LaserAttack();
 
+	UFUNCTION(BlueprintNativeEvent)
+		ASF_WeaponBase* GetWeapon();
+
+	virtual ASF_WeaponBase* GetWeapon_Implementation() { return nullptr; }
+
 protected:
 	virtual void BeginPlay() override;
 
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component", meta = (AllowPrivateAccess = "true"))
-	USF_MoveInput* MoveInputComponent;
+		USF_MoveInput* MoveInputComponent;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component", meta = (AllowPrivateAccess = "true"))
-	USF_AttackInput* AttackInputComponent;
+		USF_AttackInput* AttackInputComponent;
 
 private:
 	// ISF_DamageableInterface を介して継承されました

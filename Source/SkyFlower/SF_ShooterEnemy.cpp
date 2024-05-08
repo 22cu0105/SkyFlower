@@ -11,16 +11,16 @@ void ASF_ShooterEnemy::BeginPlay()
 {
     Super::BeginPlay();
 
-    // 敵の実際の行動
-    SF_ShooterController = Cast<ASF_ShooterController>(GetOwner());
+    //// 敵の実際の行動
+    //SF_ShooterController = Cast<ASF_ShooterController>(GetOwner());
 }
 
 void ASF_ShooterEnemy::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
 
-    UpdateState(DeltaTime);
-    ChooseActionByState(DeltaTime);
+    //UpdateState(DeltaTime);
+    //ChooseActionByState(DeltaTime);
 }
 
 /// <summary>
@@ -29,7 +29,7 @@ void ASF_ShooterEnemy::Tick(float DeltaTime)
 /// <param name="InDeltaTime"></param>
 void ASF_ShooterEnemy::UpdateState(const float InDeltaTime)
 {
-    if (!IsValid(SF_ShooterController)) return;
+    //if (!IsValid(SF_ShooterController)) return;
     if (GetCharacterState() != ESF_CharacterState::Normal)return;
 
     // プレイヤーと自分の直線距離を計算
@@ -53,7 +53,7 @@ void ASF_ShooterEnemy::UpdateState(const float InDeltaTime)
 /// <param name="InDeltaTime"></param>
 void ASF_ShooterEnemy::ChooseActionByState(const float InDeltaTime)
 {
-    if (!IsValid(SF_ShooterController)) return;
+    //if (!IsValid(SF_ShooterController)) return;
 
     switch (GetCharacterState()) {
     case ESF_CharacterState::Normal:
@@ -85,7 +85,7 @@ void ASF_ShooterEnemy::ChooseActionByState(const float InDeltaTime)
 
 void ASF_ShooterEnemy::UpdateOnNormal(const float InDeltaTime)
 {
-    SF_ShooterController->Normal(InDeltaTime);
+    //SF_ShooterController->Normal(InDeltaTime);
 
     TimeSinceLastAttack += InDeltaTime;
 
@@ -104,7 +104,7 @@ void ASF_ShooterEnemy::OnBeginAttack()
 
 void ASF_ShooterEnemy::UpdateOnShortRangeAttack(const float InDeltaTime)
 {
-    SF_ShooterController->ShortRangeAttack(InDeltaTime);
+    //SF_ShooterController->ShortRangeAttack(InDeltaTime);
    
     // プレイヤーと自分の直線距離を計算
     const auto dis = FVector::Dist(GetPlayerCharacter()->GetActorLocation(), GetActorLocation());
@@ -118,7 +118,7 @@ void ASF_ShooterEnemy::UpdateOnShortRangeAttack(const float InDeltaTime)
 
 void ASF_ShooterEnemy::UpdateOnLongRangeAttack(const float InDeltaTime)
 {
-    SF_ShooterController->LongRangeAttack(InDeltaTime);
+    //SF_ShooterController->LongRangeAttack(InDeltaTime);
     OnEndAttack();
 }
 

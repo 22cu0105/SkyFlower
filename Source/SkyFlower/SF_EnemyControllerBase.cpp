@@ -3,8 +3,15 @@
 #include "SF_GameMode.h"
 #include <Kismet/GameplayStatics.h>
 
+ASF_EnemyControllerBase::ASF_EnemyControllerBase()
+{
+	PrimaryActorTick.bCanEverTick = true;
+}
+
 void ASF_EnemyControllerBase::BeginPlay()
 {
+	Super::BeginPlay();
+
 }
 
 void ASF_EnemyControllerBase::OnPossess(APawn* InPawn)
@@ -14,6 +21,7 @@ void ASF_EnemyControllerBase::OnPossess(APawn* InPawn)
 
 void ASF_EnemyControllerBase::Tick(float DeltaTime)
 {
+	Super::Tick(DeltaTime);
 }
 
 /////////////////////////////FORCEINLINE

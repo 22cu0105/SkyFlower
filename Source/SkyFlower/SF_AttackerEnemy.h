@@ -51,6 +51,6 @@ private:
 private:
 	int32 hp = 100;
 	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	ASF_AttackerController* SF_AttackerController;
+	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	//ASF_AttackerController* SF_AttackerController;
 };

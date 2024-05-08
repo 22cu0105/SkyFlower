@@ -26,21 +26,21 @@ void ASF_EnemyBase::Tick(float DeltaTime)
 		if (GetCurrentHP() <= 0.f)
 			SetCharacterState(ESF_CharacterState::BeginDead);
 	
-	switch (GetCharacterState())
-	{
-	case ESF_CharacterState::Normal:
-		UpdateOnNormal(DeltaTime);
-		break;
-	case ESF_CharacterState::BeginDead:
-		OnBeginDead();
-		break;
-	case ESF_CharacterState::Dead:
-		UpdateOnDead(DeltaTime);
-		break;
-	case ESF_CharacterState::EndDead:
-		OnEndDead();
-		break;
-	}
+	//switch (GetCharacterState())
+	//{
+	//case ESF_CharacterState::Normal:
+	//	UpdateOnNormal(DeltaTime);
+	//	break;
+	//case ESF_CharacterState::BeginDead:
+	//	OnBeginDead();
+	//	break;
+	//case ESF_CharacterState::Dead:
+	//	UpdateOnDead(DeltaTime);
+	//	break;
+	//case ESF_CharacterState::EndDead:
+	//	OnEndDead();
+	//	break;
+	//}
 }
 
 /// ToDo

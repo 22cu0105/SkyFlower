@@ -17,7 +17,7 @@ void ASF_AttackerEnemy::BeginPlay()
 	Super::BeginPlay();
 
     // 敵の実際の行動
-    SF_AttackerController = Cast<ASF_AttackerController>(GetOwner());
+    //SF_AttackerController = Cast<ASF_AttackerController>(GetOwner());
 }
 
 void ASF_AttackerEnemy::Tick(float DeltaTime)
@@ -34,7 +34,7 @@ void ASF_AttackerEnemy::Tick(float DeltaTime)
 /// <param name="InDeltaTime"></param>
 void ASF_AttackerEnemy::UpdateState(const float InDeltaTime)
 {
-    if (!IsValid(SF_AttackerController)) return;
+    //if (!IsValid(SF_AttackerController)) return;
     if (GetCharacterState() != ESF_CharacterState::Normal)return;
 
     // プレイヤーと自分の直線距離を計算
@@ -58,7 +58,7 @@ void ASF_AttackerEnemy::UpdateState(const float InDeltaTime)
 /// <param name="InDeltaTime"></param>
 void ASF_AttackerEnemy::ChooseActionByState(const float InDeltaTime)
 {
-    if (!IsValid(SF_AttackerController)) return;
+    //if (!IsValid(SF_AttackerController)) return;
 
     switch (GetCharacterState()) {
     case ESF_CharacterState::Normal:
@@ -90,9 +90,8 @@ void ASF_AttackerEnemy::ChooseActionByState(const float InDeltaTime)
 
 void ASF_AttackerEnemy::UpdateOnNormal(const float InDeltaTime)
 {
-
     TimeSinceLastAttack += InDeltaTime;
-    SF_AttackerController->Normal(InDeltaTime);
+    //SF_AttackerController->Normal(InDeltaTime);
 
     // 攻撃が完了したら再びプレイヤーの位置を見るためにフラグをリセット
     if (TimeSinceLastAttack >= GetAttackCooldown())
@@ -109,14 +108,14 @@ void ASF_AttackerEnemy::OnBeginAttack()
 
 void ASF_AttackerEnemy::UpdateOnShortRangeAttack(const float InDeltaTime)
 {
-    SF_AttackerController->ShortRangeAttack(InDeltaTime);
+    //SF_AttackerController->ShortRangeAttack(InDeltaTime);
     AttackCollision(20);
     OnEndAttack();
 }
 
 void ASF_AttackerEnemy::UpdateOnLongRangeAttack(const float InDeltaTime)
 {
-    SF_AttackerController->LongRangeAttack(InDeltaTime);
+    //SF_AttackerController->LongRangeAttack(InDeltaTime);
 
     // プレイヤーと自分の直線距離を計算
     const auto dis = FVector::Dist(GetPlayerCharacter()->GetActorLocation(), GetActorLocation());

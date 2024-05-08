@@ -21,6 +21,7 @@ class SKYFLOWER_API ASF_AttackerController : public ASF_EnemyControllerBase
 	GENERATED_BODY()
 public:
 	ASF_AttackerController();
+
 protected:
 	virtual void BeginPlay() override;
 	virtual void OnPossess(APawn* InPawn) override;
