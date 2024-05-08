@@ -46,8 +46,6 @@ struct SKYFLOWER_API FSF_StageInfo : public FTableRowBase
 	
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	uint8 StageNum;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TArray<FSF_WaveSetting> WaveSetting;
 };
 
