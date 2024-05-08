@@ -30,6 +30,7 @@ struct FSF_WaveSetting
 {
 	GENERATED_BODY()
 
+public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<ASF_EnemyBase> EnemyType;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -39,10 +40,11 @@ struct FSF_WaveSetting
 ///////////
 /// stageInfo
 USTRUCT(BlueprintType)
-struct SKYFLOWER_API FSF_StageInfo
+struct SKYFLOWER_API FSF_StageInfo : public FTableRowBase
 {
 	GENERATED_BODY()
 	
+public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	uint8 StageNum;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
