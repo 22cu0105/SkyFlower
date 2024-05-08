@@ -9,11 +9,14 @@ public class SkyFlower : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core",
+		PublicDependencyModuleNames.AddRange(new string[] { 
+			"Core",
 			"CoreUObject",
 			"Engine",
 			"InputCore",
-			"AIModule",});
+			"AIModule",
+            "Niagara",
+        });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 
