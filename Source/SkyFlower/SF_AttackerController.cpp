@@ -34,9 +34,20 @@ void ASF_AttackerController::Tick(float DeltaTime)
 
 void ASF_AttackerController::Normal(const float InDeltaTime)
 {
-    FVector Direction = (GetPlayerCharacter()->GetActorLocation() - GetPawn()->GetActorLocation()).GetSafeNormal();
+    // 時間に基づいた振動を加える
+    FVector Offset = FVector(
+        0.0f,
+        Amplitude * FMath::Cos(Frequency * GetWorld()->TimeSeconds),
+        Amplitude * FMath::Sin(Frequency * GetWorld()->TimeSeconds)
+    );
+
+    // キャラクターの位置に振動を加える
+    FVector NewLocation = SF_AttackerEnemy->GetActorLocation() + Offset;
+    SF_AttackerEnemy->SetActorLocation(NewLocation);
+
+    FVector Direction = (GetPlayerCharacter()->GetActorLocation() - SF_AttackerEnemy->GetActorLocation()).GetSafeNormal();
     FRotator Rotation = Direction.Rotation();
-    GetPawn()->SetActorRotation(Rotation);
+    SF_AttackerEnemy->SetActorRotation(Rotation);
 }
 
 void ASF_AttackerController::ShortRangeAttack(const float InDeltaTime)

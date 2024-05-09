@@ -41,6 +41,11 @@ private:
 	UPROPERTY(VisibleAnywhere)
 		float TimeSinceLastAttack = 0.f;
 
+	UPROPERTY(EditAnywhere, Category = "Edit")
+		float Amplitude = 1.f;
+	UPROPERTY(EditAnywhere, Category = "Edit")
+		float Frequency = 4.f;
+
 	virtual void UpdateState(const float InDeltaTime) override;
 	virtual void ChooseActionByState(const float InDeltaTime) override;
 

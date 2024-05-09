@@ -32,6 +32,8 @@ private:
 	UPROPERTY(VisibleAnywhere)
 		float TimeSinceLastAttack = 0.f;
 
+
+
 	virtual void UpdateState(const float InDeltaTime) override;
 	virtual void ChooseActionByState(const float InDeltaTime) override;
 

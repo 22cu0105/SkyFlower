@@ -33,6 +33,17 @@ void ASF_ShooterController::Tick(float DeltaTime)
 
 void ASF_ShooterController::Normal(const float InDeltaTime)
 {
+    // 時間に基づいた振動を加える
+    FVector Offset = FVector(
+        0.0f,
+        Amplitude * FMath::Cos(Frequency * GetWorld()->TimeSeconds),
+        Amplitude * FMath::Sin(Frequency * GetWorld()->TimeSeconds)
+    );
+
+    // キャラクターの位置に振動を加える
+    FVector NewLocation = SF_ShooterEnemy->GetActorLocation() + Offset;
+    SF_ShooterEnemy->SetActorLocation(NewLocation);
+
     //FVector Direction = (GetPlayerCharacter()->GetActorLocation() - GetPawn()->GetActorLocation()).GetSafeNormal();
     //FRotator Rotation = Direction.Rotation();
     //GetPawn()->SetActorRotation(Rotation);

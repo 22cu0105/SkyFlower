@@ -37,9 +37,9 @@ void ASF_BlockerController::Normal(const float InDeltaTime)
 {
     // 時間に基づいた振動を加える
     FVector Offset = FVector(
-        Amplitude * FMath::Sin(Frequency * GetWorld()->TimeSeconds),
+        0.0f,
         Amplitude * FMath::Cos(Frequency * GetWorld()->TimeSeconds),
-        0.0f
+        Amplitude * FMath::Sin(Frequency * GetWorld()->TimeSeconds)
     );
 
     // キャラクターの位置に振動を加える
