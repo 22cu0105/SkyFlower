@@ -208,20 +208,30 @@ void ASF_Player::LaserAttack()
 
 void ASF_Player::HomingShoot()
 {
+	if (!IsValid(AttackInputComponent)) return;
 	AttackInputComponent->HomingShoot();
 }
 
 void ASF_Player::LockOn()
 {
+	if (!IsValid(AttackInputComponent)) return;
 	AttackInputComponent->LockOn();
+}
+
+void ASF_Player::LongRangeAttack()
+{
+	if (!IsValid(AttackInputComponent)) return;
+	AttackInputComponent->LongRangeAttack();
 }
 
 ASF_EnemyBase* ASF_Player::GetLockOnTarget()
 {
+	if (!IsValid(AttackInputComponent)) return nullptr;
 	return AttackInputComponent->GetLockOnTarget();
 }
 
 bool ASF_Player::GetLockOnStatus()
 {
+	if (!IsValid(AttackInputComponent)) return false;
 	return AttackInputComponent->GetLockOnStatus();
 }

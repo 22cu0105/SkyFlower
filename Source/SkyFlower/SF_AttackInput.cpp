@@ -43,7 +43,7 @@ void USF_AttackInput::BeginPlay()
 
 		if (!IsValid(LockOnWidgetBP)) return;
 		LockOnWidget = GetWorld()->SpawnActor<ASF_LockOnWidget>(
-			LockOnWidgetBP.Get(), 
+			LockOnWidgetBP.Get(),
 			SpawnLocation,
 			SpawnRotation,
 			SpawnParams
@@ -98,6 +98,8 @@ void USF_AttackInput::EndNormalAttack()
 			enemyPos = RockOnEnemy->GetActorLocation();
 
 		// 2つの点間の距離を測るためにユークリッド距離の2乗を取得する
+
+		/*
 		const float DistanceSquared = FVector::DistSquared(playerPos, enemyPos);
 
 		// FMath::Square()は、与えられた値の2乗を計算する
@@ -110,6 +112,9 @@ void USF_AttackInput::EndNormalAttack()
 		{
 			ShortRangeAttack();
 		}
+		*/
+
+		ShortRangeAttack();
 	}
 	// gatherPowerTime以上だったら
 	else
@@ -121,6 +126,7 @@ void USF_AttackInput::EndNormalAttack()
 	pressedTime = 0;
 }
 
+
 void USF_AttackInput::HomingAttack()
 {
 	if (!GetPlayerCharacter()) return;
@@ -128,6 +134,7 @@ void USF_AttackInput::HomingAttack()
 	Debug::Print("HomingAttack()");
 
 }
+
 
 void USF_AttackInput::LaserAttack()
 {
@@ -143,32 +150,65 @@ void USF_AttackInput::HomingShoot()
 	Debug::Print("HomingShoot()");
 
 	// to launch HomingMagicballs we need:
-	// 0. check Target
+	// 0. check Target as center, get all the enemy in that sphere
 	// 1. PlayerForwardDirection as basic Axis
 	// 2. LaunchDirection for each HomingMagicball
-	// 3. Spawn
-
-	// find Target
-	/* TODO get target from LockOn */
+	// 3. Spawn, set up target
 
 	/* step 0 */
-	// get an enemy on the map as target 
-	ASF_EnemyBase* target = nullptr;
-	for (TActorIterator<ASF_EnemyBase> It(GetWorld()); It; ++It)
+	// find Target
+	/* TODO get target from LockOn */
+	TArray<ASF_EnemyBase*> OverlappingEnemies;
+	int32 enemyCount = 0;
+	if (IsValid(LockOnTarget))
 	{
-		ASF_EnemyBase* FoundEnemy = *It;
-		if (FoundEnemy)
-		{
-			target = FoundEnemy;
-			break; // stop searching
-		}
+		FVector location = LockOnTarget->GetActorLocation();
+		TArray<AActor*> overlappingActors;
 
-		if (!IsValid(target))
+		TArray<TEnumAsByte<EObjectTypeQuery>> objectTypes;
+		objectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Pawn));
+
+		bool bOverlapping = UKismetSystemLibrary::SphereOverlapActors(
+			GetWorld(),
+			location,
+			2000.f,/* Radius */
+			objectTypes,
+			ASF_EnemyBase::StaticClass(),/* ActorClassFilter */
+			TArray<AActor*>(),
+			overlappingActors);
+
+
+		for (AActor* overlappedActor : overlappingActors)
 		{
-			Debug::PrintFixedLine("NO ENEMY FOR HOMING ATTACK", 85);
-			return;
+			ASF_EnemyBase* Enemy = Cast<ASF_EnemyBase>(overlappedActor);
+			if (IsValid(Enemy)) OverlappingEnemies.Add(Enemy);
+		}
+		enemyCount = overlappingActors.Num();
+		Debug::PrintFixedLine(
+			"GET ENEMY COUNT FOR HOMING : " + FString::FromInt(enemyCount), 220);
+	}
+
+	/*
+	else // get an enemy on the map as target
+	{
+		ASF_EnemyBase* target = nullptr;
+		for (TActorIterator<ASF_EnemyBase> It(GetWorld()); It; ++It)
+		{
+			ASF_EnemyBase* FoundEnemy = *It;
+			if (FoundEnemy)
+			{
+				target = FoundEnemy;
+				break; // stop searching
+			}
+
+			if (!IsValid(target))
+			{
+				Debug::PrintFixedLine("NO ENEMY FOR HOMING ATTACK", 85);
+				return;
+			}
 		}
 	}
+	*/
 
 	/* step 1 */
 	// get Axis
@@ -210,9 +250,17 @@ void USF_AttackInput::HomingShoot()
 
 		AActor* projectile = GetWorld()->SpawnActor<AActor>(
 			HomingShootBP, spawnPos, spawnRot, spawnParams);
-		Cast<ASF_HomingMagicball>(projectile)->InitTarget(target);
+
+		// setup target enemy
+		if (!IsValid(LockOnTarget)) continue;
+		if (enemyCount < 1) continue;
+		int j = i % enemyCount; 
+		if(ASF_EnemyBase* enemy = Cast<ASF_EnemyBase>(OverlappingEnemies[j]))
+		Cast<ASF_HomingMagicball>(projectile)->InitTarget(enemy);
 	}
 
+	//clear target array
+	OverlappingEnemies.Empty();
 }
 
 void USF_AttackInput::LockOn()
@@ -236,8 +284,8 @@ void USF_AttackInput::ShortRangeAttack()
 	if (!GetPlayerCharacter()) return;
 
 	//GetPlayerCharacter()->SetCharacterState(ESF_CharacterState::ShortRangeAttack);
+	//UE_LOG(LogTemp, Warning, TEXT("ShortRange"));
 
-	UE_LOG(LogTemp, Warning, TEXT("ShortRange"));
 
 	// 敵を追いかける
 	beginShortAttack = true;
@@ -266,7 +314,7 @@ void USF_AttackInput::LongRangeAttack()
 
 	//GetPlayerCharacter()->SetCharacterState(ESF_CharacterState::LongRangeAttack);
 
-	//throw magicball
+	//throw magic ball
 	{
 		if (!MagicballBP) return;
 		FVector HandLocation = GetPlayerCharacter()->GetMesh()->GetSocketLocation("Magicball");
@@ -322,11 +370,16 @@ void USF_AttackInput::MoveToEnemy(float DeltaTime)
 
 void USF_AttackInput::LockOnIconProcess()
 {
+	//null check
 	if (!IsValid(LockOnWidget)) return;
+
 	//show/hide LockOn icon
-	{
-		bool hasEnemy = IsValid(LockOnTarget);
-		LockOnWidget->SetActorVisible(hasEnemy);
+	LockOnWidget->SetActorVisible(IsValid(LockOnTarget));
+
+	//update icon visibility to false once target is destroy
+	if (!IsValid(LockOnTarget)) {
+		LockOnWidget->SetIconVisibility(ESlateVisibility::Hidden);
+		LockOnStatus = false;
 	}
 
 	//raycast to update target
@@ -373,10 +426,13 @@ void USF_AttackInput::RaytraceToGetTarget()
 
 	DRAW_LINE_SingleFrame(start, end)
 
-	if (!bHit) return;
+		if (!bHit) return;
 
 	ASF_EnemyBase* enemy = Cast<ASF_EnemyBase>(hitResult.GetActor());
-	if (IsValid(enemy)) LockOnTarget = enemy;
+	if (IsValid(enemy)) {
+		LockOnTarget = enemy;
+		GetGameMode()->SetLockOnEnemy(enemy);
+	}
 
 	Debug::PrintFixedLine("RAYTRACE : " + hitResult.GetActor()->GetName(), 171);
 }
@@ -409,6 +465,7 @@ void USF_AttackInput::IsTargetVisibleOnScreen()
 	}
 
 	LockOnTarget = nullptr;
+	GetGameMode()->SetLockOnEnemy(nullptr);
 }
 
 void USF_AttackInput::NotifyActivateComboInTime()

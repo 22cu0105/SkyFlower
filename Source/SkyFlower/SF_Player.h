@@ -43,6 +43,7 @@ public:
 
 	void HomingShoot();
 	void LockOn();
+	void LongRangeAttack();
 
 	ASF_EnemyBase* GetLockOnTarget();
 	bool GetLockOnStatus();

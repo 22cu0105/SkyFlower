@@ -62,8 +62,8 @@ protected:
 	UParticleSystem* ParticleEffect;
 
 private:
-	ASF_EnemyBase* target;
-	int32 hitDamage;
-	float accelerateDelta;
+	ASF_EnemyBase* target = nullptr;
+	int32 hitDamage = 30.f;
+	float accelerateDelta = 500.f;
 	bool isDelayComplete = false;
 };

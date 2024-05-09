@@ -49,6 +49,7 @@ private:
 
 	void HomingShoot();
 	void LockOn();
+	void LongRangeAttack();
 
 	///////////////////////////// custom variable
 protected:

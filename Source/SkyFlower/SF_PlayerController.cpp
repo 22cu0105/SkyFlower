@@ -48,9 +48,10 @@ void ASF_PlayerController::SetupInputComponent()
 	InputComponent->BindAction("EndNormalAttack", IE_Released, this, &ASF_PlayerController::EndNormalAttack);
 	InputComponent->BindAction("HomingAttack", IE_Pressed, this, &ASF_PlayerController::HomingAttack);
 	InputComponent->BindAction("LaserAttack", IE_Pressed, this, &ASF_PlayerController::LaserAttack);
-
+	
 	InputComponent->BindAction("HomingShoot", IE_Pressed, this, &ASF_PlayerController::HomingShoot);
-	InputComponent->BindAction("LockOn", IE_Pressed, this, & ASF_PlayerController::LockOn);
+	InputComponent->BindAction("LockOn", IE_Pressed, this, &ASF_PlayerController::LockOn);
+	InputComponent->BindAction("LongRangeAttack", IE_Pressed, this, &ASF_PlayerController::LongRangeAttack);
 }
 
 ///////////////////////// camera
@@ -97,7 +98,6 @@ void ASF_PlayerController::BeginNormalAttack()
 {
 	if (!m_pCharacter) return;
 	m_pCharacter->BeginNormalAttack();
-
 }
 
 void ASF_PlayerController::EndNormalAttack()
@@ -111,19 +111,18 @@ void ASF_PlayerController::HomingAttack()
 {
 	if (!m_pCharacter) return;
 	m_pCharacter->HomingAttack();
-
 }
 
 void ASF_PlayerController::HomingShoot()
 {
 	Debug::Print(" ASF_PlayerController::HomingShoot() ");
+	m_pCharacter->HomingShoot();
 }
 
 void ASF_PlayerController::LaserAttack()
 {
 	if (!m_pCharacter) return;
 	m_pCharacter->LaserAttack();
-
 }
 
 void ASF_PlayerController::LockOn()
@@ -146,6 +145,12 @@ void ASF_PlayerController::LockOn()
 		SF_GameMode->SetLockOnEnemy(nullptr);
 	}
 	*/
-	Debug::Print("LOCK ON PRESSED");
+
+	Debug::PrintFixedLine("LOCK ON PRESSED", 190);
 	m_pCharacter->LockOn();
+}
+
+void ASF_PlayerController::LongRangeAttack()
+{
+	m_pCharacter->LongRangeAttack();
 }

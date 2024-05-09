@@ -42,10 +42,10 @@ public:
 
 	void HomingShoot();
 	void LockOn();
+	void LongRangeAttack();
 
 private:
 	void ShortRangeAttack();
-	void LongRangeAttack();
 
 	UFUNCTION()
 	void MoveToEnemy(float DeltaTime);
