@@ -143,4 +143,5 @@ public:
 	//ESF_CameraState GetCameraState() const { return CameraState; }
 	FVector GetViewPoint() const { return ViewPoint; }
 	ESF_CameraEventType GetCurrentCameraEventType() const { return CurrentCameraEventType; }
+	bool IsPlayerLockOn();
 };

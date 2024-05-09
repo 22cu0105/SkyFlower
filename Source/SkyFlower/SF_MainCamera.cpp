@@ -74,16 +74,18 @@ void ASF_MainCamera::Tick(float DeltaTime)
 	// 注視点
 	switch (SF_Player->GetCharacterState())
 	{
-		//case ESF_CharacterState::Normal:
-		//	break;
+	case ESF_CharacterState::Normal:
+		UpdateOnNormal(DeltaTime);
+		break;
 	case ESF_CharacterState::ShortRangeAttack:
-		UpdateOnShortRangeAttack(DeltaTime);
+		//UpdateOnShortRangeAttack(DeltaTime);
+		UpdateOnNormal(DeltaTime);
 		break;
 	case ESF_CharacterState::LongRangeAttack:
-		UpdateOnLongRangeAttack(DeltaTime);
+		//UpdateOnLongRangeAttack(DeltaTime);
+		UpdateOnNormal(DeltaTime);
 		break;
 	default:
-		UpdateOnNormal(DeltaTime);
 		break;
 	}
 
@@ -105,16 +107,15 @@ void ASF_MainCamera::Tick(float DeltaTime)
 				break;
 			}
 		}
-		Debug::PrintFixedLine("CurrentCameraEventType : Dash", 120);
+		//Debug::PrintFixedLine("CurrentCameraEventType : Dash", 120);
 		break;
 	default:
-		Debug::PrintFixedLine("CurrentCameraEventType : Default", 121);
+		//Debug::PrintFixedLine("CurrentCameraEventType : Default", 121);
 		break;
 	}
 
-	//todo lock on
+	//lock on
 	ProcessLockOn(DeltaTime);
-
 }
 
 /// @brief Pitchの回転処理
@@ -122,6 +123,8 @@ void ASF_MainCamera::Tick(float DeltaTime)
 void ASF_MainCamera::AddPitchRotation(float InValue)
 {
 	if (InValue == 0.f) return;
+
+	if (IsPlayerLockOn())return;
 
 	// 現在のカメラの回転量に加算
 	FRotator NewRotation = GetActorRotation();
@@ -142,6 +145,8 @@ void ASF_MainCamera::AddPitchRotation(float InValue)
 void ASF_MainCamera::AddYawRotation(float InValue)
 {
 	if (InValue == 0.f) return;
+
+	if (IsPlayerLockOn())return;
 
 	// 現在のカメラの回転量に加算
 	FRotator NewRotation = GetActorRotation();
@@ -204,15 +209,15 @@ void ASF_MainCamera::CalculateViewPoint(float height)
 
 void ASF_MainCamera::ProcessLockOn(const float InDeltaTime)
 {
+	//null check
 	ASF_Player* const Player = USF_FunctionLibrary::GetPlayer(GetWorld());
 	if (!IsValid(Player)) return;
 	if (!Player->GetLockOnStatus()) return;
 	ASF_EnemyBase* const LockOnEnemy = Player->GetLockOnTarget();
 	if (!IsValid(LockOnEnemy)) return;
 
-
-	ViewPoint = Player->GetActorLocation();
-	SetActorLocation(ViewPoint);
+	//CalculateViewPoint();
+	//SetActorLocation(ViewPoint);
 
 	const FVector LockOnEnemyPos = LockOnEnemy->GetActorLocation();
 	const FRotator CameraDirection = (LockOnEnemyPos - GetActorLocation()).Rotation();
@@ -276,4 +281,13 @@ void ASF_MainCamera::UpdateOnLongRangeAttack(const float InDeltaTime)
 	}
 
 	*/
+}
+
+bool ASF_MainCamera::IsPlayerLockOn()
+{
+	ASF_Player* const Player = USF_FunctionLibrary::GetPlayer(GetWorld());
+	if (!IsValid(Player)) return false;
+	if (!Player->GetLockOnStatus()) return false;
+
+	return true;
 }

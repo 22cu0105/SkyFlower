@@ -105,7 +105,8 @@ void ASF_Magicball::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AAc
 		{
 			FVector Location = GetActorLocation();
 			FRotator Rotation = FRotator(0.0f, 0.0f, 0.0f);
-			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ParticleEffect, Location, Rotation, true);
+			UGameplayStatics::SpawnEmitterAtLocation(
+				GetWorld(), ParticleEffect, Location, Rotation, true);
 
 			this->Destroy();
 		}

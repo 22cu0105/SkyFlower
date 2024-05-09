@@ -51,6 +51,8 @@ public:
 	ASF_WeaponBase* GetWeapon() const { return Weapon; };
 	UPROPERTY(BlueprintReadWrite)
 	ASF_WeaponBase* Weapon = nullptr;
+
+	////////////////////// BlueprintImplementableEvent
 	UFUNCTION(BlueprintImplementableEvent)
 	void Init();
 

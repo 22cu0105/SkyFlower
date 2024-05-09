@@ -17,9 +17,10 @@
 #include "Math/Vector.h"
 #include "Math/Quat.h"
 #include "Math/RotationMatrix.h"
-#include "SF_EnemyBase.h"
 #include "EngineUtils.h"  
 
+// for lockOn icon
+#include "SF_LockOnWidget.h"
 
 // Sets default values for this component's properties
 USF_AttackInput::USF_AttackInput()
@@ -32,6 +33,24 @@ USF_AttackInput::USF_AttackInput()
 void USF_AttackInput::BeginPlay()
 {
 	Super::BeginPlay();
+
+	// spawn LockOn icon
+	{
+		UClass* ActorToSpawn = ASF_LockOnWidget::StaticClass();
+		FVector SpawnLocation = GetOwner()->GetActorLocation();
+		FRotator SpawnRotation = GetOwner()->GetActorRotation();
+		FActorSpawnParameters SpawnParams;
+
+		if (!IsValid(LockOnWidgetBP)) return;
+		LockOnWidget = GetWorld()->SpawnActor<ASF_LockOnWidget>(
+			LockOnWidgetBP.Get(), 
+			SpawnLocation,
+			SpawnRotation,
+			SpawnParams
+		);
+		if (!IsValid(LockOnWidget)) return;
+		LockOnWidget->SetIconVisibility(ESlateVisibility::Hidden);
+	}
 
 }
 
@@ -51,11 +70,10 @@ void USF_AttackInput::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 		// ボタンが押され続けている処理を行う
 		pressedTime += DeltaTime;
 	}
+
 	MoveToEnemy(DeltaTime);
 
-
-
-
+	LockOnIconProcess();
 
 }
 
@@ -109,12 +127,26 @@ void USF_AttackInput::HomingAttack()
 
 	Debug::Print("HomingAttack()");
 
+}
+
+void USF_AttackInput::LaserAttack()
+{
+	if (!GetPlayerCharacter()) return;
+
+	Debug::Print("LaserAttack()");
+}
+
+void USF_AttackInput::HomingShoot()
+{
+	if (!GetPlayerCharacter()) return;
+
+	Debug::Print("HomingShoot()");
+
 	// to launch HomingMagicballs we need:
 	// 0. check Target
 	// 1. PlayerForwardDirection as basic Axis
 	// 2. LaunchDirection for each HomingMagicball
 	// 3. Spawn
-
 
 	// find Target
 	/* TODO get target from LockOn */
@@ -177,22 +209,9 @@ void USF_AttackInput::HomingAttack()
 		spawnParams.Instigator = this->GetOwner()->GetInstigator();
 
 		AActor* projectile = GetWorld()->SpawnActor<AActor>(
-			HomingAttackClass, spawnPos, spawnRot, spawnParams);
+			HomingShootBP, spawnPos, spawnRot, spawnParams);
 		Cast<ASF_HomingMagicball>(projectile)->InitTarget(target);
 	}
-
-}
-
-void USF_AttackInput::LaserAttack()
-{
-	if (!GetPlayerCharacter()) return;
-
-	Debug::Print("LaserAttack()");
-}
-
-void USF_AttackInput::HomingShoot()
-{
-	if (!GetPlayerCharacter()) return;
 
 }
 
@@ -200,6 +219,15 @@ void USF_AttackInput::LockOn()
 {
 	if (!GetPlayerCharacter()) return;
 
+	LockOnStatus = !LockOnStatus;
+	if (LockOnStatus)//ON
+	{
+		LockOnWidget->SetIconVisibility(ESlateVisibility::Visible);
+	}
+	else//OFF
+	{
+		LockOnWidget->SetIconVisibility(ESlateVisibility::Hidden);
+	}
 
 }
 
@@ -240,7 +268,7 @@ void USF_AttackInput::LongRangeAttack()
 
 	//throw magicball
 	{
-		if (!MagicballClass) return;
+		if (!MagicballBP) return;
 		FVector HandLocation = GetPlayerCharacter()->GetMesh()->GetSocketLocation("Magicball");
 
 		ASF_MainCamera* camera = GetGameMode()->GetMainCamera();
@@ -251,13 +279,14 @@ void USF_AttackInput::LongRangeAttack()
 		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 		SpawnParams.Instigator = GetPlayerCharacter();
 
-		GetWorld()->SpawnActor<AActor>(MagicballClass, SpawnTM, SpawnParams);
+		GetWorld()->SpawnActor<AActor>(MagicballBP, SpawnTM, SpawnParams);
 		Debug::PrintFixedLine("AttackRanged", 22);
 	}
 }
 
 void USF_AttackInput::MoveToEnemy(float DeltaTime)
 {
+
 	if (!beginShortAttack) return;
 	//ASF_EnemyBase* enemy = GetGameMode()->GetNearestEnemy();
 	if (!IsValid(LockOnTarget))return;
@@ -288,6 +317,98 @@ void USF_AttackInput::MoveToEnemy(float DeltaTime)
 	// プレイヤー情報を更新
 	GetPlayerCharacter()->SetActorLocation(newPos);
 	GetPlayerCharacter()->SetActorRotation(FMath::RInterpTo(currentRot, targetRot, DeltaTime, rotationSpeed));
+
+}
+
+void USF_AttackInput::LockOnIconProcess()
+{
+	if (!IsValid(LockOnWidget)) return;
+	//show/hide LockOn icon
+	{
+		bool hasEnemy = IsValid(LockOnTarget);
+		LockOnWidget->SetActorVisible(hasEnemy);
+	}
+
+	//raycast to update target
+	RaytraceToGetTarget();
+
+	//update lockOn icon location
+	if (!IsValid(LockOnTarget)) return;
+	FVector pos = LockOnTarget->GetActorLocation();
+	LockOnWidget->SetActorLocation(pos);
+
+	Debug::PrintFixedLine(" LOCK ON TARGET : " + LockOnTarget->GetName(), 180.f);
+
+	//disable icon if Target out of viewport
+	IsTargetVisibleOnScreen();
+
+}
+
+void USF_AttackInput::RaytraceToGetTarget()
+{
+	Debug::PrintFixedLine("USF_AttackInput::RaycastToGetTarget()", 141);
+
+	ASF_MainCamera* camera = GetGameMode()->GetMainCamera();
+	if (!IsValid(camera)) return;
+
+	FHitResult hitResult;
+
+	FRotator cameraRotation = camera->GetActorRotation();
+	float TraceDistance = 6000.f;
+	FVector start = GetOwner()->GetActorLocation() + FVector(0.f, 0.f, 100.f); /* height rev value of camera */
+	FVector end = start + (cameraRotation.Vector() * TraceDistance);
+
+	FCollisionQueryParams traceParams;
+	traceParams.AddIgnoredActor(GetOwner());
+	traceParams.bTraceComplex = true;
+	traceParams.bReturnPhysicalMaterial = false;
+
+	bool bHit = GetWorld()->LineTraceSingleByChannel(
+		hitResult,
+		start,
+		end,
+		ECC_Camera,
+		traceParams
+	);
+
+	DRAW_LINE_SingleFrame(start, end)
+
+	if (!bHit) return;
+
+	ASF_EnemyBase* enemy = Cast<ASF_EnemyBase>(hitResult.GetActor());
+	if (IsValid(enemy)) LockOnTarget = enemy;
+
+	Debug::PrintFixedLine("RAYTRACE : " + hitResult.GetActor()->GetName(), 171);
+}
+
+void USF_AttackInput::IsTargetVisibleOnScreen()
+{
+	Debug::PrintFixedLine("USF_AttackInput::TargetOutOfViewport()", 145);
+
+	ASF_MainCamera* camera = GetGameMode()->GetMainCamera();
+	if (!IsValid(camera)) return;
+
+	APlayerController* playerController = GetWorld()->GetFirstPlayerController();
+	if (!IsValid(playerController)) return;
+
+	FVector2D ScreenPosition;
+	FVector ActorLocation = LockOnTarget->GetActorLocation();
+	bool bIsOnScreen = playerController->ProjectWorldLocationToScreen(ActorLocation, ScreenPosition);
+
+	// get screen size
+	int32 ScreenX, ScreenY;
+	playerController->GetViewportSize(ScreenX, ScreenY);
+
+	// check if target is in screen
+	if (bIsOnScreen && ScreenPosition.X >= 0
+		&& ScreenPosition.X <= ScreenX
+		&& ScreenPosition.Y >= 0
+		&& ScreenPosition.Y <= ScreenY)
+	{
+		return; // enemy in screen
+	}
+
+	LockOnTarget = nullptr;
 }
 
 void USF_AttackInput::NotifyActivateComboInTime()

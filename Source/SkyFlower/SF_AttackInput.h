@@ -16,6 +16,7 @@ class ASF_GameMode;
 class ASF_Player;
 class ASF_WeaponBase;
 class ASF_EnemyBase;
+class ASF_LockOnWidget;
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class SKYFLOWER_API USF_AttackInput : public UActorComponent
@@ -49,7 +50,10 @@ private:
 	UFUNCTION()
 	void MoveToEnemy(float DeltaTime);
 
-	void RaycastToGetTarget();
+	//lockOn icon process
+	void LockOnIconProcess();
+	void RaytraceToGetTarget();
+	void IsTargetVisibleOnScreen();
 
 	////////////////////////////////////////// custom variable
 public:
@@ -94,7 +98,7 @@ public:
 	float stoppingDistance = 100.f;
 
 	UPROPERTY(EditAnywhere, Category = "TEST")
-	TSubclassOf<AActor> MagicballClass;
+	TSubclassOf<AActor> MagicballBP;
 
 	// homing attack parameter
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -104,13 +108,18 @@ public:
 	float angleStep = 360.f;
 
 	UPROPERTY(EditAnywhere, Category = "TEST")
-	TSubclassOf<AActor> HomingAttackClass;
+	TSubclassOf<AActor> HomingShootBP;
 
 	void NotifyActivateComboInTime();
 
 private:
+	//for lockOn icon
+	UPROPERTY(EditAnywhere, Category = "TEST")
+	TSubclassOf<ASF_LockOnWidget> LockOnWidgetBP;
+
 	ASF_EnemyBase* LockOnTarget = nullptr;
 	bool LockOnStatus = false;
+	ASF_LockOnWidget* LockOnWidget = nullptr;
 
 	////////////////////////////////////////// Get関数
 public:
