@@ -69,8 +69,7 @@ void ASF_ShooterController::LongRangeAttack(const float InDeltaTime)
     GetPawn()->SetActorRotation(Rotation);
 
     // プロジェクタイルのスポーン位置を計算（EnemyLocationの少し前方に移動）
-    float Distance = 100.0f; // 前方に移動する距離を設定
-    FVector SpawnLocation = EnemyLocation + Direction * Distance;
+    FVector SpawnLocation = EnemyLocation + Direction * ProjectileOffset;
     FTransform SpawnTM = FTransform(Rotation, SpawnLocation);
 
     // プロジェクタイルをスポーンさせる

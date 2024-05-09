@@ -48,6 +48,8 @@ private:
 	virtual void OnEndDead() override;
 
 	UPROPERTY(EditAnywhere, Category = "TEST")
+	float ProjectileOffset = 100.0f;
+	UPROPERTY(EditAnywhere, Category = "TEST")
 		TSubclassOf<AActor> ProjectileClass;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))

@@ -11,7 +11,6 @@ ASF_EnemyControllerBase::ASF_EnemyControllerBase()
 void ASF_EnemyControllerBase::BeginPlay()
 {
 	Super::BeginPlay();
-
 }
 
 void ASF_EnemyControllerBase::OnPossess(APawn* InPawn)
