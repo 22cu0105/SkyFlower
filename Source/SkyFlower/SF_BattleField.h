@@ -2,9 +2,8 @@
 
 #include "CoreMinimal.h"
 #include "SF_FieldBase.h"
+#include "SF_StageInfo.h"
 #include "SF_BattleField.generated.h"
-
-struct FSF_BattleStageInfo;
 
 UCLASS()
 class SKYFLOWER_API ASF_BattleField : public ASF_FieldBase
@@ -25,14 +24,14 @@ private:
 	uint8 StageID;
 
 	UPROPERTY()
-	FSF_BattleStageInfo BattleStageInfo;
+	FSF_StageInfo BattleStageInfo;
 	UPROPERTY()
 	TArray<ASF_EnemyBase*> StageEnemyList;
 	UPROPERTY()
 	int CurrentWaveCnt;
 
 private:
-	FSF_BattleStageInfo GetBattleStageData() const;
+	FSF_StageInfo GetBattleStageData(const uint8 InStageID) const;
 	UFUNCTION()
 	void OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 	void OnPlayerEnterBattleField();

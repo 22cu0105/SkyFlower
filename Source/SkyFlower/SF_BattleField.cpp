@@ -3,7 +3,7 @@
 #include "SF_EnemyBase.h"
 #include "SF_GameMode.h"
 #include "SF_EnemyManager.h"
-#include "SF_BattleDataModel.h"
+#include "SF_StageDataModel.h"
 #include "SF_FunctionLibrary.h"
 #include "DebugHelpers.h"
 #include "Components/BoxComponent.h"
@@ -25,7 +25,7 @@ void ASF_BattleField::BeginPlay()
 
 	// 初期化
 	FieldEventType = ESF_FieldEventType::Waiting;
-	BattleStageInfo = GetBattleStageData();
+	BattleStageInfo = GetBattleStageData(StageID);
 }
 
 void ASF_BattleField::Tick(float DeltaTime)
@@ -51,14 +51,20 @@ void ASF_BattleField::Tick(float DeltaTime)
 	UpdateOnActive(DeltaTime);
 }
 
-FSF_BattleStageInfo ASF_BattleField::GetBattleStageData() const
+/// @brief DataAssetからデータを取得する
+/// @return StageIDに対応したステージ情報構造体
+FSF_StageInfo ASF_BattleField::GetBattleStageData(const uint8 InStageID) const
 {
-	FSF_BattleStageInfo OutBattleStageInfo = FSF_BattleStageInfo();
+	FSF_StageInfo OutBattleStageInfo = FSF_StageInfo();
 
-	if (BattleDataAsset == nullptr) return OutBattleStageInfo;
+	if (StageDataAsset == nullptr)
+	{
+		Debug::Print("not found 'StageDataAsset'");
+		return OutBattleStageInfo;
+	}
 
-	if (auto BattleDataModel = Cast<USF_BattleDataModel>(StaticLoadObject(USF_BattleDataModel::StaticClass(), nullptr, *BattleDataAsset.ToString())))
-		if (auto BattleStageData = BattleDataModel->BattleDataMap.Find(StageID))
+	if (const USF_StageDataModel* const BattleDataModel = Cast<USF_StageDataModel>(StaticLoadObject(USF_StageDataModel::StaticClass(), nullptr, *StageDataAsset.ToString())))
+		if (const FSF_StageInfo* const BattleStageData = BattleDataModel->StageDataMap.Find(InStageID))
 			OutBattleStageInfo = *BattleStageData;
 
 	return OutBattleStageInfo;
@@ -87,7 +93,7 @@ void ASF_BattleField::OnPlayerEnterBattleField()
 
 void ASF_BattleField::UpdateOnActive(const float InDeltaTime)
 {
-	ASF_GameMode* const SF_GameMode = USF_FunctionLibrary::GetGameMode(GetWorld());
+	const ASF_GameMode* const SF_GameMode = USF_FunctionLibrary::GetGameMode(GetWorld());
 	if (!IsValid(SF_GameMode)) return;
 
 	// ToDo	敵の管理構造を変更するかも
@@ -96,11 +102,11 @@ void ASF_BattleField::UpdateOnActive(const float InDeltaTime)
 	{
 		CurrentWaveCnt++;
 		// 現在のウェーブが最後のウェーブより多ければ
-		if (CurrentWaveCnt >= BattleStageInfo.WaveInfoList.Num())
+		if (CurrentWaveCnt >= BattleStageInfo.WaveSetting.Num())
 		{
 			// 終了処理
 			ESF_FieldEventType::Inactive;
-			Debug::Print("BattleField : EndBattleStage");
+			Debug::PrintFixedLine("BattleField : EndBattleStage");
 			return;
 		}
 
@@ -113,27 +119,28 @@ void ASF_BattleField::UpdateOnActive(const float InDeltaTime)
 /// @param InWaveCnt 
 void ASF_BattleField::SpawnAllEnemiesInWave(const int InWaveCnt)
 {
-	ASF_GameMode* const SF_GameMode = USF_FunctionLibrary::GetGameMode(GetWorld());
+	const ASF_GameMode* const SF_GameMode = USF_FunctionLibrary::GetGameMode(GetWorld());
 	if (!IsValid(SF_GameMode)) return;
-	USF_EnemyManager* SF_EnemyManager = SF_GameMode->GetEnemyManager();
+	USF_EnemyManager* const SF_EnemyManager = SF_GameMode->GetEnemyManager();
 	if (!IsValid(SF_EnemyManager)) return;
 
 
-	const FSF_WaveInfo WaveInfo = BattleStageInfo.WaveInfoList[InWaveCnt];
-	// 生成する敵の種類分処理を行う
-	for (int et_i = 0; et_i < WaveInfo.GenerateEnemyList.Num(); et_i++)
+	const FSF_WaveSetting WaveInfo = BattleStageInfo.WaveSetting[InWaveCnt];
+	// 生成する敵の配列分処理を行う
+	for (int et_i = 0; et_i < WaveInfo.EnemyGroup.Num(); et_i++)
 	{
-		const FSF_GeneratEnemyInfo EnemyInfo = WaveInfo.GenerateEnemyList[et_i];
+		const FSF_EnemyGroup EnemyInfo = WaveInfo.EnemyGroup[et_i];
+		if (!IsValid(EnemyInfo.EnemyType)) continue;
 		// 生成する敵の数だけ処理を行う
-		for (int e_i = 0; e_i < EnemyInfo.MaxGenerateNum; e_i++)
+		for (int e_i = 0; e_i < EnemyInfo.EnemyCount; e_i++)
 		{
-			if (!IsValid(EnemyInfo.EnemyChara)) continue;
+			Debug::Print("BattleField : Spawn()");
 
 			ASF_EnemyBase* const CreateEnemy =
 			USF_FunctionLibrary::SpawnAIEnemy(
 				/*WorldContext = */GetWorld(),
-				/*Location	   = */EnemyInfo.SpawnPosList[e_i],
-				/*EnemyChara   = */EnemyInfo.EnemyChara);
+				/*Location	   = */EnemyInfo.EnemyPos,
+				/*EnemyChara   = */EnemyInfo.EnemyType);
 
 			StageEnemyList.Add(CreateEnemy);
 			SF_GameMode->GetEnemyManager()->AddEnemy(CreateEnemy);

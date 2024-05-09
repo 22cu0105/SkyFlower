@@ -33,6 +33,6 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = "FieldBase")
 	ESF_FieldEventType FieldEventType;
 
-	UPROPERTY(EditAnywhere, meta = (AllowedClasses = "SF_BattleDataModel"))
-	FSoftObjectPath BattleDataAsset;
+	UPROPERTY(EditAnywhere, meta = (AllowedClasses = "SF_StageDataModel"))
+	FSoftObjectPath StageDataAsset;
 };

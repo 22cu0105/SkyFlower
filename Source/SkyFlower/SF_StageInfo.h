@@ -17,6 +17,8 @@ struct FSF_EnemyGroup
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<ASF_EnemyBase> EnemyType;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	uint8 EnemyCount;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FVector EnemyPos;
@@ -31,8 +33,6 @@ struct FSF_WaveSetting
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TSubclassOf<ASF_EnemyBase> EnemyType;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TArray<FSF_EnemyGroup> EnemyGroup;
 };
