@@ -74,16 +74,20 @@ void USF_MoveInput::MoveDash()
 	UE_LOG(LogTemp, Warning, TEXT(": %s"), *GetPlayerCharacter()->GetCharacterMovement()->Velocity.ToString());
 	//Debug::Print(GetPlayerCharacter()->GetCharacterMovement()->Velocity.ToString());
 	
-	// キャラクターの速度ベクトルを取得
-	FVector CharacterVelocity = GetPlayerCharacter()->GetCharacterMovement()->Velocity;
+	// このやり方だとキャラクターの保持しているベロシティの向きにだけダッシュするので
+	// プレイヤーの向きを変えてもダッシュし続けているとその方向にしか動かない
+	//// キャラクターの速度ベクトルを取得
+	//FVector CharacterVelocity = GetPlayerCharacter()->GetCharacterMovement()->Velocity;
+	//
+	//// 速度ベクトルがゼロでないことを確認してから正規化
+	//if (!CharacterVelocity.IsNearlyZero())
+	//{
+	//	CharacterVelocity.Normalize();
+	//	AddForce(CharacterVelocity);
+	//}
 
-	// 速度ベクトルがゼロでないことを確認してから正規化
-	if (!CharacterVelocity.IsNearlyZero())
-	{
-		CharacterVelocity.Normalize();
-		AddForce(CharacterVelocity);
-	}
-
+	// キャラクターとカメラの正面方向を足してその向きにダッシュするように
+	AddForce(GetPlayerCharacter()->GetActorForwardVector() + GetMainCamera()->GetActorForwardVector());
 }
 
 void USF_MoveInput::MoveUp(const float InValue)
@@ -101,7 +105,7 @@ void USF_MoveInput::AddForce(const FVector InDirection)
 	GetPlayerCharacter()->GetCharacterMovement()->Velocity = FVector::Zero();
 	// ダッシュ
 	//UE_LOG(LogTemp, Warning, TEXT("AddForce()"))
-	GetPlayerCharacter()->GetCharacterMovement()->AddImpulse(InDirection * dashSpeed, true);
+	GetPlayerCharacter()->GetCharacterMovement()->AddImpulse(InDirection * dashSpeed,true);
 }
 
 void USF_MoveInput::CharacterRotate() const
