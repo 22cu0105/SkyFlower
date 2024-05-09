@@ -33,9 +33,9 @@ void ASF_ShooterController::Tick(float DeltaTime)
 
 void ASF_ShooterController::Normal(const float InDeltaTime)
 {
-    FVector Direction = (GetPlayerCharacter()->GetActorLocation() - GetPawn()->GetActorLocation()).GetSafeNormal();
-    FRotator Rotation = Direction.Rotation();
-    GetPawn()->SetActorRotation(Rotation);
+    //FVector Direction = (GetPlayerCharacter()->GetActorLocation() - GetPawn()->GetActorLocation()).GetSafeNormal();
+    //FRotator Rotation = Direction.Rotation();
+    //GetPawn()->SetActorRotation(Rotation);
 }
 
 void ASF_ShooterController::ShortRangeAttack(const float InDeltaTime)
@@ -148,7 +148,7 @@ void ASF_ShooterController::UpdateOnNormal(const float InDeltaTime)
     TimeSinceLastAttack += InDeltaTime;
 
     // 攻撃が完了したら再びプレイヤーの位置を見るためにフラグをリセット
-    if (TimeSinceLastAttack >= GetAttackCooldown())
+    if (TimeSinceLastAttack >= SF_ShooterEnemy->GetAttackCooldown())
     {
         SetCanAttack(true);
         TimeSinceLastAttack = 0.0f; // リセット

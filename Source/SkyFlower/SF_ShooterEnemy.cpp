@@ -142,8 +142,11 @@ void ASF_ShooterEnemy::OnEndDead()
 
 void ASF_ShooterEnemy::GetDamage(int32 damage)
 {
+    hp = GetCurrentHP();
     hp -= damage;
-    Debug::Print("EnemyMiddle GetDamage : " + FString::FromInt(hp));
+    SetCurretnHP(hp);
+
+    Debug::Print("ShooterEnemy GetDamage : " + FString::FromInt(hp));
 
     if (hp < 1) this->Destroy();
 }

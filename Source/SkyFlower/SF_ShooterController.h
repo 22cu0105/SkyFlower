@@ -1,4 +1,11 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// ==================================================
+// Filename	:	SF_ShooterEnemy.h
+// Author	:	22cu0115 â‰º‘ñl
+// Description: ShooterEnemy‚Ìs“®‚ğŠÇ—
+// Notes:		—á
+//				
+// Update:		
+// ==================================================
 
 #pragma once
 

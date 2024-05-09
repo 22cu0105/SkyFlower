@@ -38,9 +38,9 @@ public:
 		bool GetCanAttack() { return bCanAttack; }
 
 private:
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "EnemyBase")
 		float AttackCooldown = 2.0f; // 突撃間隔
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category = "EnemyBase")
 		bool bCanAttack = true;
 	virtual void UpdateState(const float InDeltaTime) {};
 	virtual void ChooseActionByState(const float InDeltaTime) {};

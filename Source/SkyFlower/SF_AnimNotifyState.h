@@ -1,3 +1,11 @@
+// ==================================================
+// Filename	:	SF_AnimNotifyState.h
+// Author	:	22cu0115 坂下拓人
+// Description: プレイヤーのAnimMontageで設定したNortifyを呼び出す
+// Notes:		例
+//				
+// Update:		
+// ==================================================
 #pragma once
 
 #include "CoreMinimal.h"

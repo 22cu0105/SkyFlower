@@ -1,6 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "SF_AttackerEnemy.h"
 #include "SF_AttackerController.h"
 #include "SF_GameMode.h"
@@ -147,8 +144,11 @@ void ASF_AttackerEnemy::OnEndDead()
 
 void ASF_AttackerEnemy::GetDamage(int32 damage)
 {
-	hp -= damage;
-	Debug::Print("EnemyMiddle GetDamage : " + FString::FromInt(hp));
+    hp = GetCurrentHP();
+    hp -= damage;
+    SetCurretnHP(hp);
+
+	Debug::Print("AttackerEnemy GetDamage : " + FString::FromInt(hp));
 
 	if (hp < 1) this->Destroy();
 }

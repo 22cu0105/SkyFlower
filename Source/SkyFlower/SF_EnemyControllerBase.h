@@ -33,15 +33,11 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION(BlueprintCallable, Category = "EnemyBase")
-		float GetAttackCooldown() { return AttackCooldown; }
-	UFUNCTION(BlueprintCallable, Category = "EnemyBase")
 		void SetCanAttack(const bool InCanAttack) { bCanAttack = InCanAttack; }
 	UFUNCTION(BlueprintCallable, Category = "EnemyBase")
 		bool GetCanAttack() { return bCanAttack; }
 
 private:
-	UPROPERTY(EditAnywhere)
-		float AttackCooldown = 2.0f; // 突撃間隔
 	UPROPERTY(VisibleAnywhere)
 		bool bCanAttack = true;
 	virtual void UpdateState(const float InDeltaTime) {};

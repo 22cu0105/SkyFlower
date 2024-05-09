@@ -82,7 +82,6 @@ void ASF_AttackerController::UpdateState(const float InDeltaTime)
     {
         SF_AttackerEnemy->SetCharacterState(ESF_CharacterState::LongRangeAttack);
     }
-
 }
 
 /// <summary>
@@ -97,7 +96,6 @@ void ASF_AttackerController::ChooseActionByState(const float InDeltaTime)
     switch (SF_AttackerEnemy->GetCharacterState()) {
     case ESF_CharacterState::Normal:
     {
-
         UpdateOnNormal(InDeltaTime);
         break;
     }
@@ -130,7 +128,7 @@ void ASF_AttackerController::UpdateOnNormal(const float InDeltaTime)
     Normal(InDeltaTime);
 
     // 攻撃が完了したら再びプレイヤーの位置を見るためにフラグをリセット
-    if (TimeSinceLastAttack >= GetAttackCooldown())
+    if (TimeSinceLastAttack >= SF_AttackerEnemy->GetAttackCooldown())
     {
         SetCanAttack(true);
         TimeSinceLastAttack = 0.0f; // リセット

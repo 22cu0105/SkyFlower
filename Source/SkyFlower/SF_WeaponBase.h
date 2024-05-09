@@ -1,4 +1,11 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// ==================================================
+// Filename	:	SF_WeaponBase.h
+// Author	:	22cu0115 坂下拓人
+// Description: プレイヤーが持ってる武器の情報
+// Notes:		例
+//				
+// Update:		
+// ==================================================
 
 #pragma once
 
@@ -15,6 +22,7 @@ class SKYFLOWER_API ASF_WeaponBase : public ASF_EquipmentBase
 
 public:
 	ASF_WeaponBase();
+
 protected:
 
 	virtual void BeginPlay() override;
