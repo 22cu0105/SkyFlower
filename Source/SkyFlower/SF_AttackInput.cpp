@@ -34,7 +34,7 @@ void USF_AttackInput::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// spawn LockOn icon
+		// spawn LockOn icon
 	{
 		UClass* ActorToSpawn = ASF_LockOnWidget::StaticClass();
 		FVector SpawnLocation = GetOwner()->GetActorLocation();
@@ -48,10 +48,9 @@ void USF_AttackInput::BeginPlay()
 			SpawnRotation,
 			SpawnParams
 		);
-		if (!IsValid(LockOnWidget)) return;
+
 		LockOnWidget->SetIconVisibility(ESlateVisibility::Hidden);
 	}
-
 }
 
 
@@ -130,8 +129,7 @@ void USF_AttackInput::EndNormalAttack()
 void USF_AttackInput::HomingAttack()
 {
 	if (!GetPlayerCharacter()) return;
-
-	Debug::Print("HomingAttack()");
+	Debug::PrintFixedLine("HomingAttack()",999);
 
 }
 
@@ -139,15 +137,13 @@ void USF_AttackInput::HomingAttack()
 void USF_AttackInput::LaserAttack()
 {
 	if (!GetPlayerCharacter()) return;
-
-	Debug::Print("LaserAttack()");
+	Debug::PrintFixedLine("LaserAttack()", 999);
 }
 
 void USF_AttackInput::HomingShoot()
 {
 	if (!GetPlayerCharacter()) return;
-
-	Debug::Print("HomingShoot()");
+	Debug::PrintFixedLine("HomingShoot()", 999);
 
 	// to launch HomingMagicballs we need:
 	// 0. check Target as center, get all the enemy in that sphere
@@ -254,9 +250,9 @@ void USF_AttackInput::HomingShoot()
 		// setup target enemy
 		if (!IsValid(LockOnTarget)) continue;
 		if (enemyCount < 1) continue;
-		int j = i % enemyCount; 
-		if(ASF_EnemyBase* enemy = Cast<ASF_EnemyBase>(OverlappingEnemies[j]))
-		Cast<ASF_HomingMagicball>(projectile)->InitTarget(enemy);
+		int j = i % enemyCount;
+		if (ASF_EnemyBase* enemy = Cast<ASF_EnemyBase>(OverlappingEnemies[j]))
+			Cast<ASF_HomingMagicball>(projectile)->InitTarget(enemy);
 	}
 
 	//clear target array
@@ -266,7 +262,7 @@ void USF_AttackInput::HomingShoot()
 void USF_AttackInput::LockOn()
 {
 	if (!GetPlayerCharacter()) return;
-
+	if (!IsValid(LockOnWidget)) return;
 	LockOnStatus = !LockOnStatus;
 	if (LockOnStatus)//ON
 	{
@@ -328,7 +324,7 @@ void USF_AttackInput::LongRangeAttack()
 		SpawnParams.Instigator = GetPlayerCharacter();
 
 		GetWorld()->SpawnActor<AActor>(MagicballBP, SpawnTM, SpawnParams);
-		Debug::PrintFixedLine("AttackRanged", 22);
+		Debug::PrintFixedLine("LongRangeAttack()", 999);
 	}
 }
 

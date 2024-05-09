@@ -79,7 +79,7 @@ void ASF_Magicball::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
 
 void ASF_Magicball::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	Debug::PrintFixedLine("Magicball OnBeginOverlap", 46);
+	//Debug::PrintFixedLine("Magicball OnBeginOverlap", 46);
 	
 	//filter
 	if (OtherActor == nullptr || OtherActor == this) return;
