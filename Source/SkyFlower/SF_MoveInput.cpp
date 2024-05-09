@@ -74,7 +74,7 @@ void USF_MoveInput::MoveDash()
 	//UE_LOG(LogTemp, Warning, TEXT(": %f"), GetPlayerCharacter()->GetCharacterMovement()->Velocity;);
 	Debug::PrintFixedLine(GetPlayerCharacter()->GetCharacterMovement()->Velocity.ToString());
 	
-	AddForce(GetPlayerCharacter()->GetActorForwardVector());
+	AddForce(GetMainCamera()->GetActorForwardVector());
 }
 
 void USF_MoveInput::MoveUp(const float InValue)

@@ -20,6 +20,14 @@ void USF_AnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSeq
 {
 	UE_LOG(LogTemp, Warning, TEXT("NotifyBegin"));
 	//ASF_WeaponBase* SF_WeaponBase = GetPlayerCharacter()->GetWeapon();
+	//if (SF_WeaponBase->GetBoxComponent())
+	//{
+	//	UE_LOG(LogTemp, Warning, TEXT("GetBoxComponent"));
+	//}
+	//else
+	//{
+	//	UE_LOG(LogTemp, Warning, TEXT("GetBoxComponent ; NULLLLLLLLLLLLL"));
+	//}
 	//if (!SF_WeaponBase) return;
 	//CollisionBoxComponent = SF_WeaponBase->GetBoxComponent();
 	//if (!CollisionBoxComponent)return;
