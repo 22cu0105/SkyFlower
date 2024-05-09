@@ -71,10 +71,19 @@ void USF_MoveInput::MoveDash()
 	if (!IsValid(GetMainCamera())) return;
 	if (!IsValid(GetPlayerCharacter())) return;
 
-	//UE_LOG(LogTemp, Warning, TEXT(": %f"), GetPlayerCharacter()->GetCharacterMovement()->Velocity;);
-	Debug::Print(GetPlayerCharacter()->GetCharacterMovement()->Velocity.ToString());
+	UE_LOG(LogTemp, Warning, TEXT(": %s"), *GetPlayerCharacter()->GetCharacterMovement()->Velocity.ToString());
+	//Debug::Print(GetPlayerCharacter()->GetCharacterMovement()->Velocity.ToString());
+	
+	// キャラクターの速度ベクトルを取得
+	FVector CharacterVelocity = GetPlayerCharacter()->GetCharacterMovement()->Velocity;
 
-	AddForce(GetPlayerCharacter()->GetCharacterMovement()->Velocity);
+	// 速度ベクトルがゼロでないことを確認してから正規化
+	if (!CharacterVelocity.IsNearlyZero())
+	{
+		CharacterVelocity.Normalize();
+		AddForce(CharacterVelocity);
+	}
+
 }
 
 void USF_MoveInput::MoveUp(const float InValue)
