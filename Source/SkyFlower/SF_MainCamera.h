@@ -59,9 +59,9 @@ public:
 public:
 	FSF_ChangeValueInfo()
 		: BeginValue(0.f)
-		, AddValue(0.f)
 		, EndValue(0.f)
 		, CurrentValue(0.f)
+		, AddValue(0.f)
 	{}
 };
 
@@ -91,15 +91,16 @@ class SKYFLOWER_API ASF_MainCamera : public AActor
 {
 	GENERATED_BODY()
 
+	//////////// override function
 public:
 	ASF_MainCamera();
+	virtual void Tick(float DeltaTime) override;
 
 protected:
 	virtual void BeginPlay() override;
 
+	//////////////// custom function
 public:
-	virtual void Tick(float DeltaTime) override;
-
 	void AddPitchRotation(float InValue);
 	void AddYawRotation(float InValue);
 
@@ -107,6 +108,14 @@ public:
 	void AddChangeValue(FSF_CameraInfo& OutCameraInfo);
 	void ReduceChangeValue(FSF_CameraInfo& OutCameraInfo);
 
+private:
+	void CalculateViewPoint(float height = 100.f/*, FRotator rotate = FRotator(-45, 0, 0)*/);/* pitch , yaw, roll */
+	void ProcessLockOn(const float InDeltaTime);
+	void UpdateOnNormal(const float InDeltaTime);
+	void UpdateOnShortRangeAttack(const float InDeltaTime);
+	void UpdateOnLongRangeAttack(const float InDeltaTime);
+
+	//////////////// custom parameter
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera | Visible", meta = (AllowPrivateAccess = "true"))
 	USpringArmComponent* SpringArmComponent;
@@ -133,9 +142,5 @@ public:
 	//void SetCameraState(const ESF_CameraState InCameraState) { CameraState = InCameraState; }
 	//ESF_CameraState GetCameraState() const { return CameraState; }
 	FVector GetViewPoint() const { return ViewPoint; }
-
-private:
-	void UpdateOnNormal(const float InDeltaTime);
-	void UpdateOnShortRangeAttack(const float InDeltaTime);
-	void UpdateOnLongRangeAttack(const float InDeltaTime);
+	ESF_CameraEventType GetCurrentCameraEventType() const { return CurrentCameraEventType; }
 };

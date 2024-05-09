@@ -7,10 +7,10 @@
 #include "Camera/CameraComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "SF_PlayerController.h"
-using namespace Debug;
+#include "SF_FunctionLibrary.h"
 
 ASF_MainCamera::ASF_MainCamera()
-	//: CameraState(ESF_CameraState::None)
+//: CameraState(ESF_CameraState::None)
 	: ViewPoint(FVector(0.f))
 	, MaxPitch(60.f)
 	, LockOnRotateSpeed(1.f)
@@ -45,9 +45,9 @@ void ASF_MainCamera::BeginPlay()
 
 		if (ASF_Player* const SF_Player = SF_GameMode->GetPlayerCharacter())
 			ViewPoint = SF_Player->GetActorLocation();
-	}	
-	
-	
+	}
+
+
 	APlayerController* const PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 	if (PlayerController)
 		PlayerController->SetViewTargetWithBlend(this);
@@ -64,6 +64,7 @@ void ASF_MainCamera::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	// null check
 	ASF_GameMode* const SF_GameMode = Cast<ASF_GameMode>(UGameplayStatics::GetGameMode(GetWorld()));
 	if (!IsValid(SF_GameMode)) return;
 
@@ -73,14 +74,16 @@ void ASF_MainCamera::Tick(float DeltaTime)
 	// 注視点
 	switch (SF_Player->GetCharacterState())
 	{
-	case ESF_CharacterState::Normal:
-		UpdateOnNormal(DeltaTime);
-		break;
+		//case ESF_CharacterState::Normal:
+		//	break;
 	case ESF_CharacterState::ShortRangeAttack:
 		UpdateOnShortRangeAttack(DeltaTime);
 		break;
 	case ESF_CharacterState::LongRangeAttack:
 		UpdateOnLongRangeAttack(DeltaTime);
+		break;
+	default:
+		UpdateOnNormal(DeltaTime);
 		break;
 	}
 
@@ -102,8 +105,16 @@ void ASF_MainCamera::Tick(float DeltaTime)
 				break;
 			}
 		}
+		Debug::PrintFixedLine("CurrentCameraEventType : Dash", 120);
+		break;
+	default:
+		Debug::PrintFixedLine("CurrentCameraEventType : Default", 121);
 		break;
 	}
+
+	//todo lock on
+	ProcessLockOn(DeltaTime);
+
 }
 
 /// @brief Pitchの回転処理
@@ -177,21 +188,53 @@ void ASF_MainCamera::ReduceChangeValue(FSF_CameraInfo& OutCameraInfo)
 		{
 			OutCameraInfo.CurrentMode = ESF_AddValueMode::None;
 			CurrentChangeValueInfo->CurrentValue = CurrentChangeValueInfo->BeginValue;
+
+			CurrentCameraEventType = ESF_CameraEventType::None;
 		}
 	}
+}
+
+void ASF_MainCamera::CalculateViewPoint(float height)
+{
+	if (APawn* const Player = UGameplayStatics::GetPlayerPawn(GetWorld(), 0))
+	{
+		ViewPoint = Player->GetActorLocation() + FVector(0, 0, height);
+	}
+}
+
+void ASF_MainCamera::ProcessLockOn(const float InDeltaTime)
+{
+	ASF_Player* const Player = USF_FunctionLibrary::GetPlayer(GetWorld());
+	if (!IsValid(Player)) return;
+	if (!Player->GetLockOnStatus()) return;
+	ASF_EnemyBase* const LockOnEnemy = Player->GetLockOnTarget();
+	if (!IsValid(LockOnEnemy)) return;
+
+
+	ViewPoint = Player->GetActorLocation();
+	SetActorLocation(ViewPoint);
+
+	const FVector LockOnEnemyPos = LockOnEnemy->GetActorLocation();
+	const FRotator CameraDirection = (LockOnEnemyPos - GetActorLocation()).Rotation();
+	const FRotator NewRotation = FMath::RInterpTo(GetActorRotation(), CameraDirection, InDeltaTime, LockOnRotateSpeed);
+	SetActorRotation(NewRotation);
+
 }
 
 void ASF_MainCamera::UpdateOnNormal(const float InDeltaTime)
 {
 	if (APawn* const Player = UGameplayStatics::GetPlayerPawn(GetWorld(), 0))
 	{
-		ViewPoint = Player->GetActorLocation();
+		CalculateViewPoint();
+		//ViewPoint = Player->GetActorLocation();
 		SetActorLocation(ViewPoint);
 	}
 }
 
 void ASF_MainCamera::UpdateOnShortRangeAttack(const float InDeltaTime)
 {
+	/*
+
 	if (const ASF_GameMode* const SF_GameMode = Cast<ASF_GameMode>(UGameplayStatics::GetGameMode(GetWorld())))
 	{
 		ASF_Player* const Player = SF_GameMode->GetPlayerCharacter();
@@ -206,10 +249,15 @@ void ASF_MainCamera::UpdateOnShortRangeAttack(const float InDeltaTime)
 		ViewPoint = ((LockOnEnemyPos - PlayerPos) / 2.f) + PlayerPos;
 		SetActorLocation(ViewPoint);
 	}
+
+	*/
+
 }
 
 void ASF_MainCamera::UpdateOnLongRangeAttack(const float InDeltaTime)
 {
+	/*
+
 	if (ASF_GameMode* const SF_GameMode = Cast<ASF_GameMode>(UGameplayStatics::GetGameMode(GetWorld())))
 	{
 		ASF_Player* const Player = SF_GameMode->GetPlayerCharacter();
@@ -226,4 +274,6 @@ void ASF_MainCamera::UpdateOnLongRangeAttack(const float InDeltaTime)
 		const FRotator NewRotation = FMath::RInterpTo(GetActorRotation(), CameraDirection, InDeltaTime, LockOnRotateSpeed);
 		SetActorRotation(NewRotation);
 	}
+
+	*/
 }

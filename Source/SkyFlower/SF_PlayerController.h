@@ -47,6 +47,7 @@ private:
 	void HomingAttack();
 	void LaserAttack();
 
+	void HomingShoot();
 	void LockOn();
 
 	///////////////////////////// custom variable

@@ -40,11 +40,10 @@ void USF_AttackInput::BeginPlay()
 void USF_AttackInput::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	if (!GetPlayerCharacter()) return;
-	if (!AnimInstance)
-	{
-		AnimInstance = GetPlayerCharacter()->GetMesh()->GetAnimInstance();
-	}
+	//if (!GetPlayerCharacter()) return;
+	//if (!AnimInstance) {
+	//	AnimInstance = GetPlayerCharacter()->GetMesh()->GetAnimInstance();
+	//}
 
 	// 押されてからの時間を計測してレーザー攻撃かそれ以外を判定する
 	if (isButtonPressed)
@@ -53,6 +52,11 @@ void USF_AttackInput::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 		pressedTime += DeltaTime;
 	}
 	MoveToEnemy(DeltaTime);
+
+
+
+
+
 }
 
 void USF_AttackInput::BeginNormalAttack()
@@ -186,6 +190,19 @@ void USF_AttackInput::LaserAttack()
 	Debug::Print("LaserAttack()");
 }
 
+void USF_AttackInput::HomingShoot()
+{
+	if (!GetPlayerCharacter()) return;
+
+}
+
+void USF_AttackInput::LockOn()
+{
+	if (!GetPlayerCharacter()) return;
+
+
+}
+
 void USF_AttackInput::ShortRangeAttack()
 {
 	if (!GetPlayerCharacter()) return;
@@ -198,6 +215,9 @@ void USF_AttackInput::ShortRangeAttack()
 	beginShortAttack = true;
 
 	// ComboMontageはAnimMontageへのポインタを保持している変数です
+	AnimInstance = GetPlayerCharacter()->GetMesh()->GetAnimInstance();
+	if (!AnimInstance) return;
+
 	if (ComboMontage && AnimInstance)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("ComboMontage"));
@@ -239,8 +259,11 @@ void USF_AttackInput::LongRangeAttack()
 void USF_AttackInput::MoveToEnemy(float DeltaTime)
 {
 	if (!beginShortAttack) return;
-	ASF_EnemyBase* enemy = GetGameMode()->GetNearestEnemy();
-	if (!IsValid(enemy))return;
+	//ASF_EnemyBase* enemy = GetGameMode()->GetNearestEnemy();
+	if (!IsValid(LockOnTarget))return;
+	// 位置を取得する
+	playerPos = GetPlayerCharacter()->GetActorLocation();
+	enemyPos = LockOnTarget->GetActorLocation();
 
 	if (stoppingDistance >= FVector::Distance(playerPos, enemyPos) || moveTime >= moveTimeLimit)
 	{
@@ -251,10 +274,6 @@ void USF_AttackInput::MoveToEnemy(float DeltaTime)
 
 	// 計測開始
 	moveTime += DeltaTime;
-
-	// 位置を取得する
-	playerPos = GetPlayerCharacter()->GetActorLocation();
-	enemyPos = GetGameMode()->GetNearestEnemy()->GetActorLocation();
 
 	// プレイヤーが敵に近づく方向を計算する
 	const FVector DirectionToEnemy = (enemyPos - playerPos).GetSafeNormal();

@@ -21,15 +21,15 @@ class SKYFLOWER_API ASF_Player : public ASF_CharacterBase
 {
 	GENERATED_BODY()
 
+////////////////////// override function
 public:
 	ASF_Player();
-
-public:
 	virtual void Tick(float DeltaTime) override;
-
-public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+protected:
+	virtual void BeginPlay() override;
+	////////////////////// custom function
 public:
 	void MoveForward(const float InValue);
 	void MoveRight(const float InValue);
@@ -41,14 +41,18 @@ public:
 	void HomingAttack();
 	void LaserAttack();
 
+	void HomingShoot();
+	void LockOn();
+
+	ASF_EnemyBase* GetLockOnTarget();
+	bool GetLockOnStatus();
+	
 	UFUNCTION(BlueprintCallable)
 	ASF_WeaponBase* GetWeapon() const { return Weapon; };
 	UPROPERTY(BlueprintReadWrite)
 	ASF_WeaponBase* Weapon = nullptr;
 	UFUNCTION(BlueprintImplementableEvent)
 	void Init();
-protected:
-	virtual void BeginPlay() override;
 
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component", meta = (AllowPrivateAccess = "true"))

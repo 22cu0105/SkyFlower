@@ -7,8 +7,9 @@
 #include "SF_GameMode.h"
 #include "SF_EnemyBase.h"
 #include "SF_FunctionLibrary.h"
-
+#include "DebugHelpers.h"
 #include "Kismet/GameplayStatics.h"
+
 
 ASF_PlayerController::ASF_PlayerController()
 	:m_pCharacter(nullptr)
@@ -48,6 +49,7 @@ void ASF_PlayerController::SetupInputComponent()
 	InputComponent->BindAction("HomingAttack", IE_Pressed, this, &ASF_PlayerController::HomingAttack);
 	InputComponent->BindAction("LaserAttack", IE_Pressed, this, &ASF_PlayerController::LaserAttack);
 
+	InputComponent->BindAction("HomingShoot", IE_Pressed, this, &ASF_PlayerController::HomingShoot);
 	InputComponent->BindAction("LockOn", IE_Pressed, this, & ASF_PlayerController::LockOn);
 }
 
@@ -112,6 +114,11 @@ void ASF_PlayerController::HomingAttack()
 
 }
 
+void ASF_PlayerController::HomingShoot()
+{
+	Debug::Print(" ASF_PlayerController::HomingShoot() ");
+}
+
 void ASF_PlayerController::LaserAttack()
 {
 	if (!m_pCharacter) return;
@@ -121,6 +128,7 @@ void ASF_PlayerController::LaserAttack()
 
 void ASF_PlayerController::LockOn()
 {
+	/*
 	ASF_GameMode* const SF_GameMode = USF_FunctionLibrary::GetGameMode(GetWorld());
 	if (!IsValid(SF_GameMode)) return;
 
@@ -137,4 +145,7 @@ void ASF_PlayerController::LockOn()
 	{
 		SF_GameMode->SetLockOnEnemy(nullptr);
 	}
+	*/
+	Debug::Print("LOCK ON PRESSED");
+	m_pCharacter->LockOn();
 }

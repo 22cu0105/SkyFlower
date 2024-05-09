@@ -7,7 +7,6 @@
 #include "SF_PlayerController.h"
 #include "Kismet/GameplayStatics.h"
 #include "DebugHelpers.h"
-using namespace Debug;
 
 ASF_Player::ASF_Player()
 {
@@ -118,6 +117,8 @@ void ASF_Player::MoveDash()
 	MoveInputComponent->MoveDash();
 	if (ASF_GameMode* const SF_GameMode = Cast<ASF_GameMode>(UGameplayStatics::GetGameMode(GetWorld())))
 	{
+		//todo check camera status
+		if (SF_GameMode->GetMainCamera()->GetCurrentCameraEventType() == ESF_CameraEventType::Dash) return;
 		SF_GameMode->GetMainCamera()->StartCameraEvent(ESF_CameraEventType::Dash);
 	}
 }
@@ -185,7 +186,7 @@ void ASF_Player::LaserAttack()
 		// ロックオンが設定されていたら終了
 		if (IsValid(SF_GameMode->GetLockOnEnemy()))
 		{
-			Debug::Print("setted lock on enemy");
+			Debug::Print("set lock on enemy");
 			return;
 		}
 
@@ -203,4 +204,24 @@ void ASF_Player::LaserAttack()
 			SF_GameMode->SetLockOnEnemy(Enemy);
 		}
 	}
+}
+
+void ASF_Player::HomingShoot()
+{
+	AttackInputComponent->HomingShoot();
+}
+
+void ASF_Player::LockOn()
+{
+	AttackInputComponent->LockOn();
+}
+
+ASF_EnemyBase* ASF_Player::GetLockOnTarget()
+{
+	return AttackInputComponent->GetLockOnTarget();
+}
+
+bool ASF_Player::GetLockOnStatus()
+{
+	return AttackInputComponent->GetLockOnStatus();
 }
