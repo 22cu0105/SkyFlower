@@ -31,7 +31,8 @@ void ASF_WeaponBase::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AA
 	if (OtherActor == nullptr || OtherActor == this) return;
 	if (OtherActor->IsA<ASF_Player>()) return;
 
-	UE_LOG(LogTemp, Warning, TEXT("ASF_WeaponBase : OnBeginOverlap"));
+	//UE_LOG(LogTemp, Warning, TEXT("ASF_WeaponBase : OnBeginOverlap"));
+	Debug::Print("ASF_WeaponBase : OnBeginOverlap");
 
 	//apply damage
 	ISF_DamageableInterface* damageInterface = Cast<ISF_DamageableInterface>(OtherActor);
@@ -46,6 +47,7 @@ void ASF_WeaponBase::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AA
 			FRotator Rotation = FRotator(0.0f, 0.0f, 0.0f);
 			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ParticleEffect, Location, Rotation, true);
 
+			DRAW_SPHERE(Location)
 			//this->Destroy();
 		}
 	}

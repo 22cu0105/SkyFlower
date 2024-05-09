@@ -195,7 +195,7 @@ void USF_AttackInput::ShortRangeAttack()
 	UE_LOG(LogTemp, Warning, TEXT("ShortRange"));
 
 	// 敵を追いかける
-	//beginShortAttack = true;
+	beginShortAttack = true;
 
 	// ComboMontageはAnimMontageへのポインタを保持している変数です
 	if (ComboMontage && AnimInstance)
@@ -205,17 +205,6 @@ void USF_AttackInput::ShortRangeAttack()
 		if (!AnimInstance->Montage_IsPlaying(ComboMontage))
 		{
 			GetPlayerCharacter()->PlayAnimMontage(ComboMontage);
-		}
-
-		// PlayAnimMontageメソッドを使用してComboMontageを再生します
-		const auto NotifyEvents = ComboMontage->Notifies;
-		for (FAnimNotifyEvent EventNortify : NotifyEvents)
-		{
-			if (const auto Attack01 = Cast<USF_AnimNotify>(EventNortify.Notify))
-			{
-				Attack01->OnNotified.AddUObject(this, &USF_AttackInput::NotifyActivateComboInTime);
-			}
-
 		}
 	}
 

@@ -41,19 +41,20 @@ public:
 	void HomingAttack();
 	void LaserAttack();
 
-	UFUNCTION(BlueprintNativeEvent)
-		ASF_WeaponBase* GetWeapon();
-
-	virtual ASF_WeaponBase* GetWeapon_Implementation() { return nullptr; }
-
+	UFUNCTION(BlueprintCallable)
+	ASF_WeaponBase* GetWeapon() const { return Weapon; };
+	UPROPERTY(BlueprintReadWrite)
+	ASF_WeaponBase* Weapon = nullptr;
+	UFUNCTION(BlueprintImplementableEvent)
+	void Init();
 protected:
 	virtual void BeginPlay() override;
 
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component", meta = (AllowPrivateAccess = "true"))
-		USF_MoveInput* MoveInputComponent;
+	USF_MoveInput* MoveInputComponent;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component", meta = (AllowPrivateAccess = "true"))
-		USF_AttackInput* AttackInputComponent;
+	USF_AttackInput* AttackInputComponent;
 
 private:
 	// ISF_DamageableInterface を介して継承されました

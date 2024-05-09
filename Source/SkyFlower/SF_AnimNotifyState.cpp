@@ -8,6 +8,7 @@
 #include "SF_Player.h"
 #include "SF_WeaponBase.h"
 #include <Kismet/GameplayStatics.h>
+#include "DebugHelpers.h"
 
 
 
@@ -18,27 +19,26 @@ USF_AnimNotifyState::USF_AnimNotifyState()
 
 void USF_AnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration)
 {
-	UE_LOG(LogTemp, Warning, TEXT("NotifyBegin"));
-	//ASF_WeaponBase* SF_WeaponBase = GetPlayerCharacter()->GetWeapon();
-	//if (SF_WeaponBase->GetBoxComponent())
-	//{
-	//	UE_LOG(LogTemp, Warning, TEXT("GetBoxComponent"));
-	//}
-	//else
-	//{
-	//	UE_LOG(LogTemp, Warning, TEXT("GetBoxComponent ; NULLLLLLLLLLLLL"));
-	//}
-	//if (!SF_WeaponBase) return;
-	//CollisionBoxComponent = SF_WeaponBase->GetBoxComponent();
-	//if (!CollisionBoxComponent)return;
-	//// コリジョンを有効にする
-	//CollisionBoxComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	//UE_LOG(LogTemp, Warning, TEXT("NotifyBegin"));
+	Debug::Print("NotifyBegin");
+
+	ASF_Player* Player = Cast<ASF_Player>(MeshComp->GetOwner());
+	if (!Player) return;
+	ASF_WeaponBase* SF_WeaponBase = Player->GetWeapon();
+	if (!SF_WeaponBase) return;
+
+	CollisionBoxComponent = SF_WeaponBase->GetBoxComponent();
+
+	if (!CollisionBoxComponent)return;
+	// コリジョンを有効にする
+	CollisionBoxComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
    
 }
 
 void USF_AnimNotifyState::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation)
 {
-	UE_LOG(LogTemp, Warning, TEXT("NotifyEnd"));
+	//UE_LOG(LogTemp, Warning, TEXT("NotifyEnd"));
+	Debug::Print("NotifyEnd");
 	if (!CollisionBoxComponent)return;
 
 	CollisionBoxComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
