@@ -57,7 +57,7 @@ void ASF_HomingMagicball::BeginPlay()
 		TimerHandle,	// タイマーハンドル
 		this,			// タイマーを実行するオブジェクト
 		&ASF_HomingMagicball::SetDelayComplete,	// ターゲット関数
-		1.0f,			// 遅延秒数
+		0.6f,			// 遅延秒数
 		false			// 繰り返し実行しない
 	);
 }
@@ -100,9 +100,6 @@ bool ASF_HomingMagicball::FindTarget()
 void ASF_HomingMagicball::SetDelayComplete()
 {
 	isDelayComplete = true;
-
-	USceneComponent* targetRootComponent = target->GetRootComponent();
-	MovementComp->HomingTargetComponent = targetRootComponent;
 }
 
 // Called every frame
@@ -116,6 +113,12 @@ void ASF_HomingMagicball::Tick(float DeltaTime)
 	}
 
 	if (IsValid(target)) {
+		//test
+		{
+			MovementComp->bIsHomingProjectile = true;
+			USceneComponent* targetRootComponent = target->GetRootComponent();
+			MovementComp->HomingTargetComponent = targetRootComponent;
+		}
 		float accelerationTemp = MovementComp->HomingAccelerationMagnitude;
 		accelerationTemp += accelerateDelta;
 		accelerationTemp = FMath::Clamp(accelerationTemp, /* min */0.0f, /* max */ 15000.0f);
@@ -124,7 +127,8 @@ void ASF_HomingMagicball::Tick(float DeltaTime)
 	}
 	else // test
 	{
-		FindTarget();
+		//FindTarget();
+		MovementComp->bIsHomingProjectile = false;
 	}
 
 }
