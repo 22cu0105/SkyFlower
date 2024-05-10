@@ -403,7 +403,7 @@ void USF_AttackInput::RaytraceToGetTarget()
 	FHitResult hitResult;
 
 	FRotator cameraRotation = camera->GetActorRotation();
-	float TraceDistance = 6000.f;
+	float TraceDistance = 12000.f;
 	FVector start = GetOwner()->GetActorLocation() + FVector(0.f, 0.f, 100.f); /* height rev value of camera */
 	FVector end = start + (cameraRotation.Vector() * TraceDistance);
 
@@ -430,7 +430,8 @@ void USF_AttackInput::RaytraceToGetTarget()
 		GetGameMode()->SetLockOnEnemy(enemy);
 	}
 
-	Debug::PrintFixedLine("RAYTRACE : " + hitResult.GetActor()->GetName(), 171);
+	//if(IsValid(hitResult.GetActor()))
+	//	Debug::PrintFixedLine("RAYTRACE : " + hitResult.GetActor()->GetName(), 171);
 }
 
 void USF_AttackInput::IsTargetVisibleOnScreen()
