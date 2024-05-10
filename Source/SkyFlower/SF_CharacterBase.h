@@ -120,6 +120,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "CharacterBase")
 	bool IsAttack_LongRange() const { return CharacterState == ESF_CharacterState::LongRangeAttack ? true : false; }
 
+	UFUNCTION(BlueprintCallable, Category = "CharacterBase")
+	void SetAttackableDistance_LongRange(const float InValue) { CharacterParam.AttackableDistance_LongRange = InValue; }
+
 	/// @brief 近距離攻撃可能距離を取得
 	UFUNCTION(BlueprintCallable, Category = "CharacterBase")
 	float GetAttackableDistance_ShortRange() const { return CharacterParam.AttackableDistance_ShortRange; }
