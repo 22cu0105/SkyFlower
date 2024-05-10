@@ -21,6 +21,8 @@ void ASF_ShooterEnemy::Tick(float DeltaTime)
 
     //UpdateState(DeltaTime);
     //ChooseActionByState(DeltaTime);
+    Debug::PrintFixedLine("SHOOTER ENEMY TICK", 302);
+
 }
 
 /// <summary>

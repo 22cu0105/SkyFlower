@@ -21,6 +21,8 @@
 
 // for lockOn icon
 #include "SF_LockOnWidget.h"
+#include "SF_AirWall.h"
+
 
 // Sets default values for this component's properties
 USF_AttackInput::USF_AttackInput()
@@ -403,12 +405,16 @@ void USF_AttackInput::RaytraceToGetTarget()
 	FHitResult hitResult;
 
 	FRotator cameraRotation = camera->GetActorRotation();
-	float TraceDistance = 12000.f;
+	float TraceDistance = 16000.f;
 	FVector start = GetOwner()->GetActorLocation() + FVector(0.f, 0.f, 100.f); /* height rev value of camera */
 	FVector end = start + (cameraRotation.Vector() * TraceDistance);
 
 	FCollisionQueryParams traceParams;
 	traceParams.AddIgnoredActor(GetOwner());
+	for (TActorIterator<ASF_AirWall> ActorItr(GetWorld()); ActorItr ; ++ActorItr)
+	{
+		traceParams.AddIgnoredActor(*ActorItr);
+	}
 	traceParams.bTraceComplex = true;
 	traceParams.bReturnPhysicalMaterial = false;
 

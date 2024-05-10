@@ -29,6 +29,8 @@ void ASF_ShooterController::Tick(float DeltaTime)
 
     UpdateState(DeltaTime);
     ChooseActionByState(DeltaTime);
+
+    Debug::PrintFixedLine("SHOOTER CONTROLLEER TICK", 301);
 }
 
 void ASF_ShooterController::Normal(const float InDeltaTime)
