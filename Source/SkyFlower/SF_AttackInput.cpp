@@ -319,8 +319,8 @@ void USF_AttackInput::LongRangeAttack()
 
 		ASF_MainCamera* camera = GetGameMode()->GetMainCamera();
 		FTransform SpawnTM = FTransform(camera->GetActorRotation(), HandLocation);
-		ASF_EnemyBase* enemy = GetGameMode()->GetNearestEnemy();
-		if (!IsValid(enemy))return;
+		//ASF_EnemyBase* enemy = GetGameMode()->GetNearestEnemy();
+		//if (!IsValid(enemy))return;
 		FActorSpawnParameters SpawnParams;
 		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 		SpawnParams.Instigator = GetPlayerCharacter();
